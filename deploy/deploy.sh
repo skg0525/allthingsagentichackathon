@@ -80,9 +80,15 @@ gcloud run deploy vastunest-ui \
 
 UI_URL="$(gcloud run services describe vastunest-ui --region "$REGION" --format='value(status.url)')"
 
-# Lock CORS to the deployed UI now that we know its hostname.
+# Cloud Run serves each service on two hostnames. Allow both, or the browser is
+# blocked on whichever one gcloud did not report.
+PROJECT_NUMBER="$(gcloud projects describe "$PROJECT" --format='value(projectNumber)')"
+UI_URL_ALT="https://vastunest-ui-${PROJECT_NUMBER}.${REGION}.run.app"
+echo "==> allowing CORS from both UI hostnames"
+echo "    $UI_URL"
+echo "    $UI_URL_ALT"
 gcloud run services update vastunest-agent --region "$REGION" \
-  --update-env-vars "CORS_ORIGIN=$UI_URL"
+  --update-env-vars "^|^CORS_ORIGIN=$UI_URL,$UI_URL_ALT"
 
 echo "==> Cloud Scheduler: the autonomous overnight run"
 SA="vastunest-scheduler@${PROJECT}.iam.gserviceaccount.com"

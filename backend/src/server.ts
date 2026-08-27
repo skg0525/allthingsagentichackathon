@@ -36,7 +36,34 @@ const app = express();
 
 // Cloud Run terminates TLS upstream; trust its X-Forwarded-For for rate limiting.
 app.set('trust proxy', true);
-app.use(cors({ origin: process.env.CORS_ORIGIN?.split(',') ?? true }));
+/**
+ * CORS.
+ *
+ * Cloud Run gives every service TWO hostnames — the legacy
+ * `<service>-<hash>-<region>.a.run.app` and the newer
+ * `<service>-<projectNumber>.<region>.run.app` — and both serve the same
+ * container. Pinning CORS to whichever one `gcloud describe` happened to report
+ * blocks the browser on the other, which looks exactly like the backend being
+ * down. Accept every hostname belonging to the configured UI service.
+ */
+const ALLOWED_ORIGINS = process.env.CORS_ORIGIN?.split(',').map((o) => o.trim()).filter(Boolean);
+
+function isAllowedOrigin(origin: string | undefined): boolean {
+  if (!origin || !ALLOWED_ORIGINS?.length) return true; // unconfigured = permissive (local dev)
+  if (ALLOWED_ORIGINS.includes(origin)) return true;
+  // Same Cloud Run service, other hostname format.
+  const service = (o: string) => o.replace(/^https?:\/\//, '').split('.')[0]?.split('-').slice(0, -1).join('-');
+  return ALLOWED_ORIGINS.some(
+    (a) => a.endsWith('run.app') && origin.endsWith('run.app') && service(a) === service(origin),
+  );
+}
+
+app.use(cors({
+  origin: (origin, cb) =>
+    isAllowedOrigin(origin ?? undefined)
+      ? cb(null, true)
+      : cb(new Error(`Origin ${origin} is not allowed`)),
+}));
 // Uploaded floor plans arrive base64-encoded in the body.
 app.use(express.json({ limit: '12mb' }));
 
@@ -331,5 +358,6 @@ initMemory().then((backend) => {
     console.log(`  model:  ${MODEL}`);
     console.log(`  memory: ${backend}`);
     console.log(`  budget: ${DAILY_MODEL_CALL_BUDGET} model calls/day per instance`);
+    console.log(`  cors:   ${ALLOWED_ORIGINS?.join(', ') ?? 'any origin (unconfigured)'}`);
   });
 });
