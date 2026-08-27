@@ -10,21 +10,42 @@ import type {
  * that route for why. Falls back to the build-time value, then to localhost, so
  * local development needs no extra setup.
  */
-let apiBase =
-  process.env.NEXT_PUBLIC_API_BASE?.replace(/\/$/, '') ?? 'http://localhost:8080';
+/* `??` does not catch an empty string, and an unset NEXT_PUBLIC_* inlines as ""
+   in a production build — which left apiBase as "" and sent every request to
+   the UI's own origin, where it 404s. Treat empty as absent. */
+let apiBase = process.env.NEXT_PUBLIC_API_BASE?.replace(/\/$/, '') || '';
 
 let resolved: Promise<string> | null = null;
 
-/** Must be awaited once before any other call in this module. */
+/**
+ * Resolve the agent's URL. Must be awaited once before any other call here.
+ *
+ * Deliberately throws rather than falling back. A silent fallback to a wrong
+ * base produces a 404 that reads as "the backend is down", which is exactly the
+ * wrong thing to tell someone whose backend is fine.
+ */
 export function resolveApiBase(): Promise<string> {
   if (resolved) return resolved;
-  resolved = fetch('/api/config')
-    .then((r) => (r.ok ? r.json() : null))
+  resolved = fetch('/api/config', { cache: 'no-store' })
+    .then((r) => {
+      if (!r.ok) throw new Error(`/api/config returned ${r.status}`);
+      return r.json();
+    })
     .then((cfg) => {
-      if (cfg?.apiBase) apiBase = String(cfg.apiBase).replace(/\/$/, '');
+      const base = String(cfg?.apiBase ?? '').replace(/\/$/, '');
+      if (base) {
+        apiBase = base;
+      } else if (!apiBase) {
+        throw new Error('/api/config did not supply an agent URL');
+      }
       return apiBase;
     })
-    .catch(() => apiBase);
+    .catch((err) => {
+      // Local dev has no /api/config route worth trusting over the default.
+      if (!apiBase) apiBase = 'http://localhost:8080';
+      console.warn('[api] falling back to', apiBase, '—', (err as Error).message);
+      return apiBase;
+    });
   return resolved;
 }
 
