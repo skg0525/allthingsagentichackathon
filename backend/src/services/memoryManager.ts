@@ -30,8 +30,12 @@ export async function initMemory(): Promise<MemoryBackend> {
   try {
     const projectId = process.env.GOOGLE_CLOUD_PROJECT ?? process.env.GCLOUD_PROJECT;
     const db = new Firestore(projectId ? { projectId } : {});
-    // Cheap round-trip that fails fast when credentials are absent.
-    await db.collection(COLLECTION).doc('__probe__').get();
+    /* Cheap round-trip that fails fast when credentials are absent.
+       The id must not match Firestore's reserved __.*__ pattern — using
+       "__probe__" here made a perfectly healthy database report itself as
+       unavailable, and the service silently ran on local storage in
+       production. */
+    await db.collection(COLLECTION).doc('connectivity-probe').get();
     firestore = db;
     backend = 'firestore';
     console.log('[memory] Firestore connected');

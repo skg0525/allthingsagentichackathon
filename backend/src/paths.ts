@@ -9,6 +9,7 @@
  */
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { tmpdir } from 'node:os';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 
@@ -21,6 +22,20 @@ export const APP_ROOT = process.env.APP_ROOT
 
 export const PUBLIC_DIR = join(APP_ROOT, 'public');
 export const ASSETS_DIR = join(PUBLIC_DIR, 'assets');
+/**
+ * Where local (non-Firestore) state goes.
+ *
+ * On Cloud Run the image filesystem is read-only outside /tmp, and the
+ * container runs as a non-root user, so writing beside the app throws EACCES.
+ * That turned every profile read into a 500 the moment Firestore was not
+ * available. Detect a managed runtime (K_SERVICE is set by Cloud Run) and use
+ * the writable temp dir instead — the data is ephemeral there, which is correct:
+ * on Cloud Run, Firestore is the system of record and this is only a lifeboat.
+ */
+const ON_CLOUD_RUN = Boolean(process.env.K_SERVICE);
+
 export const STORE_DIR = process.env.STORE_DIR
   ? resolve(process.env.STORE_DIR)
-  : join(APP_ROOT, '.localstore');
+  : ON_CLOUD_RUN
+    ? join(tmpdir(), 'vastunest')
+    : join(APP_ROOT, '.localstore');
