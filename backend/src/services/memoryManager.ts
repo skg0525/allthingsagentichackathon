@@ -37,7 +37,16 @@ export async function initMemory(): Promise<MemoryBackend> {
     console.log('[memory] Firestore connected');
   } catch (err) {
     backend = 'local-json';
-    console.warn(`[memory] Firestore unavailable (${(err as Error).message.slice(0, 80)}) — using local JSON store`);
+    // On Cloud Run this almost always means the Firestore database has not been
+    // created in the project, or the runtime service account is missing
+    // roles/datastore.user. Log the whole error, not a truncated head — a
+    // silent downgrade to local storage in production is the kind of thing you
+    // only notice when the demo says "local store" on camera.
+    console.warn('[memory] Firestore unavailable, falling back to the local JSON store.');
+    console.warn(`[memory]   project: ${process.env.GOOGLE_CLOUD_PROJECT ?? '(not set)'}`);
+    console.warn(`[memory]   reason:  ${(err as Error).message}`);
+    console.warn('[memory]   fix:     gcloud firestore databases create --location=nam5');
+    console.warn('[memory]            and grant roles/datastore.user to the run service account');
   }
   return backend;
 }

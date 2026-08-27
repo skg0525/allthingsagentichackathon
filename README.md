@@ -453,6 +453,45 @@ frontend/
   src/lib/api.ts          typed client incl. the SSE reader
 ```
 
+## Keeping the bill at zero
+
+Cloud Run bills for request time only. With `min-instances=0` an idle service
+costs nothing at all — not a rounding error, nothing.
+
+What *can* cost money, in order of actual risk:
+
+| | Risk | Control |
+|---|---|---|
+| **Gemini API calls** | The real one. Vision on images is the expensive part. | Perception cache (a re-rank costs zero), per-IP throttles, and a hard `DAILY_MODEL_CALL_BUDGET` |
+| Cloud Run compute | Tiny. Scales to zero, capped at 2 instances. | `min-instances=0`, `max-instances=2` |
+| Cloud Build | ~$0 — first 120 build-minutes/day are free. | n/a |
+| Cloud Scheduler | **Free.** 3 jobs/month per billing account; this uses 1. | n/a |
+| Firestore | Free tier covers this by orders of magnitude. | n/a |
+
+The scheduled 6am run is the only thing that happens unattended. It reads at
+most 2 new listings, so **one Gemini call each — about two model calls a day.**
+
+### Budget alerts do not stop spending
+
+This is the part people get wrong. A GCP budget is a **notification**, not a cap.
+Setting one is still worth doing, but if you want a hard guarantee:
+
+```bash
+# The actual off switch — deletes both services and the scheduler.
+./deploy/teardown.sh YOUR_PROJECT_ID
+```
+
+The rules do not require the app to be live at judging, so tearing it down right
+after you record is the safest option and costs you nothing in the submission.
+
+To cap the Gemini side specifically, set a spend limit on the API key in AI
+Studio, and lower `DAILY_MODEL_CALL_BUDGET` on the service:
+
+```bash
+gcloud run services update vastunest-agent --region us-central1 \
+  --update-env-vars DAILY_MODEL_CALL_BUDGET=100
+```
+
 ## Cost and abuse controls
 
 A public `.run.app` URL is world-reachable, and every interesting route can cost

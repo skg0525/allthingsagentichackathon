@@ -24,8 +24,22 @@ gcloud services enable \
   secretmanager.googleapis.com \
   cloudbuild.googleapis.com
 
-echo "==> Firestore (ignore error if it already exists)"
-gcloud firestore databases create --location=nam5 2>/dev/null || true
+echo "==> Firestore"
+if gcloud firestore databases describe --database='(default)' >/dev/null 2>&1; then
+  echo "    already exists"
+else
+  echo "    creating (this is what makes /api/health say 'firestore' not 'local store')"
+  gcloud firestore databases create --location=nam5 \
+    || echo "    !! FAILED — the agent will fall back to local JSON storage."
+fi
+
+# The Cloud Run runtime service account needs to actually read and write it.
+RUNTIME_SA="$(gcloud projects describe "$PROJECT" --format='value(projectNumber)')-compute@developer.gserviceaccount.com"
+echo "==> granting Firestore access to $RUNTIME_SA"
+gcloud projects add-iam-policy-binding "$PROJECT" \
+  --member "serviceAccount:$RUNTIME_SA" \
+  --role roles/datastore.user --condition=None >/dev/null 2>&1 \
+  || echo "    !! could not grant roles/datastore.user — grant it by hand"
 
 if ! gcloud secrets describe gemini-api-key >/dev/null 2>&1; then
   echo "==> storing the Gemini key in Secret Manager"
@@ -50,6 +64,8 @@ gcloud run deploy vastunest-agent \
   --set-env-vars "GOOGLE_CLOUD_PROJECT=$PROJECT,DAILY_MODEL_CALL_BUDGET=${DAILY_MODEL_CALL_BUDGET:-400}"
 
 API_URL="$(gcloud run services describe vastunest-agent --region "$REGION" --format='value(status.url)')"
+# Cloud Run now serves two hostnames per service. Use whichever the API reports
+# as canonical so the UI and the scheduler both point at the same one.
 echo "==> agent is at $API_URL"
 
 echo "==> deploying the UI"
@@ -60,7 +76,7 @@ gcloud run deploy vastunest-ui \
   --min-instances 0 \
   --max-instances 2 \
   --memory 512Mi \
-  --set-build-env-vars "NEXT_PUBLIC_API_BASE=$API_URL"
+  --set-env-vars "API_BASE=$API_URL"
 
 UI_URL="$(gcloud run services describe vastunest-ui --region "$REGION" --format='value(status.url)')"
 

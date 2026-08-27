@@ -22,6 +22,9 @@ COPY --from=build /app/dist ./dist
 # Property imagery ships in the image: the vision agent and the browser are
 # then provably reading the same bytes, and a scan needs no network fetch.
 COPY public ./public
+# The committed perception seed. Without it a fresh container starts cold and
+# the first scan gambles on the vision API's mood.
+COPY data ./data
 
 # Cloud Run injects PORT; 8080 is the documented default.
 ENV PORT=8080

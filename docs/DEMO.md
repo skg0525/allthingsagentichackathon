@@ -136,6 +136,61 @@ before a judge can ask it.
 
 ---
 
+## 5b. If you would rather not narrate live
+
+You do not have to be a good speaker to make a good demo video. But read this
+first, because there is a line here worth not crossing.
+
+**What the rules ask for:** *"a live, unedited demo."* That is about the
+**screen capture** — they want to see the app actually working, not a montage
+that hides a failure. It is not a rule about your audio track.
+
+**So: keep the screen recording as one continuous take. Treat the audio
+separately.** That is honest and it is what most polished submissions do.
+
+### The approach I would pick: Descript
+
+<https://descript.com> — free tier is enough.
+
+1. Record screen + your live narration in one take, as normal.
+2. Drop it into Descript. It transcribes automatically.
+3. **Remove filler words** — one click strips every "um", "uh", "like", and
+   awkward pause across the whole recording.
+4. **Studio Sound** — one toggle. Makes laptop-mic audio sound like a podcast.
+5. If a sentence came out badly, retype it and **Overdub** speaks it in your own
+   cloned voice, matched to the surrounding audio.
+
+This keeps your voice, which matters — judges are hearing whether a real person
+solved a real problem. It just removes the parts you do not like.
+
+### If you would rather not use your voice at all
+
+Record the screen silently, then generate narration from the script:
+
+- **ElevenLabs** (<https://elevenlabs.io>) — the most natural TTS available. Paste
+  the script from section B, pick a voice, export, lay it over the screen capture.
+- **Play.ht** or **Murf.ai** — comparable, sometimes cheaper.
+
+Honest trade-off: fully synthetic narration is noticeably smoother, but it also
+reads as more detached, and some judges respond less warmly to a project that
+sounds like a product ad than one that sounds like a person who has toured
+twenty-two houses and is frustrated. Given that your story *is* personal, I would
+keep your voice and just clean it up.
+
+### Free audio-only cleanup
+
+**Adobe Podcast Enhance** (<https://podcast.adobe.com/enhance>) — free, no signup
+needed for short clips. Upload your audio, it removes room echo and noise. Does
+not remove filler words, but fixes bad mic quality in seconds.
+
+### Whichever you choose
+
+- Say plainly in the Devpost description if you used AI narration. It is not
+  against the rules and nobody minds; being caught not mentioning it is worse.
+- **Do not cut the screen capture** to hide a slow scan or an error. If something
+  goes wrong, narrate it. A recovered failure is more convincing than a demo with
+  no rough edges.
+
 ## 6. Delivery
 
 - **Don't read the script.** Know the five beats and talk. Stumbling sounds live;

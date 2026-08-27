@@ -12,7 +12,7 @@ import { AgentBrief } from '@/components/AgentBrief';
 import { PlanDropzone } from '@/components/PlanDropzone';
 import {
   getHealth, getListings, getProfile, getTraditions, getBriefs, patchProfile,
-  startScan, API_BASE, type ScanMode,
+  startScan, resolveApiBase, getApiBase, type ScanMode,
 } from '@/lib/api';
 import type {
   AuditResult, PropertyListing, PreferenceProfile, HealthPayload, Tradition,
@@ -41,6 +41,9 @@ export default function CommandCenter() {
   useEffect(() => {
     (async () => {
       try {
+        // The agent's URL comes from the server at runtime, so nothing may talk
+        // to it until this resolves.
+        await resolveApiBase();
         const [l, p, h, t, b] = await Promise.all([
           getListings(), getProfile(), getHealth(), getTraditions(),
           getBriefs().catch(() => [] as DailyBrief[]),
@@ -158,7 +161,7 @@ export default function CommandCenter() {
           <h1 className="text-lg font-semibold text-white">Backend unreachable</h1>
           <p className="mt-2 text-[13px] text-ink-300">{bootError}</p>
           <p className="mt-4 font-mono text-[11.5px] text-ink-400">
-            Expected the agent at <span className="text-brand-400">{API_BASE}</span>
+            Expected the agent at <span className="text-brand-400">{getApiBase()}</span>
           </p>
           <p className="mt-2 text-[12px] text-ink-400">
             Start it with <code className="text-ink-200">cd backend &amp;&amp; npm run dev</code>

@@ -3,16 +3,40 @@ import type {
   Tradition, TraditionId, DailyBrief, AdhocResult,
 } from '@/types/listing';
 
-export const API_BASE =
+/**
+ * Where the agent lives.
+ *
+ * Resolved at runtime from /api/config rather than inlined at build time — see
+ * that route for why. Falls back to the build-time value, then to localhost, so
+ * local development needs no extra setup.
+ */
+let apiBase =
   process.env.NEXT_PUBLIC_API_BASE?.replace(/\/$/, '') ?? 'http://localhost:8080';
+
+let resolved: Promise<string> | null = null;
+
+/** Must be awaited once before any other call in this module. */
+export function resolveApiBase(): Promise<string> {
+  if (resolved) return resolved;
+  resolved = fetch('/api/config')
+    .then((r) => (r.ok ? r.json() : null))
+    .then((cfg) => {
+      if (cfg?.apiBase) apiBase = String(cfg.apiBase).replace(/\/$/, '');
+      return apiBase;
+    })
+    .catch(() => apiBase);
+  return resolved;
+}
+
+export const getApiBase = () => apiBase;
 
 export const USER_ID = 'demo_buyer_1';
 
 /** Property imagery is served by the API, so the agent and the browser see identical bytes. */
-export const assetUrl = (path: string) => `${API_BASE}${path}`;
+export const assetUrl = (path: string) => `${apiBase}${path}`;
 
 async function json<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${API_BASE}${path}`, {
+  const res = await fetch(`${apiBase}${path}`, {
     ...init,
     headers: { 'Content-Type': 'application/json', ...(init?.headers ?? {}) },
   });
@@ -104,7 +128,7 @@ export type ScanMode =
 
 export function startScan(handlers: ScanHandlers, mode: ScanMode = 'full'): () => void {
   const q = mode === 'force' ? '&force=true' : mode === 'rescore' ? '&cachedOnly=true' : '';
-  const url = `${API_BASE}/api/scan?userId=${USER_ID}${q}`;
+  const url = `${apiBase}/api/scan?userId=${USER_ID}${q}`;
   const es = new EventSource(url);
 
   const on = <T,>(name: string, fn?: (d: T) => void) =>
