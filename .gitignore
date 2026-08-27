@@ -1,0 +1,27 @@
+node_modules/
+dist/
+.next/
+out/
+build/
+
+# Secrets — never commit
+.env
+.env.local
+.env.*.local
+*-key.json
+service-account*.json
+
+# Local agent memory + perception cache scratch
+backend/.localstore/
+
+.DS_Store
+*.log
+npm-debug.log*
+tsconfig.tsbuildinfo
+
+# Scratch files from scripts/optimizeAssets.ts
+.tmp-*
+
+# Local editor/tooling config — kept on disk, not published
+.claude/
+CLAUDE.md

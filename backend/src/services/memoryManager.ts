@@ -1,0 +1,178 @@
+/**
+ * Persistent preference memory.
+ *
+ * Firestore is the system of record on Cloud Run. Locally — and in any
+ * environment without Application Default Credentials — this transparently
+ * falls back to a JSON file so the demo never dies on a missing credential.
+ * The fallback is announced in the health payload, never silently swapped,
+ * so you always know which store answered.
+ */
+import { Firestore } from '@google-cloud/firestore';
+import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { join, dirname } from 'node:path';
+import { PreferenceProfile, DimensionKey, defaultProfile } from '../types/preferences.js';
+import { TraditionId, TRADITIONS } from '../data/traditions.js';
+import { STORE_DIR } from '../paths.js';
+
+const LOCAL_STORE = join(STORE_DIR, 'memory.json');
+const COLLECTION = 'buyerProfiles';
+
+export type MemoryBackend = 'firestore' | 'local-json';
+
+let firestore: Firestore | null = null;
+let backend: MemoryBackend = 'local-json';
+let probed = false;
+
+/** One probe at boot decides the backend; per-request failures fall back too. */
+export async function initMemory(): Promise<MemoryBackend> {
+  if (probed) return backend;
+  probed = true;
+  try {
+    const projectId = process.env.GOOGLE_CLOUD_PROJECT ?? process.env.GCLOUD_PROJECT;
+    const db = new Firestore(projectId ? { projectId } : {});
+    // Cheap round-trip that fails fast when credentials are absent.
+    await db.collection(COLLECTION).doc('__probe__').get();
+    firestore = db;
+    backend = 'firestore';
+    console.log('[memory] Firestore connected');
+  } catch (err) {
+    backend = 'local-json';
+    console.warn(`[memory] Firestore unavailable (${(err as Error).message.slice(0, 80)}) — using local JSON store`);
+  }
+  return backend;
+}
+
+export const memoryBackend = () => backend;
+
+/* ------------------------- local JSON fallback ------------------------- */
+
+async function readLocal(): Promise<Record<string, PreferenceProfile>> {
+  try { return JSON.parse(await readFile(LOCAL_STORE, 'utf8')); }
+  catch { return {}; }
+}
+async function writeLocal(all: Record<string, PreferenceProfile>) {
+  await mkdir(dirname(LOCAL_STORE), { recursive: true });
+  await writeFile(LOCAL_STORE, JSON.stringify(all, null, 2));
+}
+
+/** Profiles written before a field existed must not crash on read. */
+function withDefaults(profile: PreferenceProfile, userId: string): PreferenceProfile {
+  const base = defaultProfile(userId);
+  return {
+    ...base,
+    ...profile,
+    weights: { ...base.weights, ...(profile.weights ?? {}) },
+    hardConstraints: { ...base.hardConstraints, ...(profile.hardConstraints ?? {}) },
+    learnedNotes: profile.learnedNotes ?? [],
+  };
+}
+
+/* ------------------------------- API ---------------------------------- */
+
+export async function getProfile(userId: string): Promise<PreferenceProfile> {
+  if (backend === 'firestore' && firestore) {
+    try {
+      const doc = await firestore.collection(COLLECTION).doc(userId).get();
+      if (doc.exists) return withDefaults(doc.data() as PreferenceProfile, userId);
+      const fresh = defaultProfile(userId);
+      await firestore.collection(COLLECTION).doc(userId).set(fresh);
+      return fresh;
+    } catch (err) {
+      console.warn('[memory] Firestore read failed, falling back:', (err as Error).message);
+      backend = 'local-json';
+    }
+  }
+  const all = await readLocal();
+  if (!all[userId]) {
+    all[userId] = defaultProfile(userId);
+    await writeLocal(all);
+  }
+  return withDefaults(all[userId]!, userId);
+}
+
+async function saveProfile(profile: PreferenceProfile): Promise<PreferenceProfile> {
+  profile.updatedAt = new Date().toISOString();
+  profile.version += 1;
+
+  if (backend === 'firestore' && firestore) {
+    try {
+      await firestore.collection(COLLECTION).doc(profile.userId).set(profile);
+      return profile;
+    } catch (err) {
+      console.warn('[memory] Firestore write failed, falling back:', (err as Error).message);
+      backend = 'local-json';
+    }
+  }
+  const all = await readLocal();
+  all[profile.userId] = profile;
+  await writeLocal(all);
+  return profile;
+}
+
+/** Direct weight / constraint edits from the UI chips. */
+export async function updateProfile(
+  userId: string,
+  patch: {
+    weights?: Partial<Record<DimensionKey, number>>;
+    hardConstraints?: Partial<PreferenceProfile['hardConstraints']>;
+    tradition?: TraditionId;
+  },
+): Promise<PreferenceProfile> {
+  const profile = await getProfile(userId);
+  if (patch.tradition && patch.tradition in TRADITIONS) profile.tradition = patch.tradition;
+  if (patch.weights) {
+    for (const [k, v] of Object.entries(patch.weights)) {
+      if (typeof v === 'number') profile.weights[k as DimensionKey] = Math.max(0, Math.min(1, v));
+    }
+  }
+  if (patch.hardConstraints) Object.assign(profile.hardConstraints, patch.hardConstraints);
+  return saveProfile(profile);
+}
+
+export interface AppliedFeedback {
+  profile: PreferenceProfile;
+  changes: { dimension: DimensionKey; from: number; to: number }[];
+  note: string;
+}
+
+/**
+ * Turn a free-text critique into an actual weight change.
+ *
+ * The interpretation is done by Gemini (see feedbackInterpreter.ts) — this
+ * function is the transactional part: clamp, record, persist, and report
+ * exactly what moved so the UI can show the buyer what it learned.
+ */
+export async function applyFeedback(
+  userId: string,
+  propertyId: string,
+  action: 'thumbs_up' | 'thumbs_down',
+  critique: string,
+  adjustments: { dimension: DimensionKey; delta: number }[],
+  note: string,
+): Promise<AppliedFeedback> {
+  const profile = await getProfile(userId);
+  const changes: AppliedFeedback['changes'] = [];
+
+  for (const { dimension, delta } of adjustments) {
+    const from = profile.weights[dimension];
+    if (from === undefined) continue;
+    const to = Math.max(0.05, Math.min(1, Math.round((from + delta) * 100) / 100));
+    if (to !== from) {
+      profile.weights[dimension] = to;
+      changes.push({ dimension, from, to });
+    }
+  }
+
+  const stamp = new Date().toISOString().slice(0, 10);
+  profile.learnedNotes.unshift(`[${stamp}] ${action === 'thumbs_up' ? '👍' : '👎'} ${propertyId}: ${note}`);
+  profile.learnedNotes = profile.learnedNotes.slice(0, 25); // keep the doc bounded
+
+  const saved = await saveProfile(profile);
+  return { profile: saved, changes, note };
+}
+
+export async function resetProfile(userId: string): Promise<PreferenceProfile> {
+  const fresh = defaultProfile(userId);
+  fresh.version = 0;
+  return saveProfile(fresh);
+}

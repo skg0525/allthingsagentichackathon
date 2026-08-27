@@ -1,0 +1,212 @@
+{
+  "prop_101": {
+    "perception": {
+      "entranceDirection": "East",
+      "entranceEvidence": "The covered porch and foyer are located on the eastern side of the floor plan.",
+      "kitchenQuadrant": "South-East",
+      "kitchenEvidence": "The kitchen is situated in the south-east corner of the floor plan.",
+      "masterBedQuadrant": "South-West",
+      "masterBedEvidence": "The primary bedroom is located in the south-west quadrant of the floor plan.",
+      "mainFloorBedroom": true,
+      "mainFloorFullBath": true,
+      "mainFloorSuiteEvidence": "The main floor contains a primary bedroom and a guest bedroom alongside a full bathroom with a bathtub and shower.",
+      "yardGrade": "Flat",
+      "yardPrivacy": "Medium",
+      "yardFenced": true,
+      "yardEvidence": "The aerial view shows a fully fenced rear yard with level grass and a patio.",
+      "backsOntoMajorRoad": false,
+      "siteEvidence": "The aerial view shows the property located on a cul-de-sac backing onto trees without any major roads abutting it."
+    },
+    "model": "gemini-3.5-flash-lite",
+    "at": "2026-08-27T18:55:59.590Z"
+  },
+  "prop_102": {
+    "perception": {
+      "entranceDirection": "South",
+      "entranceEvidence": "The front door is clearly labelled as 'FRONT DOOR' on the south wall of the floor plan.",
+      "kitchenQuadrant": "North",
+      "kitchenEvidence": "The kitchen is located at the top-centre (North) of the main floor plan.",
+      "masterBedQuadrant": "Unknown",
+      "masterBedEvidence": "The floor plan notes that all bedrooms are on the upper level, so no master bedroom is present on this floor.",
+      "mainFloorBedroom": false,
+      "mainFloorFullBath": false,
+      "mainFloorSuiteEvidence": "The floor plan shows only a half bath containing a toilet and sink, and notes that all bedrooms are upper level.",
+      "yardGrade": "Flat",
+      "yardPrivacy": "Medium",
+      "yardFenced": true,
+      "yardEvidence": "The aerial view shows a fenced rear yard with a relatively level grade and moderate tree cover.",
+      "backsOntoMajorRoad": true,
+      "siteEvidence": "The aerial view clearly shows a multi-lane road with yellow double lines and lane markings running alongside the property's front/side."
+    },
+    "model": "gemini-3.5-flash-lite",
+    "at": "2026-08-27T18:56:07.578Z"
+  },
+  "prop_103": {
+    "perception": {
+      "entranceDirection": "North",
+      "entranceEvidence": "The foyer and main entrance doors are located at the top-center exterior wall of the floor plan pointing North.",
+      "kitchenQuadrant": "East",
+      "kitchenEvidence": "The room labelled KITCHEN is situated on the right side of the plan, which is the East quadrant.",
+      "masterBedQuadrant": "Unknown",
+      "masterBedEvidence": "The text at the bottom left of the floor plan states 'BEDROOMS: UPPER LEVEL', indicating no master bedroom on this main floor.",
+      "mainFloorBedroom": false,
+      "mainFloorFullBath": false,
+      "mainFloorSuiteEvidence": "The floor plan shows only a powder room with a toilet and sink on the main floor, and no bedrooms.",
+      "yardGrade": "Steep Slope",
+      "yardPrivacy": "Medium",
+      "yardFenced": false,
+      "yardEvidence": "The aerial view shows a dramatic elevation change and retaining walls at the rear of the lot.",
+      "backsOntoMajorRoad": false,
+      "siteEvidence": "The aerial image shows the property is on a quiet residential cul-de-sac street without lane markings."
+    },
+    "model": "gemini-3.5-flash-lite",
+    "at": "2026-08-27T18:56:09.403Z"
+  },
+  "prop_104": {
+    "perception": {
+      "entranceDirection": "West",
+      "entranceEvidence": "The floor plan explicitly labels the 'FRONT DOOR' on the left side of the image, which corresponds to West based on the North arrow.",
+      "kitchenQuadrant": "North-West",
+      "kitchenEvidence": "The room labelled KITCHEN is located in the top-left corner of the floor plan.",
+      "masterBedQuadrant": "Unknown",
+      "masterBedEvidence": "The provided floor plan for the main floor does not contain a primary or master bedroom.",
+      "mainFloorBedroom": true,
+      "mainFloorFullBath": false,
+      "mainFloorSuiteEvidence": "The floor plan shows a 'FLEX ROOM / BEDROOM 4' on the main floor, but the only bathroom on this level is labelled 'HALF BATH' and contains only a toilet and sink.",
+      "yardGrade": "Flat",
+      "yardPrivacy": "Medium",
+      "yardFenced": true,
+      "yardEvidence": "The aerial photograph shows a level rear lawn enclosed by a wooden privacy fence, though it is overlooked by several neighboring two-story homes.",
+      "backsOntoMajorRoad": false,
+      "siteEvidence": "The aerial view shows the property is located on a residential cul-de-sac with no multi-lane roads or lane markings visible adjacent to the lot."
+    },
+    "model": "gemini-3-flash-preview",
+    "at": "2026-08-27T18:57:00.913Z"
+  },
+  "prop_105": {
+    "perception": {
+      "entranceDirection": "North",
+      "entranceEvidence": "The front door is clearly labeled on the north side of the floor plan near the primary bedroom.",
+      "kitchenQuadrant": "South-East",
+      "kitchenEvidence": "The room labelled Kitchen is located in the south-east quadrant of the floor plan.",
+      "masterBedQuadrant": "North-East",
+      "masterBedEvidence": "The Primary Bedroom is located in the north-east quadrant of the floor plan.",
+      "mainFloorBedroom": true,
+      "mainFloorFullBath": true,
+      "mainFloorSuiteEvidence": "The floor plan shows multiple bedrooms (Primary Bedroom, Bedroom 2, Bedroom 3) and a full bath containing a bathtub and shower.",
+      "yardGrade": "Flat",
+      "yardPrivacy": "Medium",
+      "yardFenced": false,
+      "yardEvidence": "The aerial image shows a level suburban backyard with minimal separating fences.",
+      "backsOntoMajorRoad": false,
+      "siteEvidence": "The aerial view shows the property situated on a standard residential street without multi-lane major roads abutting it."
+    },
+    "model": "gemini-3.5-flash-lite",
+    "at": "2026-08-27T18:57:04.484Z"
+  },
+  "prop_106": {
+    "perception": {
+      "entranceDirection": "South",
+      "entranceEvidence": "The floor plan shows the covered entry porch and front door at the bottom of the layout, facing South.",
+      "kitchenQuadrant": "East",
+      "kitchenEvidence": "The kitchen is located on the right side of the main floor plan, corresponding to the East quadrant.",
+      "masterBedQuadrant": "North-West",
+      "masterBedEvidence": "The primary bedroom is situated in the top-left section of the floor plan, placing it in the North-West quadrant.",
+      "mainFloorBedroom": true,
+      "mainFloorFullBath": true,
+      "mainFloorSuiteEvidence": "The floor plan features a primary bedroom and a guest bedroom on the main level along with multiple full bathrooms containing tubs and showers.",
+      "yardGrade": "Flat",
+      "yardPrivacy": "High",
+      "yardFenced": true,
+      "yardEvidence": "The aerial image shows a level, fully fenced rectangular rear yard surrounded by dense trees.",
+      "backsOntoMajorRoad": false,
+      "siteEvidence": "The aerial photo shows the property backing onto a greenbelt trail and dense woods rather than a major road."
+    },
+    "model": "gemini-3.5-flash-lite",
+    "at": "2026-08-27T18:57:08.388Z"
+  },
+  "prop_107": {
+    "perception": {
+      "entranceDirection": "West",
+      "entranceEvidence": "The stair entry with the door symbol is located on the western exterior wall of the floor plan.",
+      "kitchenQuadrant": "North-East",
+      "kitchenEvidence": "The kitchen is clearly labelled in the north-east portion of the main floor plan.",
+      "masterBedQuadrant": "Unknown",
+      "masterBedEvidence": "The floor plan notes that bedrooms are on the upper level, so there is no master bedroom on this main floor.",
+      "mainFloorBedroom": false,
+      "mainFloorFullBath": false,
+      "mainFloorSuiteEvidence": "The only bathroom on this main floor is a powder room containing only a toilet and sink, and no bedrooms are present.",
+      "yardGrade": "Flat",
+      "yardPrivacy": "Medium",
+      "yardFenced": false,
+      "yardEvidence": "The aerial view shows a small balcony/patio area with minimal outdoor space and flat grade levels.",
+      "backsOntoMajorRoad": false,
+      "siteEvidence": "The aerial view shows the property situated in a townhome community next to a local street and train tracks, but not a multi-lane major road."
+    },
+    "model": "gemini-3.5-flash-lite",
+    "at": "2026-08-27T18:57:23.160Z"
+  },
+  "prop_108": {
+    "perception": {
+      "entranceDirection": "North",
+      "entranceEvidence": "The main entry is located at the top-center (North) of the floor plan labelled MAIN ENTRY.",
+      "kitchenQuadrant": "South-East",
+      "kitchenEvidence": "The kitchen is located in the bottom-right (South-East) section of the floor plan.",
+      "masterBedQuadrant": "Unknown",
+      "masterBedEvidence": "The floor plan notes PRIMARY SUITE: UPPER LEVEL, so no master bedroom is on this main floor.",
+      "mainFloorBedroom": true,
+      "mainFloorFullBath": true,
+      "mainFloorSuiteEvidence": "There is a guest suite and a full bath with a bathtub and shower on the main floor.",
+      "yardGrade": "Flat",
+      "yardPrivacy": "Medium",
+      "yardFenced": true,
+      "yardEvidence": "The aerial view shows a flat rear yard enclosed by wooden fences on the sides.",
+      "backsOntoMajorRoad": true,
+      "siteEvidence": "The aerial view shows a multi-lane highway with visible lane markings abutting the rear of the property behind a sound wall."
+    },
+    "model": "gemini-3.5-flash-lite",
+    "at": "2026-08-27T18:57:26.561Z"
+  },
+  "prop_109": {
+    "perception": {
+      "entranceDirection": "East",
+      "entranceEvidence": "The foyer and covered porch are located on the eastern side of the floor plan with an entry door symbol pointing east.",
+      "kitchenQuadrant": "South-East",
+      "kitchenEvidence": "The kitchen is located in the south-east corner of the floor plan.",
+      "masterBedQuadrant": "South-West",
+      "masterBedEvidence": "The primary bedroom is located in the south-west quadrant of the floor plan.",
+      "mainFloorBedroom": true,
+      "mainFloorFullBath": true,
+      "mainFloorSuiteEvidence": "There is a primary bedroom and an in-law suite on the main floor along with multiple full baths.",
+      "yardGrade": "Flat",
+      "yardPrivacy": "Medium",
+      "yardFenced": true,
+      "yardEvidence": "The aerial view shows a level grassy rear yard enclosed by a wooden fence backing up to trees.",
+      "backsOntoMajorRoad": false,
+      "siteEvidence": "The aerial view shows the house is located on a quiet cul-de-sac with no multi-lane major roads abutting the property."
+    },
+    "model": "gemini-3.5-flash-lite",
+    "at": "2026-08-27T18:57:43.206Z"
+  },
+  "prop_110": {
+    "perception": {
+      "entranceDirection": "South",
+      "entranceEvidence": "The front door and entry porch are located on the bottom (South) side of the floor plan.",
+      "kitchenQuadrant": "North-East",
+      "kitchenEvidence": "The kitchen is located in the top-right corner of the floor plan relative to the building center.",
+      "masterBedQuadrant": "Unknown",
+      "masterBedEvidence": "The floor plan is for the main level only, and a note indicates bedrooms are located on the upper split level.",
+      "mainFloorBedroom": false,
+      "mainFloorFullBath": false,
+      "mainFloorSuiteEvidence": "The main level contains only a half bath with a toilet and sink, and no rooms are labeled as bedrooms.",
+      "yardGrade": "Steep Slope",
+      "yardPrivacy": "Low",
+      "yardFenced": true,
+      "yardEvidence": "The aerial view shows a chain-link fence enclosing a yard that slopes steeply down toward a rail corridor.",
+      "backsOntoMajorRoad": false,
+      "siteEvidence": "The aerial view and listing remarks confirm the property backs onto a rail corridor, not a major road."
+    },
+    "model": "gemini-3-flash-preview",
+    "at": "2026-08-27T18:58:38.503Z"
+  }
+}
