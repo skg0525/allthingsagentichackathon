@@ -11,7 +11,7 @@ to paste where.
 |---|---|---|
 | Gemini **3.5 or newer**, via Gemini API or Vertex AI | `gemini-3.5-flash-lite` through the Google GenAI SDK. Falls back to `gemini-3.5-flash`, then `gemini-3-flash-preview` | ✅ |
 | ≥1 Google agent framework (ADK, GenAI SDK, Antigravity SDK, GenKit) | **Google GenAI SDK** (`@google/genai`) — structured `responseSchema`, `thinkingLevel`, system instructions | ✅ |
-| ≥1 Google Cloud infra service (Cloud Run, Cloud SQL, Firestore, GKE, Pub/Sub) | **Cloud Run** (both services) + **Firestore** (profiles, briefs) + **Cloud Scheduler** (the autonomous cycle) | ⬜ deploy pending |
+| ≥1 Google Cloud infra service (Cloud Run, Cloud SQL, Firestore, GKE, Pub/Sub) | **Cloud Run** (both services) + **Firestore** (profiles, briefs) + **Cloud Scheduler** (the autonomous cycle) | ✅ deployed |
 
 **On the "extra Google AI models" bonus:** the rules name *"Gemma, Veo or Lyria."*
 We use `gemini-3.1-flash-image`, which is still Gemini — so **do not claim this
@@ -36,9 +36,15 @@ Architectural Design.
 
 ## 3. What to submit
 
-### ⬜ Hosted project URL
-Cloud Run gives you `https://vastunest-ui-xxxx.run.app` — **no custom domain
-needed**. Run `./deploy/deploy.sh YOUR_PROJECT_ID` and paste the UI URL.
+### ✅ Hosted project URL — LIVE
+
+**https://vastunest-ui-555426598641.us-central1.run.app**
+
+Agent API: https://vastunest-agent-555426598641.us-central1.run.app
+Health:    https://vastunest-agent-555426598641.us-central1.run.app/api/health
+
+Project `gen-lang-client-0460749914` · region `us-central1`. No custom domain
+needed — Cloud Run's own hostname is a valid hosted URL.
 
 > The rules say the app need not be live at judging time, so you can delete the
 > services after recording to keep spend at zero. `min-instances=0` means idle
@@ -158,9 +164,20 @@ Run revision; one-command deploy; demo reset script that verifies its own work.
 
 ## 6. Remaining, in order
 
-1. ⬜ **Push to GitHub** (public)
-2. ⬜ **`./deploy/deploy.sh YOUR_PROJECT_ID`** — the only unmet scored requirement
-3. ⬜ Export the architecture diagram to PNG
+1. ✅ **Pushed to GitHub** — https://github.com/skg0525/allthingsagentichackathon
+2. ✅ **Deployed to Cloud Run** — UI, agent, Firestore and Cloud Scheduler all live
+3. ⬜ Export the architecture diagram to PNG ([mermaid.live](https://mermaid.live))
 4. ⬜ Record the video (`docs/DEMO.md`)
 5. ⬜ Fill in the Devpost form
 6. ⬜ Bonus: blog post + social post
+7. ⬜ **After recording:** `./deploy/teardown.sh gen-lang-client-0460749914`
+
+### Live proof shots for the video
+
+| Tab | What it shows |
+|---|---|
+| https://vastunest-ui-555426598641.us-central1.run.app | The app |
+| https://vastunest-agent-555426598641.us-central1.run.app/api/health | `"memoryBackend":"firestore"`, the model, the Cloud Run revision |
+| Cloud Run console | Two services, `min-instances 0` |
+| Firestore console | `buyerProfiles/demo_buyer_1` — the weights the agent learned |
+| Cloud Scheduler | `vastunest-overnight`, 06:00 daily |
