@@ -517,6 +517,52 @@ common interaction is free no matter how often it is hit.
 `./deploy/teardown.sh PROJECT_ID` removes both services and the scheduler when
 you are done. The rules do not require the app to be live at judging time.
 
+## For judges — where to look
+
+**The one claim worth checking:** the agent reads floor plans correctly, and you
+can verify that yourself in about a second:
+
+```bash
+cd backend && npm run verify:seed     # offline, no API key needed
+```
+
+93% exact, 0% wrong across 42 fields of known ground truth. The truth lives in
+`src/data/groundTruth.ts` and is deliberately not imported by any runtime code —
+if the agent could read it, the check would be circular.
+
+| If you want to see… | Look at |
+|---|---|
+| The architectural argument | `services/geminiEvaluator.ts` (perception) vs `services/scoringEngine.ts` (judgement) — the model never sees a weight |
+| The autonomous path | `services/watchAgent.ts` — `NOTIFY_THRESHOLD` and the `notify` decision |
+| Traditions as data, not code | `data/traditions.ts` — swapping the table re-ranks everything with no model call |
+| Honest degradation | `UNKNOWN_PERCEPTION` in `geminiEvaluator.ts` — it says "Unknown" rather than guessing |
+| Why it's fast | `services/auditService.ts` — perception caches because it depends only on the images |
+
+## Didn't fit in the four-minute video
+
+Things worth knowing that the demo has no room for:
+
+- **The whole dataset is reproducible.** `npm run assets` regenerates every floor
+  plan and aerial from written scene briefs with Gemini 3.1 Flash Image, and
+  `npm run cache:build` re-reads them. The imagery is generated *from a spec*,
+  which is the only reason ground truth is knowable and the accuracy claim means
+  anything.
+- **Drop in any floor plan.** "Analyse a plan" runs an unseen image through the
+  identical prompt and schema. Yard fields come back `Unknown` because a plan
+  cannot show you a backyard — it says so rather than inventing it.
+- **Two verification harnesses.** `npm run verify` re-reads every plan live;
+  `npm run verify:seed` scores the committed readings offline. Same ground truth,
+  same scoring, so an API outage can't make the claim unfalsifiable.
+- **A model fallback chain.** `gemini-3.5-flash-lite` → `gemini-3.5-flash` →
+  `gemini-3-flash-preview`, with per-request timeouts. Measured on this repo:
+  `gemini-3.5-flash` once took **59 seconds to return a 503**, while flash-lite
+  answered the same request in 1.5s. The seed records which model produced each
+  reading, so a degraded result is auditable rather than hidden.
+- **Spend controls.** Per-IP throttles, a per-instance daily model-call budget on
+  `/api/health`, `max-instances=2`, and `deploy/teardown.sh`.
+- **Every commit's worth of production bugs is written down** in Findings below —
+  including three that could only surface on Cloud Run.
+
 ## Findings & learnings
 
 - **`thinkingLevel: LOW` roughly halved vision latency** with no measurable accuracy
