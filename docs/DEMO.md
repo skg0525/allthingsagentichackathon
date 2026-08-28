@@ -138,62 +138,46 @@ your own data?" before a judge can ask it.
 
 ---
 
-## 5b. Narration — read this before choosing a tool
+## 5b. Narration and editing — the official rules
 
-**The organizers said, in the Q&A, that they recommend your own voice over an AI
-voice, because a synthetic voice feels less genuine to judges.** That is guidance
-from the people scoring you, so it overrides any general advice about polish.
+Two things in the organizers' written checklist override earlier advice,
+including advice I gave you:
 
-So: **use your voice.** The goal is not a flawless read — it is a real person who
-has toured twenty-two houses and is frustrated. That lands.
+**Editing is not just allowed, it is recommended.** Their words: *"Use jump cuts
+to remove pauses, ums, and dead air. Cut all load times and waiting. Speed up
+slow sections. Record in short clips, then you can redo one part without filming
+it all again."* So record beat by beat and cut it together. Do not sit through a
+50-second scan on camera.
 
-### You do not have to memorise anything
+**AI voiceover is acceptable.** Their words: *"Not comfortable narrating? An AI
+voiceover beats silence or mumbling."* The live Q&A said they prefer a real
+voice, and that is still true, but a clean AI read beats a hesitant human one.
 
-You are not giving a speech. You are showing someone your app and talking about
-it. Three things make that easy:
+So the ranking is:
 
-**1. Learn the eight beats, not the words.** Hook · problem · it ran overnight ·
-evidence · tradition switch · it learns · it acts · Cloud proof. That is it. If
-you know what happens next, the words come.
+1. Your voice, recorded in short clips, filler removed in Descript
+2. An AI voiceover from the script, if narrating makes you tense up
+3. A mumbled single take — worst option, avoid
 
-**2. Put bullets on a second screen** (or a phone beside the keyboard). Five
-words per beat, not sentences. Sentences make you read; bullets make you talk.
+**Do not type live.** Their checklist says so explicitly. Paste the feedback
+text, or cut to the result.
 
-**3. Do three throwaway takes and keep the fourth.** You will be noticeably
-better by the third. That costs twenty minutes, not an afternoon.
+### The tools
 
-### Cleaning up the recording — allowed, and worth it
+**[Descript](https://descript.com)** — record in clips, one click removes every
+"um", Studio Sound fixes laptop-mic audio, and jump cuts are trivial. This is the
+whole workflow in one tool.
 
-Removing filler words from *your own* voice is not an AI voice. It is editing.
+**[ElevenLabs](https://elevenlabs.io)** — if you go the AI voiceover route, paste
+the script and lay the audio over your screen clips.
 
-**[Descript](https://descript.com)** — free tier is enough:
-- one click strips every "um", "uh", and dead pause across the whole recording
-- **Studio Sound** makes laptop-mic audio sound like a podcast
-- if one sentence came out badly, retype it and **Overdub** speaks it in your own
-  cloned voice, matched to the surrounding audio
+**[Adobe Podcast Enhance](https://podcast.adobe.com/enhance)** — free, cleans
+audio quality only.
 
-Use Overdub for *repairs*, not to generate the whole narration — that crosses
-back into the thing the organizers advised against.
+### The rule that still holds
 
-It is also exactly the tool for the AI courses you have been meaning to start, so
-learning it here is not throwaway effort.
-
-**Free minimum:** [Adobe Podcast Enhance](https://podcast.adobe.com/enhance) —
-upload the audio, it removes room echo and noise. No signup for short clips.
-
-### On HeyGen and ElevenLabs
-
-Both are good tools and I recommended them earlier — **I was wrong for this
-specific submission.** HeyGen is built for avatar presenter videos, and full
-voice cloning is the thing the judges said reads as less genuine. Save them for
-the courses.
-
-### The rule that does not bend
-
-**Do not cut the screen capture.** The rules ask for an unedited demo. Clean the
-audio all you like; the video stays one continuous take. If something goes wrong
-on camera, narrate it — a recovered failure is more convincing than a demo with
-no rough edges.
+No mockups and no slideware. Every frame has to be the real thing running. Cutting
+dead air is editing; faking a result is not.
 
 ## 6. Delivery
 
@@ -250,8 +234,13 @@ the field will be able to say.
 **Target 3:40, not 4:00.** Judges stop watching at four minutes — an overrun means
 your close and your Cloud proof are simply never seen. Leave buffer.
 
-**The first 30 seconds decide whether they keep watching.** So the demo opens on
-the agent having already done something impressive, not on a problem statement.
+**Show the project working in the first 10 to 15 seconds.** That is from the
+organizers' checklist, and it is tighter than the 30 seconds mentioned in the
+Q&A. No title card, no intro, no sign-in. Open already logged in, on a result.
+
+**Say the model and framework out loud.** Their checklist: *"which Gemini model
+and which agent framework you used — say them clearly, don't bury them."* The
+line is in the hook below.
 
 ---
 
@@ -260,16 +249,20 @@ the agent having already done something impressive, not on a problem statement.
 **Open on the app, already on a floor plan with the agent's overlay pins showing.**
 No preamble. No title card. Talk immediately.
 
-> "This is a floor plan. My agent read it about a second ago, and it can tell me
-> the front door faces east, the kitchen's in the south-east corner, and — this
-> one matters — the only bathroom on the ground floor has no tub in it.
+> "This is a floor plan. Gemini 3.5 Flash-Lite just read it, and it can tell me
+> the front door faces east, the kitchen is in the south-east corner, and the only
+> bathroom on the ground floor has no tub in it.
 >
-> [*point at the aerial tab, click it*]
+> [*click the aerial tab*]
 >
-> And from the satellite image: the backyard is flat, fenced, and backs onto
-> woodland rather than a road.
+> From the satellite image: flat backyard, fenced, backing onto woodland rather
+> than a road.
 >
 > Zillow has a filter for none of that."
+
+**On-screen text instead of saying it:** put `Gemini 3.5 Flash-Lite · Google GenAI
+SDK · Cloud Run + Firestore` as a caption here. Their checklist asks for the model
+and framework to be explicit, and a caption costs no seconds.
 
 ---
 
@@ -339,7 +332,8 @@ Click **Analyze**. Talk while cards land.
 
 ## 2:25 – 2:50 · It learns
 
-**Open the docked "Teach the agent" bar. Pick 👎. Type live:**
+**Open the docked "Teach the agent" bar. Pick 👎. PASTE the text — do not type it
+live, their checklist says so:**
 
 ```
 It fronts a four-lane road. With a toddler that's a dealbreaker.
