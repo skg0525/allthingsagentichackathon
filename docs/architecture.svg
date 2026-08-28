@@ -1,154 +1,153 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" font-family="Inter, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1520 860" width="1520" height="860" font-family="Inter, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
   <defs>
-    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
       <path d="M0,0 L10,5 L0,10 z" fill="#5f6368"/>
     </marker>
-    <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
       <path d="M0,0 L10,5 L0,10 z" fill="#1a73e8"/>
     </marker>
-    <marker id="ao" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#e37400"/>
-    </marker>
     <style>
-      .t   { font-size:15px; fill:#202124; font-weight:600 }
-      .s   { font-size:12.5px; fill:#5f6368 }
-      .lbl { font-size:11.5px; fill:#5f6368 }
-      .lblb{ font-size:11.5px; fill:#1a73e8; font-weight:600 }
-      .zone{ font-size:12px; fill:#9aa0a6; font-weight:600; letter-spacing:.08em }
-      .num { font-size:11px; fill:#e37400; font-weight:700; letter-spacing:.1em }
-      .w   { fill:#fff; font-weight:600; font-size:15px }
-      .ws  { fill:#d2e3fc; font-size:12.5px }
-      .e   { stroke:#5f6368; stroke-width:1.6; fill:none; marker-end:url(#a) }
-      .eb  { stroke:#1a73e8; stroke-width:1.8; fill:none; marker-end:url(#ab) }
-      .eo  { stroke:#e37400; stroke-width:2.6; fill:none; marker-end:url(#ao) }
-      .ed  { stroke:#9aa0a6; stroke-width:1.4; fill:none; stroke-dasharray:5 4; marker-end:url(#a) }
+      .h    { font-size:19px; font-weight:700; fill:#202124 }
+      .sub  { font-size:12.5px; fill:#5f6368 }
+      .zone { font-size:10.5px; fill:#80868b; font-weight:700; letter-spacing:.09em }
+      .n    { font-size:13.5px; font-weight:600; fill:#202124 }
+      .d    { font-size:11px; fill:#5f6368 }
+      .nw   { font-size:13.5px; font-weight:600; fill:#fff }
+      .dw   { font-size:11px; fill:#d2e3fc }
+      .nb   { font-size:13.5px; font-weight:600; fill:#1a73e8 }
+      .db   { font-size:11px; fill:#1967d2 }
+      .e    { stroke:#5f6368; stroke-width:1.5; fill:none; marker-end:url(#a) }
+      .eb   { stroke:#1a73e8; stroke-width:1.5; fill:none; marker-end:url(#ab) }
+      .l    { font-size:10.5px; fill:#5f6368 }
+      .lb   { font-size:10.5px; fill:#1a73e8 }
     </style>
   </defs>
+  <rect width="1520" height="860" fill="#fff"/>
 
-  <rect width="1600" height="900" fill="#fff"/>
+  <text x="44" y="42" class="h">VastuNest — architecture</text>
+  <text x="44" y="64" class="sub">Gemini 3.5 Flash-Lite via the Google GenAI SDK. Track: Collaborative Partner.</text>
 
-  <!-- title -->
-  <text x="60" y="58" font-size="26" font-weight="700" fill="#202124">VastuNest</text>
-  <text x="196" y="58" font-size="16" fill="#5f6368">— an autonomous home-buying agent</text>
-  <text x="240" y="115" font-size="13" fill="#5f6368">Track: Collaborative Partner  ·  Gemini 3.5 Flash-Lite via the Google GenAI SDK</text>
-  <text x="240" y="133" font-size="13" fill="#5f6368">Cloud Run  ·  Firestore  ·  Cloud Scheduler  ·  Cloud Trace  ·  Secret Manager</text>
+  <!-- clients -->
+  <text x="44" y="112" class="zone">CLIENTS &amp; TRIGGERS</text>
+  <rect x="44" y="126" width="190" height="58" rx="8" fill="#fff" stroke="#dadce0" stroke-width="1.5"/>
+  <text x="62" y="150" class="n">Browser</text>
+  <text x="62" y="169" class="d">buyer's session</text>
 
-  <!-- ================= Cloud Run boundary ================= -->
-  <rect x="48" y="148" width="1050" height="672" rx="14" fill="#f8f9fa" stroke="#dadce0" stroke-width="1.5"/>
-  <text x="700" y="176" class="zone">GOOGLE CLOUD RUN · SCALES TO ZERO</text>
+  <rect x="44" y="310" width="190" height="58" rx="8" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1.5"/>
+  <text x="62" y="334" class="nb">Cloud Scheduler</text>
+  <text x="62" y="353" class="db">cron 06:00 daily</text>
 
-  <!--  two entry points  -->
-  <rect x="80" y="182" width="230" height="76" rx="10" fill="#fff" stroke="#dadce0" stroke-width="1.5"/>
-  <text x="100" y="212" class="t">Command center</text>
-  <text x="100" y="234" class="s">Next.js · you ask</text>
-  <text x="100" y="251" class="s">rank · inspect · teach · tour</text>
+  <!-- frontend on cloud run -->
+  <rect x="286" y="100" width="228" height="180" rx="10" fill="#f8f9fa" stroke="#dadce0" stroke-width="1.5"/>
+  <text x="302" y="122" class="zone">CLOUD RUN</text>
+  <rect x="302" y="136" width="196" height="70" rx="8" fill="#fff" stroke="#dadce0" stroke-width="1.5"/>
+  <text x="318" y="160" class="n">Next.js UI</text>
+  <text x="318" y="179" class="d">ranked list · inspector</text>
+  <text x="318" y="195" class="d">feedback · tour picker</text>
+  <text x="302" y="238" class="d">min-instances 0</text>
+  <text x="302" y="256" class="d">max-instances 2</text>
 
-  <rect x="836" y="182" width="230" height="76" rx="10" fill="#fff" stroke="#dadce0" stroke-width="1.5"/>
-  <text x="856" y="212" class="t">watchAgent</text>
-  <text x="856" y="234" class="s">nobody asks · 06:00 daily</text>
-  <text x="856" y="251" class="s">reads · decides · stays silent</text>
+  <path class="e" d="M234,155 L282,163"/>
 
-  <!-- external triggers -->
-  <rect x="80" y="96" width="120" height="40" rx="20" fill="#fff" stroke="#dadce0" stroke-width="1.5"/>
-  <text x="112" y="121" class="t" font-size="13.5">Buyer</text>
-  <path class="e" d="M140,136 L140,182"/>
+  <!-- agent api -->
+  <rect x="566" y="100" width="410" height="600" rx="10" fill="#f8f9fa" stroke="#dadce0" stroke-width="1.5"/>
+  <text x="584" y="122" class="zone">CLOUD RUN — AGENT API (Express)</text>
 
-  <rect x="1140" y="182" width="200" height="60" rx="10" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1.5"/>
-  <text x="1160" y="208" class="t" fill="#1a73e8" font-size="14">Cloud Scheduler</text>
-  <text x="1160" y="228" class="s" fill="#1a73e8">06:00 daily · cron</text>
-  <path class="eb" d="M1140,212 L1074,212"/>
+  <rect x="584" y="138" width="374" height="52" rx="8" fill="#fff" stroke="#dadce0" stroke-width="1.5"/>
+  <text x="600" y="161" class="n">server.ts</text>
+  <text x="600" y="179" class="d">GET /api/scan (SSE) · POST /api/agent/run · /api/feedback · /api/tour/plan</text>
 
-  <!-- ================= the spine ================= -->
-  <text x="72" y="330" class="num">THE SPLIT EVERYTHING RESTS ON</text>
+  <rect x="584" y="212" width="374" height="56" rx="8" fill="#fff" stroke="#dadce0" stroke-width="1.5"/>
+  <text x="600" y="236" class="n">watchAgent</text>
+  <text x="600" y="255" class="d">unattended cycle · reads new listings · decides whether to notify</text>
 
-  <!-- 1 perception -->
-  <rect x="80" y="348" width="290" height="128" rx="12" fill="#fef7e0" stroke="#f9ab00" stroke-width="2.5"/>
-  <text x="104" y="380" class="num">1 · PERCEPTION</text>
-  <text x="104" y="406" class="t">The model answers</text>
-  <text x="104" y="428" class="s">“what is physically in this drawing?”</text>
-  <text x="104" y="449" class="s">entrance · kitchen · tub or no tub</text>
-  <text x="104" y="466" class="s">yard grade · road adjacency</text>
+  <rect x="584" y="288" width="374" height="56" rx="8" fill="#fff" stroke="#dadce0" stroke-width="1.5"/>
+  <text x="600" y="312" class="n">auditService</text>
+  <text x="600" y="331" class="d">orchestration · perception cache lookup · concurrency pool</text>
 
-  <!-- 2 judgement -->
-  <rect x="440" y="348" width="290" height="128" rx="12" fill="#fef7e0" stroke="#f9ab00" stroke-width="2.5"/>
-  <text x="464" y="380" class="num">2 · JUDGEMENT</text>
-  <text x="464" y="406" class="t">Code answers</text>
-  <text x="464" y="428" class="s">“how well does that fit <tspan font-style="italic">you</tspan>?”</text>
-  <text x="464" y="449" class="s">weighted dimensions · hard limits</text>
-  <text x="464" y="466" class="s">Vastu ⇄ Feng Shui rule tables</text>
+  <rect x="584" y="364" width="374" height="56" rx="8" fill="#fff" stroke="#dadce0" stroke-width="1.5"/>
+  <text x="600" y="388" class="n">geminiEvaluator</text>
+  <text x="600" y="407" class="d">vision call · structured JSON · model fallback chain · timeouts</text>
 
-  <!-- 3 acts -->
-  <rect x="800" y="348" width="266" height="128" rx="12" fill="#fef7e0" stroke="#f9ab00" stroke-width="2.5"/>
-  <text x="824" y="380" class="num">3 · IT ACTS</text>
-  <text x="824" y="406" class="t">Tour planner</text>
-  <text x="824" y="428" class="s">orders stops by geography</text>
-  <text x="824" y="449" class="s">times them · says what to check</text>
-  <text x="824" y="466" class="s">at each door</text>
+  <rect x="584" y="440" width="374" height="56" rx="8" fill="#fff" stroke="#dadce0" stroke-width="1.5"/>
+  <text x="600" y="464" class="n">scoringEngine</text>
+  <text x="600" y="483" class="d">weighted dimensions · hard constraints · Vastu / Feng Shui tables</text>
 
-  <!-- spine arrows -->
-  <path class="eo" d="M370,412 L436,412"/>
-  <path class="eo" d="M730,412 L796,412"/>
-  <text x="386" y="386" class="lbl" font-size="11" font-weight="600" fill="#e37400">23ms</text>
-  <text x="381" y="443" class="lbl" font-size="10.5">0 calls</text>
+  <rect x="584" y="516" width="374" height="56" rx="8" fill="#fff" stroke="#dadce0" stroke-width="1.5"/>
+  <text x="600" y="540" class="n">feedbackInterpreter</text>
+  <text x="600" y="559" class="d">free text → weight deltas</text>
 
-  <!-- entry points into the spine -->
-  <path class="e" d="M195,258 L195,344"/>
-  <text x="205" y="300" class="lbl">SSE stream</text>
-  <path class="e" d="M951,258 L951,344"/>
+  <rect x="584" y="592" width="374" height="56" rx="8" fill="#fff" stroke="#dadce0" stroke-width="1.5"/>
+  <text x="600" y="616" class="n">tourPlanner</text>
+  <text x="600" y="635" class="d">stop order · timings · Google Maps directions URL</text>
 
-  <!-- results back to the UI -->
-  <path class="e" d="M585,348 C585,300 340,300 300,246" stroke-dasharray="0"/>
-  <text x="392" y="292" class="lbl">ranked results</text>
+  <text x="584" y="678" class="d">memoryManager — Firestore client, local JSON fallback</text>
 
-  <!-- ================= right rail: Google services ================= -->
-  <text x="1140" y="234" class="zone">GOOGLE AI</text>
-  <rect x="1140" y="262" width="404" height="80" rx="10" fill="#1a73e8"/>
-  <text x="1164" y="294" class="w">Gemini 3.5 Flash-Lite</text>
-  <text x="1164" y="316" class="ws">vision · structured JSON output</text>
-  <text x="1164" y="334" class="ws">fallback → 3.5-flash → 3-flash-preview</text>
-  <path class="eb" d="M300,348 L300,318 L1120,318 L1136,302" stroke-dasharray="0"/>
-  <text x="640" y="310" class="lblb">floor plan + aerial</text>
+  <!-- internal flow -->
+  <path class="e" d="M770,190 L770,208"/>
+  <path class="e" d="M770,268 L770,284"/>
+  <path class="e" d="M770,344 L770,360"/>
+  <path class="e" d="M770,420 L770,436"/>
 
-  <rect x="1140" y="358" width="404" height="52" rx="10" fill="#1a73e8" opacity=".82"/>
-  <text x="1164" y="384" class="w" font-size="13.5">Gemini 3.1 Flash Image</text>
-  <text x="1164" y="402" class="ws" font-size="11.5">build-time · generates the plan + aerial dataset</text>
+  <!-- client to api -->
+  <path class="e" d="M498,171 C540,171 540,158 580,158"/>
+  <text x="506" y="150" class="l">SSE</text>
+  <path class="e" d="M234,339 C400,339 470,244 580,240"/>
+  <text x="266" y="332" class="l">POST /api/agent/run · OIDC token</text>
 
-  <!-- ================= state row ================= -->
-  <text x="72" y="576" class="zone">STATE · PERSISTENCE · TELEMETRY</text>
+  <!-- google ai -->
+  <text x="1030" y="112" class="zone">GOOGLE AI</text>
+  <rect x="1030" y="126" width="446" height="66" rx="8" fill="#1a73e8"/>
+  <text x="1050" y="150" class="nw">Gemini 3.5 Flash-Lite</text>
+  <text x="1050" y="169" class="dw">vision + structured output · floor plan and aerial images in</text>
+  <text x="1050" y="185" class="dw">fallback: gemini-3.5-flash → gemini-3-flash-preview</text>
 
-  <rect x="80" y="596" width="290" height="88" rx="10" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1.5"/>
-  <text x="104" y="626" class="t" fill="#1a73e8">Firestore</text>
-  <text x="104" y="648" class="s" fill="#1a73e8">preference profile · learned weights</text>
-  <text x="104" y="666" class="s" fill="#1a73e8">agent briefs · seen-list</text>
-  <text x="104" y="678" class="lbl" fill="#1a73e8" font-size="10.5">idempotent — the cycle resumes after a restart</text>
+  <rect x="1030" y="204" width="446" height="48" rx="8" fill="#1a73e8" opacity=".75"/>
+  <text x="1050" y="226" class="nw" font-size="12.5">Gemini 3.1 Flash Image</text>
+  <text x="1050" y="243" class="dw">build-time only · generates the floor plan and aerial dataset</text>
 
-  <rect x="440" y="596" width="290" height="88" rx="10" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1.5"/>
-  <text x="464" y="626" class="t" fill="#1a73e8">Perception cache</text>
-  <text x="464" y="648" class="s" fill="#1a73e8">keyed by property · shipped in the image</text>
-  <text x="464" y="666" class="s" fill="#1a73e8">a fresh clone scans in 23ms</text>
+  <path class="eb" d="M962,392 C1002,392 1002,176 1026,164"/>
+  <text x="966" y="382" class="lb">images</text>
+  <path class="eb" d="M962,548 C1010,548 1010,182 1026,172"/>
+  <path class="eb" d="M962,624 C1018,624 1018,188 1026,180"/>
 
-  <rect x="800" y="596" width="266" height="88" rx="10" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1.5"/>
-  <text x="824" y="626" class="t" fill="#1a73e8">Cloud Trace</text>
-  <text x="824" y="648" class="s" fill="#1a73e8">OpenTelemetry spans</text>
-  <text x="824" y="666" class="s" fill="#1a73e8">the reasoning chain, auditable</text>
+  <!-- state -->
+  <text x="1030" y="300" class="zone">STATE</text>
+  <rect x="1030" y="314" width="446" height="76" rx="8" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1.5"/>
+  <text x="1050" y="338" class="nb">Firestore</text>
+  <text x="1050" y="357" class="db">buyerProfiles — weights, hard constraints, learned notes</text>
+  <text x="1050" y="374" class="db">agentBriefs, agentSeen — makes the cycle idempotent across restarts</text>
+
+  <rect x="1030" y="402" width="446" height="60" rx="8" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1.5"/>
+  <text x="1050" y="426" class="nb">Perception cache</text>
+  <text x="1050" y="445" class="db">JSON, keyed by property, committed to the image and shipped</text>
+
+  <path class="e" d="M1026,504 C994,504 990,180 966,168"/>
+  <rect x="1030" y="474" width="446" height="60" rx="8" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1.5"/>
+  <text x="1050" y="498" class="nb">Secret Manager</text>
+  <text x="1050" y="517" class="db">GEMINI_API_KEY, mounted into the Cloud Run revision</text>
+
+  <text x="1030" y="572" class="zone">TELEMETRY &amp; OUTPUT</text>
+  <rect x="1030" y="586" width="446" height="60" rx="8" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1.5"/>
+  <text x="1050" y="610" class="nb">Cloud Trace</text>
+  <text x="1050" y="629" class="db">OpenTelemetry spans — audit.property, gemini.vision, agent.watchCycle</text>
+
+  <rect x="1030" y="658" width="446" height="60" rx="8" fill="#fff" stroke="#dadce0" stroke-width="1.5"/>
+  <text x="1050" y="682" class="n">Google Maps</text>
+  <text x="1050" y="701" class="d">directions URL, each viewing a waypoint</text>
 
   <!-- state edges -->
-  <path class="ed" d="M585,476 L585,592"/>
-  <text x="595" y="540" class="lbl">the weights you taught it</text>
-  <path class="ed" d="M225,476 L225,592"/>
-  <path class="ed" d="M300,476 C300,540 400,560 436,600"/>
-  <path class="ed" d="M933,476 L933,592"/>
+  <path class="e" d="M962,232 C994,232 994,332 1026,340"/>
+  <text x="966" y="224" class="l">writes</text>
+  <path class="e" d="M962,470 C990,470 998,438 1026,430"/>
+  
+  <path class="e" d="M962,462 C986,462 986,360 1026,356"/>
+  <path class="e" d="M962,164 C1022,164 1022,600 1026,612"/>
+  <path class="e" d="M962,636 C994,636 1000,676 1026,684"/>
 
-  <!-- maps output -->
-  <rect x="1140" y="596" width="404" height="52" rx="10" fill="#fff" stroke="#dadce0" stroke-width="1.5"/>
-  <text x="1164" y="622" class="t" font-size="14">Google Maps</text>
-  <text x="1164" y="640" class="s">directions link · every stop a waypoint</text>
-  <path class="e" d="M1066,440 C1110,440 1110,570 1136,614"/>
-
-  <!-- ================= the one line ================= -->
-  <rect x="48" y="742" width="1496" height="72" rx="12" fill="#fef7e0" stroke="#f9ab00" stroke-width="1.5"/>
-  <text x="76" y="776" font-size="15.5" font-weight="700" fill="#202124">The model never sees your weights, and never produces a score.</text>
-  <text x="76" y="800" font-size="13.5" fill="#5f6368">That single separation is why perception caches, why a re-rank costs nothing, why swapping Vastu for Feng Shui re-ranks without touching Gemini — and why every claim can be checked against the drawing it came from.</text>
-
-  <text x="48" y="866" font-size="12" fill="#9aa0a6">93% exact · 0% wrong across 42 fields of known ground truth  ·  npm run verify:seed</text>
+  <!-- footer: deployment facts, not claims -->
+  <text x="44" y="760" class="zone">DEPLOYMENT</text>
+  <text x="44" y="784" class="d">Two Cloud Run services in us-central1, both min-instances 0. Cloud Scheduler invokes the agent with an OIDC token from a dedicated service account.</text>
+  <text x="44" y="804" class="d">Perception is cached per property, so a preference or tradition change re-scores from cache and makes no model call.</text>
+  <text x="44" y="824" class="d">Firestore is the system of record; a local JSON store is used when credentials are absent.</text>
 </svg>

@@ -53,9 +53,10 @@ give it feedback.
 ![VastuNest architecture](docs/architecture.svg)
 
 The model is asked one question: what is physically in this drawing. It never
-sees your preference weights and never produces a score. Because of that, perception depends only on the images, so it's cached. A
-re-rank costs 23ms and no model call. Switching from Vastu to Feng Shui
-re-ranks the whole list without calling Gemini.
+sees your preference weights and never produces a score. Because of that,
+perception depends only on the images, so it is cached. A re-rank costs 23ms and
+no model call, and switching from Vastu to Feng Shui re-ranks the whole list
+without calling Gemini.
 
 ## Quickstart
 
