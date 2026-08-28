@@ -25,17 +25,16 @@ actually rule a house out for us:
 - Whether the lot backs onto a four-lane road.
 
 None of that is a field in any listing feed. All of it is visible in the floor
-plan and the satellite image. That makes this a vision problem wearing a
-search-filter costume.
+plan and the satellite image. It's a vision problem, not a search problem.
 
 We have toured 22 houses and still haven't bought one.
 
 ## What it does
 
 Gemini reads the floor plan and the aerial photo and reports what it sees,
-quoting the visual evidence for every claim. A scoring engine written in
-TypeScript, not the model, turns that into a match score against a preference
-profile the agent keeps updating as you tell it things.
+quoting the evidence for each claim. A TypeScript scoring engine, not the model,
+turns that into a match score against a preference profile that updates as you
+give it feedback.
 
 | | |
 |---|---|
@@ -44,8 +43,8 @@ profile the agent keeps updating as you tell it things.
 | Scores deterministically | Same house, same number, every time |
 | Enforces your non-negotiables | Hard constraints cap the score, so a nice house can't outrank a must-have |
 | Learns from plain English | "It fronts a four-lane road, that's a dealbreaker with a toddler" becomes a weight change, saved to Firestore |
-| Runs without you | Cloud Scheduler triggers it every morning. It reads what's new and decides on its own whether to say anything |
-| Swaps rulebooks | Vastu and Feng Shui disagree. A south-facing entrance is a flaw in one and the ideal in the other |
+| Runs unattended | Cloud Scheduler triggers it each morning. It reads what's new and decides whether anything is worth reporting |
+| Swappable rulebooks | Vastu and Feng Shui disagree: a south-facing entrance is a flaw in one, the ideal in the other |
 | Plans the tour | Orders the stops by geography, times them, says what to check at each door, returns a Google Maps route |
 | Reads plans it's never seen | Drop in any floor plan and the same pipeline runs |
 
@@ -54,10 +53,9 @@ profile the agent keeps updating as you tell it things.
 ![VastuNest architecture](docs/architecture.svg)
 
 The model is asked one question: what is physically in this drawing. It never
-sees your preference weights and never produces a score. That separation is why
-perception can be cached, why a re-rank costs 23ms and no model call, and why
-switching from Vastu to Feng Shui re-ranks everything without calling Gemini at
-all.
+sees your preference weights and never produces a score. Because of that, perception depends only on the images, so it's cached. A
+re-rank costs 23ms and no model call. Switching from Vastu to Feng Shui
+re-ranks the whole list without calling Gemini.
 
 ## Quickstart
 
@@ -97,10 +95,10 @@ adjacent   3/42    7%     (one compass point out on a hand-drawn plan)
 wrong      0/42    0%
 ```
 
-The floor plans were generated from written specs, which is the only reason
-ground truth is knowable. That truth lives in `src/data/groundTruth.ts` and is
-never imported by runtime code; if the agent could read it, the check would be
-circular. `npm run verify` does the same scoring against live model calls.
+The floor plans were generated from written specs, so the correct answer for
+each one is known. Those answers live in `src/data/groundTruth.ts`, which no
+runtime code imports. `npm run verify` runs the same scoring against live model
+calls.
 
 ## Repo layout
 
@@ -143,7 +141,7 @@ docs/                    setup, demo script, design notes
 | The architectural argument | `geminiEvaluator.ts` (perception) against `scoringEngine.ts` (judgement) |
 | The autonomous decision | `watchAgent.ts`, specifically `NOTIFY_THRESHOLD` and `notify` |
 | Traditions as data | `data/traditions.ts` |
-| Honest failure | `UNKNOWN_PERCEPTION` in `geminiEvaluator.ts`. It says Unknown instead of guessing |
+| Failure handling | `UNKNOWN_PERCEPTION` in `geminiEvaluator.ts`. Returns Unknown rather than a guess |
 | Why it's fast | `auditService.ts`, the perception cache |
 
 ## Didn't fit in four minutes
@@ -151,7 +149,7 @@ docs/                    setup, demo script, design notes
 - **The dataset regenerates.** `npm run assets` rebuilds every floor plan and
   aerial from written scene briefs using Gemini 3.1 Flash Image.
 - **Upload any plan.** Yard fields come back Unknown, because a floor plan can't
-  show you a backyard. It says so rather than inventing an answer.
+  show you a backyard.
 - **Two verification harnesses**, one live and one offline, sharing one answer key.
 - **A model fallback chain.** `gemini-3.5-flash` was measured taking 59 seconds to
   return a 503 while flash-lite answered the same request in 1.5 seconds. The seed

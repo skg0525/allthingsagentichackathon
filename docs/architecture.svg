@@ -30,7 +30,8 @@
   <!-- title -->
   <text x="60" y="58" font-size="26" font-weight="700" fill="#202124">VastuNest</text>
   <text x="196" y="58" font-size="16" fill="#5f6368">— an autonomous home-buying agent</text>
-  <text x="240" y="121" font-size="13.5" fill="#5f6368">Gemini reads the drawings. Code decides what they mean to you.</text>
+  <text x="240" y="115" font-size="13" fill="#5f6368">Track: Collaborative Partner  ·  Gemini 3.5 Flash-Lite via the Google GenAI SDK</text>
+  <text x="240" y="133" font-size="13" fill="#5f6368">Cloud Run  ·  Firestore  ·  Cloud Scheduler  ·  Cloud Trace  ·  Secret Manager</text>
 
   <!-- ================= Cloud Run boundary ================= -->
   <rect x="48" y="148" width="1050" height="672" rx="14" fill="#f8f9fa" stroke="#dadce0" stroke-width="1.5"/>
