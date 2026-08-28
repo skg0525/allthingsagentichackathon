@@ -191,8 +191,11 @@ export function FeedbackDock({
           </div>
 
           {!action && critique.trim() && (
-            <p className="mt-2 text-[11.5px] text-warn-400">
-              Pick 👍 or 👎 first — the agent needs to know which way to move.
+            <p className="mt-2 flex items-center gap-1.5 rounded-lg bg-warn-400/15 px-3 py-2
+                          text-[12.5px] font-medium text-warn-400 ring-1 ring-warn-400/30">
+              👈 Pick <span className="font-semibold">Works</span> or
+              <span className="font-semibold">Not for us</span> first — the agent
+              needs to know which way to move.
             </p>
           )}
           {error && (
