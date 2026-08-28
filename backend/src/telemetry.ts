@@ -64,6 +64,13 @@ export function initTelemetry(): boolean {
   try {
     // Deliberately synchronous requires, after the safety checks above.
     const { NodeTracerProvider, SimpleSpanProcessor } = require('@opentelemetry/sdk-trace-node');
+    const { diag, DiagConsoleLogger, DiagLogLevel } = require('@opentelemetry/api');
+
+    /* Surface the exporter's own errors. Without this an export failure is
+       completely silent — spans vanish and the service looks healthy. */
+    if (process.env.TRACE_DEBUG === 'true') {
+      diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.DEBUG);
+    }
     const { TraceExporter } = require('@google-cloud/opentelemetry-cloud-trace-exporter');
     const { resourceFromAttributes } = require('@opentelemetry/resources');
     const {
@@ -82,7 +89,24 @@ export function initTelemetry(): boolean {
         [ATTR_SERVICE_NAME]: SERVICE,
         [ATTR_SERVICE_VERSION]: process.env.K_REVISION ?? 'local',
       }),
-      spanProcessors: [new SimpleSpanProcessor(new TraceExporter({ projectId }))],
+      spanProcessors: [new SimpleSpanProcessor(
+        (() => {
+          const exp = new TraceExporter({ projectId });
+          // Wrap export so a failure is logged rather than swallowed.
+          const original = exp.export.bind(exp);
+          exp.export = (spans: unknown[], cb: (r: { code: number; error?: Error }) => void) =>
+            original(spans, (result: { code: number; error?: Error }) => {
+              if (result.code !== 0) {
+                console.error(`[trace] export FAILED (${spans.length} spans):`,
+                  result.error?.message ?? JSON.stringify(result).slice(0, 200));
+              } else if (process.env.TRACE_DEBUG === 'true') {
+                console.log(`[trace] exported ${spans.length} span(s)`);
+              }
+              cb(result);
+            });
+          return exp;
+        })(),
+      )],
     });
     tp.register();
     provider = tp;

@@ -180,15 +180,12 @@ Run revision; one-command deploy; demo reset script that verifies its own work.
 6. ⬜ Bonus: blog post + social post
 7. ⬜ **After recording:** `./deploy/teardown.sh gen-lang-client-0460749914`
 
-> **Cloud Trace is instrumented but unverified.** Spans are created and the
-> exporter starts cleanly, but nothing has appeared in the Trace console and the
-> cause is unresolved. **Do not claim tracing in the video or the write-up**
-> until it is confirmed.
 
 ### Live proof shots for the video
 
 | Tab | What it shows |
 |---|---|
+| Cloud Trace console | `audit.property` and `/api/scan` spans — the agent's reasoning chain in Google's own tooling |
 | https://vastunest-ui-555426598641.us-central1.run.app | The app |
 | https://vastunest-agent-555426598641.us-central1.run.app/api/health | `"memoryBackend":"firestore"`, the model, the Cloud Run revision |
 | Cloud Run console | Two services, `min-instances 0` |

@@ -1,34 +1,39 @@
-flowchart LR
+flowchart TB
 
-  USER(["Buyer"]) --> UI
-  CRON["<b>Cloud Scheduler</b><br/>06:00 daily"] --> WATCH
+  BUYER(["Buyer"])
+  CRON["<b>Cloud Scheduler</b><br/>06:00 daily"]
 
-  subgraph CR["Cloud Run"]
-    UI["<b>Command center</b><br/>Next.js"]
-    WATCH["<b>watchAgent</b><br/>autonomous"]
-    PERC["<b>Perception</b><br/>reads the drawings"]
-    JUDGE["<b>Scoring engine</b><br/>deterministic"]
-    TOUR["<b>Tour planner</b>"]
+  subgraph CR["☁ Cloud Run · scale to zero"]
+    direction TB
+    UI["<b>Command center</b> · Next.js"]
+    WATCH["<b>watchAgent</b><br/>autonomous · decides alone"]
+    PERC["<b>1 · PERCEPTION</b><br/>reads floor plan + aerial"]
+    JUDGE["<b>2 · JUDGEMENT</b><br/>deterministic scoring"]
+    TOUR["<b>3 · ACTS</b> · tour planner"]
   end
 
+  GEM["<b>Gemini 3.5 Flash-Lite</b><br/>vision · structured output"]
+  FS[("<b>Firestore</b><br/>profile · learned weights<br/>briefs · seen-list")]
+  CACHE[("Perception cache")]
+  MAPS(["Google Maps route"])
+
+  BUYER --> UI
+  CRON --> WATCH
   UI -->|SSE| PERC
   WATCH --> PERC
-  PERC -->|"cached · 23ms re-rank"| JUDGE
+  PERC -->|"23ms re-rank<br/>zero model calls"| JUDGE
+  JUDGE --> TOUR --> MAPS
   JUDGE --> UI
-  JUDGE --> TOUR
 
-  PERC <-->|"floor plan + aerial"| GEM["<b>Gemini 3.5 Flash-Lite</b><br/>vision"]
-  TOUR --> MAPS(["Google Maps"])
-
-  JUDGE <--> FS[("<b>Firestore</b><br/>profile · briefs")]
-  WATCH --> FS
-  UI -->|feedback| FS
-  PERC <--> CACHE[("Perception cache")]
-  PERC -.-> TRACE(["<b>Cloud Trace</b>"])
+  PERC <--> GEM
+  PERC <--> CACHE
+  JUDGE <--> FS
+  WATCH <-->|"idempotent<br/>resumes after restart"| FS
+  UI -.->|"feedback → weights"| FS
 
   classDef g fill:#1a73e8,stroke:#174ea6,color:#fff
   classDef store fill:#e8f0fe,stroke:#1a73e8,color:#174ea6
   classDef key fill:#fef7e0,stroke:#f9ab00,color:#3c4043
   class GEM g
-  class FS,CACHE,TRACE,MAPS,CRON store
+  class FS,CACHE,MAPS,CRON store
   class PERC,JUDGE key
