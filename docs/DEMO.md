@@ -138,60 +138,62 @@ your own data?" before a judge can ask it.
 
 ---
 
-## 5b. If you would rather not narrate live
+## 5b. Narration — read this before choosing a tool
 
-You do not have to be a good speaker to make a good demo video. But read this
-first, because there is a line here worth not crossing.
+**The organizers said, in the Q&A, that they recommend your own voice over an AI
+voice, because a synthetic voice feels less genuine to judges.** That is guidance
+from the people scoring you, so it overrides any general advice about polish.
 
-**What the rules ask for:** *"a live, unedited demo."* That is about the
-**screen capture** — they want to see the app actually working, not a montage
-that hides a failure. It is not a rule about your audio track.
+So: **use your voice.** The goal is not a flawless read — it is a real person who
+has toured twenty-two houses and is frustrated. That lands.
 
-**So: keep the screen recording as one continuous take. Treat the audio
-separately.** That is honest and it is what most polished submissions do.
+### You do not have to memorise anything
 
-### The approach I would pick: Descript
+You are not giving a speech. You are showing someone your app and talking about
+it. Three things make that easy:
 
-<https://descript.com> — free tier is enough.
+**1. Learn the eight beats, not the words.** Hook · problem · it ran overnight ·
+evidence · tradition switch · it learns · it acts · Cloud proof. That is it. If
+you know what happens next, the words come.
 
-1. Record screen + your live narration in one take, as normal.
-2. Drop it into Descript. It transcribes automatically.
-3. **Remove filler words** — one click strips every "um", "uh", "like", and
-   awkward pause across the whole recording.
-4. **Studio Sound** — one toggle. Makes laptop-mic audio sound like a podcast.
-5. If a sentence came out badly, retype it and **Overdub** speaks it in your own
-   cloned voice, matched to the surrounding audio.
+**2. Put bullets on a second screen** (or a phone beside the keyboard). Five
+words per beat, not sentences. Sentences make you read; bullets make you talk.
 
-This keeps your voice, which matters — judges are hearing whether a real person
-solved a real problem. It just removes the parts you do not like.
+**3. Do three throwaway takes and keep the fourth.** You will be noticeably
+better by the third. That costs twenty minutes, not an afternoon.
 
-### If you would rather not use your voice at all
+### Cleaning up the recording — allowed, and worth it
 
-Record the screen silently, then generate narration from the script:
+Removing filler words from *your own* voice is not an AI voice. It is editing.
 
-- **ElevenLabs** (<https://elevenlabs.io>) — the most natural TTS available. Paste
-  the script from section B, pick a voice, export, lay it over the screen capture.
-- **Play.ht** or **Murf.ai** — comparable, sometimes cheaper.
+**[Descript](https://descript.com)** — free tier is enough:
+- one click strips every "um", "uh", and dead pause across the whole recording
+- **Studio Sound** makes laptop-mic audio sound like a podcast
+- if one sentence came out badly, retype it and **Overdub** speaks it in your own
+  cloned voice, matched to the surrounding audio
 
-Honest trade-off: fully synthetic narration is noticeably smoother, but it also
-reads as more detached, and some judges respond less warmly to a project that
-sounds like a product ad than one that sounds like a person who has toured
-twenty-two houses and is frustrated. Given that your story *is* personal, I would
-keep your voice and just clean it up.
+Use Overdub for *repairs*, not to generate the whole narration — that crosses
+back into the thing the organizers advised against.
 
-### Free audio-only cleanup
+It is also exactly the tool for the AI courses you have been meaning to start, so
+learning it here is not throwaway effort.
 
-**Adobe Podcast Enhance** (<https://podcast.adobe.com/enhance>) — free, no signup
-needed for short clips. Upload your audio, it removes room echo and noise. Does
-not remove filler words, but fixes bad mic quality in seconds.
+**Free minimum:** [Adobe Podcast Enhance](https://podcast.adobe.com/enhance) —
+upload the audio, it removes room echo and noise. No signup for short clips.
 
-### Whichever you choose
+### On HeyGen and ElevenLabs
 
-- Say plainly in the Devpost description if you used AI narration. It is not
-  against the rules and nobody minds; being caught not mentioning it is worse.
-- **Do not cut the screen capture** to hide a slow scan or an error. If something
-  goes wrong, narrate it. A recovered failure is more convincing than a demo with
-  no rough edges.
+Both are good tools and I recommended them earlier — **I was wrong for this
+specific submission.** HeyGen is built for avatar presenter videos, and full
+voice cloning is the thing the judges said reads as less genuine. Save them for
+the courses.
+
+### The rule that does not bend
+
+**Do not cut the screen capture.** The rules ask for an unedited demo. Clean the
+audio all you like; the video stays one continuous take. If something goes wrong
+on camera, narrate it — a recovered failure is more convincing than a demo with
+no rough edges.
 
 ## 6. Delivery
 
@@ -245,265 +247,171 @@ the field will be able to say.
 
 # B · What to say
 
-The judge has to watch the agent do work it could not have done in advance.
+**Target 3:40, not 4:00.** Judges stop watching at four minutes — an overrun means
+your close and your Cloud proof are simply never seen. Leave buffer.
+
+**The first 30 seconds decide whether they keep watching.** So the demo opens on
+the agent having already done something impressive, not on a problem statement.
 
 ---
 
-## 0:00 – 0:40 · The problem (talking over a screen recording of Zillow)
+## 0:00 – 0:30 · The hook
 
-> "We've toured twenty-two houses. We still haven't bought one. Not because
-> nothing's available — because the things that disqualify a house aren't
-> filterable.
->
-> [*scrolling Zillow's filter panel*]
-> Beds. Baths. Price. Square feet.
->
-> Here's what actually decides it for us. Our main entrance has to face east or
-> north — that's Vastu, a Hindu architectural tradition, and it's not negotiable
-> in my family. We need a real bedroom on the ground floor with a *full* bath,
-> not a study and a powder room. The backyard has to be flat and fenced, because
-> we have a toddler. And it can't back onto a four-lane road.
->
-> None of those are filters. None of them are even *fields*.
->
-> But every single one of them is visible — in the floor plan, and in the
-> satellite image. That's not a search problem. That's a vision problem."
+**Open on the app, already on a floor plan with the agent's overlay pins showing.**
+No preamble. No title card. Talk immediately.
 
-**On screen:** Zillow filters, then cut to a floor plan and an aerial side by side.
+> "This is a floor plan. My agent read it about a second ago, and it can tell me
+> the front door faces east, the kitchen's in the south-east corner, and — this
+> one matters — the only bathroom on the ground floor has no tub in it.
+>
+> [*point at the aerial tab, click it*]
+>
+> And from the satellite image: the backyard is flat, fenced, and backs onto
+> woodland rather than a road.
+>
+> Zillow has a filter for none of that."
 
 ---
 
-## 0:40 – 1:05 · The agent already worked
+## 0:30 – 0:55 · Why it matters (fast)
 
-**On screen:** VastuNest opens on the brief. Do NOT scroll past the green panel.
+**Cut to Zillow's filter panel for a few seconds only.**
 
-> "So I built an agent that reads them. And the first thing you see is what it
-> did overnight, before I opened this."
+> "We've toured twenty-two houses. Beds, baths, price — that's all you can filter
+> on. But what actually rules a house out for us is whether the entrance faces
+> east, because that's Vastu and it's not negotiable in my family. Whether there's
+> a real ground-floor bedroom with a full bath for my parents. Whether the yard is
+> flat enough for a toddler. Whether it backs onto a four-lane road.
+>
+> None of that is a field. All of it is in the drawings."
+
+**Back to the app.**
+
+---
+
+## 0:55 – 1:15 · It already ran without me
 
 **Point at "While you were away".**
 
-> "Cloud Scheduler ran it at six this morning. Two new listings hit the market.
-> It read both floor plans and both satellite images without being asked, scored
-> them against my profile, and decided one of them — 18 Wren Hollow Court, 91 out
-> of 100 — was worth waking me up for. The other scored 35 and it stayed quiet
-> about it.
+> "And it doesn't wait for me. Cloud Scheduler ran this at six this morning. Two
+> new listings hit the market, it read both of them, and it decided one — this
+> one, 89 out of 100 — was worth waking me up for. The other scored 35 and it
+> stayed quiet.
 >
-> That decision is the product. An agent that pings you about every new listing
-> is just a worse email alert."
-
-**Then scroll to the brief and the candidate strip.**
-
-> "Below that is my profile — main-floor bedroom with a full bath, required. Max
-> commute thirty minutes. And ten properties I'm already considering, none of
-> them scored. Nothing here is precomputed."
-
-Click **Analyze**.
+> That decision is the whole product. An agent that pings you about every new
+> listing is just a worse email alert."
 
 ---
 
-## 1:05 – 2:00 · The agent works (LIVE — do not use the cache)
+## 1:15 – 2:05 · The evidence
 
-Cards fill in one at a time as each vision pass resolves. Talk over it.
+Click **Analyze**. Talk while cards land.
 
-> "Each property, it's sending Gemini 3.5 Flash two images — the floor plan and
-> the aerial — and asking one question: what is physically in this drawing?
-> It never sees my preferences. It doesn't produce a score. It just reports what
-> it sees."
+> "Every one of these gets two images sent to Gemini — the floor plan and the
+> aerial — and one question: what is physically in this drawing?"
 
-When the top result lands, open it.
+**Open the winner. Scroll to "What the agent saw."**
 
-> "This one scored 89. Here's *why* — and this is the part I care about."
+> "And it shows its work. Every claim has the evidence it used." [*read one aloud*]
 
-**Open the floor plan tab. Point at the overlay pins.**
+**Click the worst one (35/100).**
 
-> "It found the front door on the east side. Kitchen in the south-east. Primary
-> bedroom south-west. That's textbook Vastu — and it read all of it off the
-> drawing."
-
-**Scroll to 'What the agent saw'.**
-
-> "And it shows its work. Every claim has the evidence sentence it used."
->
-> [*read one aloud*] "'The floor plan shows the covered porch and foyer located
-> on the eastern side of the main floor layout.' I can open the plan and check
-> that."
-
-**Now click the WORST property (38/100).**
-
-> "And here's the one it rejected. South-facing entrance. No bedroom on the main
-> floor at all. And it caught this from the satellite image — it fronts a
-> four-lane road. Three hard-constraint violations. It's not that this house
-> scored low. It's that it broke rules I told it were non-negotiable."
+> "Here's one it rejected. South-facing entrance. No bedroom on the main floor.
+> And it caught from the satellite image that it fronts a four-lane road. It
+> didn't score low — it broke rules I told it were non-negotiable."
 
 ---
 
-## 2:00 – 2:25 · The tradition switch
+## 2:05 – 2:25 · The rulebook is swappable
 
-**Point at the left rail, then click Feng Shui.**
+> "Vastu is an Indian tradition. Plenty of families use a different one. So the
+> compass rules are a table, not code. Watch fourth place."
 
-> "One more thing. Vastu is an Indian tradition — my wife is white, I'm Indian,
-> and plenty of families use a different system entirely. So the compass rules
-> are a swappable table, not hardcoded logic.
->
-> Watch fourth place." [*point at 75 Trailview Court, 60/100*]
->
-> [*click Feng Shui*]
->
-> "It just went from fourth to **first**. Its compass score went from 23 to 75.
-> Same house, same floor plan, same reading — because a south-facing entrance is
-> a flaw in Vastu and the *classical ideal* in Feng Shui. Nothing about what the
-> agent saw changed. Only the rulebook did.
->
-> That's the separation I care about: perception is fixed, judgement is
-> configurable. And it took no model call at all."
+**Click Feng Shui.** *(75 Trailview: 4th → 1st, compass 23 → 75.)*
 
-**Switch back to Vastu before continuing.**
+> "Fourth to first. Same house, same reading — a south entrance is a flaw in Vastu
+> and the ideal in Feng Shui. The agent didn't change its mind about what it saw.
+> Only the rulebook did. And that took no model call at all."
 
-*(Verified ranking. Vastu: 101 → 105 → 108 → **106**. Feng Shui: **106** → 101 →
-105 → 108.)*
+**Switch back to Vastu.**
 
 ---
 
-## 2:25 – 2:55 · The collaborative loop (the money shot)
+## 2:25 – 2:50 · It learns
 
-> "Now here's what makes it a partner instead of a filter."
-
-**Select 87 Oak Ridge Court (the 37/100). Click the docked "Teach the agent" bar
-at the bottom. Pick 👎. Type live — do not paste:**
+**Open the docked "Teach the agent" bar. Pick 👎. Type live:**
 
 ```
-It fronts a four-lane road. With a toddler that's an absolute
-dealbreaker, and the yard has no real fence.
+It fronts a four-lane road. With a toddler that's a dealbreaker.
 ```
 
-Submit. Wait for the response.
-
-> "It didn't just save that comment. It turned it into weights."
-
-**Point at the before → after.**
-
-> "Community and safety, 0.75 to 0.95. Backyard, 0.95 to 1.00. That's written to
-> Firestore, and it persists across sessions."
-
-**Point at the list re-ordering.**
-
-> "And every property just re-ranked. That took thirty-six milliseconds, because
-> re-ranking doesn't need the model at all — the perception is already cached.
-> The only thing that changed is how much I care."
+> "It turns that into weights — community safety, 0.75 to 0.95 — writes it to
+> Firestore, and re-ranks everything in twenty-three milliseconds, because
+> re-ranking doesn't need the model at all."
 
 ---
 
-## 2:55 – 3:15 · It acts on the answer
+## 2:50 – 3:10 · It acts
 
-**Click "Plan a tour" in the header.** Three are pre-selected.
+**Click "Plan a tour" → Plan.**
 
-> "Scoring is only half of it. I still have to go and see them."
+> "And when I've decided what's worth seeing, it plans the day. Ordered by
+> geography — both Alpharetta houses first, Brookhaven on the way back. Forty-five
+> minutes at the 1969 house instead of thirty, because that's the one with the
+> aging systems. And what to check at each door, from what it already found in the
+> plan."
 
-**Click Plan.**
-
-> "It ordered them by geography — both Alpharetta houses first, Brookhaven on
-> the way back, because it knows where these places are. It gave the 1969 ranch
-> forty-five minutes instead of thirty, because *that's* the one with the aging
-> systems. And look at what it says to check at each door — 'inspect the
-> electrical panel and HVAC to assess remaining lifespan.' That's not generic
-> advice. That came from what it found in the plan."
-
-**Click "Open the route in Google Maps."** Let the real map load on screen.
-
-> "And that's a real Google Maps route, on my phone, with every stop as a
-> waypoint."
-
-**Optional, ~15s if you have room — the credibility beat:**
-Click **Analyse a plan** and drop in a real floor plan you found online.
-
-> "One more thing. This is a floor plan it has never seen, from a listing I
-> found five minutes ago." [*results appear*] "Same model, same rules. And notice
-> the yard fields say Unknown — a floor plan can't tell you about a backyard, so
-> it says so instead of guessing."
+**Click "Open in Google Maps."** Let the real route render.
 
 ---
 
-## 3:15 – 3:35 · Google Cloud proof (MANDATORY)
+## 3:10 – 3:30 · Google Cloud proof (MANDATORY)
 
-**Cut to the browser. Have these tabs open in advance.**
+**Point at the header badges first — they're already on screen.**
 
-1. The header badges — `gemini-3.5-flash-lite`, `Firestore`, `Cloud Run · <revision>`
-   > "That's live, off the health endpoint."
-2. **Cloud Run console** — both services, `min-instances 0`.
-   > "Backend and frontend, both on Cloud Run, both scaling to zero."
-3. The `.run.app` URL in the address bar.
-4. **Cloud Run logs** — show the Gemini vision calls with timings.
-5. **Firestore console** — open the `buyerProfiles` document, show the weight
-   you just changed and the learned note.
-   > "There's the 0.95 I just created."
-6. **Cloud Scheduler** — `vastunest-overnight`, enabled, 06:00 daily.
-   > "And that's the job that ran this morning without me."
+> "Gemini 3.5 Flash-Lite, Firestore, and the live Cloud Run revision."
+
+Then, fast, one tab each:
+1. **Cloud Run console** — two services, min-instances 0
+2. **Logs** — the Gemini calls
+3. **Firestore** — `buyerProfiles/demo_buyer_1`, the 0.95 you just created
+4. **Cloud Scheduler** — `vastunest-overnight`, enabled, 06:00
 
 ---
 
-## 3:35 – 4:00 · Architecture & close
+## 3:30 – 3:45 · Close
 
-**Show the architecture diagram.**
+**Architecture diagram.**
 
-> "Two paths through this system. The one you drove — you click, it analyses.
-> And the one you didn't — Cloud Scheduler, every morning at six, no human in
-> the loop at all."
-
-
-> "One decision drives this whole system: **Gemini does perception, code does
-> judgement.** The model only answers 'what's in this drawing?' It never sees my
-> weights and never emits a score. A deterministic scoring engine does that.
+> "One decision drives all of it: Gemini does perception, code does judgement. The
+> model answers what's in the drawing. It never sees my weights and never produces
+> a score.
 >
-> That buys four things. It's **reproducible** — same house, same number, every
-> time, so I can compare houses across weeks. It's **auditable** — every claim
-> ships with its evidence. It **caches**, because perception only depends on the
-> images: a full live analysis takes about a minute, a re-rank takes thirty-six
-> milliseconds. And it's **pluggable** — you saw the whole tradition swap out
-> without the model being called once.
+> That's why the same house scores the same every time, why every claim comes with
+> evidence, and why I can tell you it reads these plans 93% exactly right — because
+> I know the ground truth and you can re-run that yourself.
 >
-> It also degrades honestly. If the vision call fails, the field reads 'Unknown'
-> and the trace says why. It never guesses. For something this consequential, a
-> plausible fabrication is worse than a gap.
->
-> I'm still house hunting. But now I'm touring the right three houses instead of
-> the wrong twenty-two."
+> I'm still house hunting. But now I'm touring the right three instead of the
+> wrong twenty-two."
 
 ---
 
-## Pre-flight checklist
+## Timing discipline
 
-- [ ] Run `./deploy/demo-reset.sh` — it does all of the below in one go
-- [ ] Confirm its output says `cache 0 entries`, or the scan will not be live
-- [ ] Confirm "While you were away" has content when you load the page
-- [ ] Backend deployed, `/api/health` returns `firestore` + a real revision
-- [ ] Cloud Run console, logs, and Firestore tabs open and pre-authenticated
-- [ ] Zillow tab open on the filter panel
-- [ ] Screen at 1512px+ so all three panes show
-- [ ] Do one full dry run and time it — first analysis varies a lot with API load
-- [ ] Record audio in one take; no cuts (rules say unedited)
-
-## Timing risk — read this before recording
-
-**Vision latency is Google's, and it is not stable.** Measured on this repo,
-identical two-image requests:
-
-| Model | Good window | Bad window |
+| Beat | Ends | Cumulative |
 |---|---|---|
-| `gemini-3.5-flash-lite` (primary) | 1.5–3s | ~23s, or a 503 |
-| `gemini-3.5-flash` | ~10s | **59s to return a 503** |
+| Hook | 0:30 | 0:30 |
+| Problem | 0:55 | 0:55 |
+| Overnight run | 1:15 | 1:15 |
+| Live evidence | 2:05 | 2:05 |
+| Tradition switch | 2:25 | 2:25 |
+| Feedback | 2:50 | 2:50 |
+| Tour | 3:10 | 3:10 |
+| **Cloud proof** | 3:30 | 3:30 |
+| Close | 3:45 | **3:45** |
 
-That is why the seed exists and why `flash-lite` is primary. It is also why
-Option A above is the safer recording: a single live re-read is 15 seconds of
-proof instead of two minutes of hoping.
+**If you are running long, cut the tradition switch (2:05–2:25).** It is the most
+impressive beat and the least load-bearing. The Cloud proof, the overnight run and
+the feedback loop are all scored requirements.
 
-**If you go cold and it drags:** the scan streams, so narrate the first card the
-moment it lands rather than waiting for all ten.
-
-If you are over time overall, the tradition switch (2:00–2:25) is the cut. It is
-the most impressive beat but the least load-bearing — the Google Cloud proof, the
-feedback loop and the overnight-agent opening are all scored requirements and
-cannot be dropped.
-
-**Never cut the overnight brief.** "Autonomous action with little to no
-hand-holding" is 40% of the score, and that panel is the only place the demo
-shows it.
+**Never cut the overnight brief or the Cloud proof.**
