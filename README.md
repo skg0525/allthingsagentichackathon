@@ -154,67 +154,53 @@ Exits non-zero if anything is off.
 ```mermaid
 flowchart TB
 
-subgraph HUMAN[" 1 · You ask "]
-  direction LR
-  UI["<b>Command center</b><br/>Next.js on Cloud Run<br/>rank · inspect · teach · tour"]
-end
+UI["<b>Command center</b> · Next.js on Cloud Run<br/>rank · inspect · teach · plan a tour"]
+SCHED["<b>Cloud Scheduler</b> · 06:00 daily<br/><i>nobody is watching</i>"]
+WATCH["<b>watchAgent</b><br/>pull what is new · read it · decide alone<br/><i>staying silent is a valid outcome</i>"]
 
-subgraph AUTO[" 2 · Or nobody asks "]
-  direction LR
-  SCHED["<b>Cloud Scheduler</b><br/>06:00 daily"] --> WATCH["<b>watchAgent</b><br/>pull new listings<br/>read them · decide alone<br/><i>silence is a valid outcome</i>"]
-end
+PERC["<b>PERCEPTION</b> — the model<br/>“what is physically in this drawing?”<br/>entrance · kitchen · tub or no tub · yard grade · road<br/><i>never sees your weights · never emits a score</i>"]
+JUDGE["<b>JUDGEMENT</b> — the code<br/>“how well does that fit <i>you</i>?”<br/>weighted dimensions · hard constraints · Vastu ⇄ Feng Shui<br/><i>deterministic · reproducible</i>"]
 
-subgraph SPLIT[" 3 · The split everything rests on "]
-  direction LR
-  PERC["<b>PERCEPTION</b> — the model<br/>“what is physically in this drawing?”<br/>entrance · kitchen · tub or no tub<br/>yard grade · road adjacency<br/><i>never sees your weights</i>"]
-  JUDGE["<b>JUDGEMENT</b> — the code<br/>“how well does that fit <i>you</i>?”<br/>weighted dimensions · hard constraints<br/>Vastu ⇄ Feng Shui rule tables<br/><i>deterministic · reproducible</i>"]
-  PERC ==>|"cached per property<br/>re-rank = 23ms, zero calls"| JUDGE
-end
+TOUR["<b>tourPlanner</b><br/>order by geography · time each stop<br/>what to check at the door"]
+MAPS(["Google Maps route"])
 
-subgraph ACT[" 4 · It acts "]
-  direction LR
-  NARR["narrator<br/><i>no extra model call</i>"]
-  TOUR["<b>tourPlanner</b><br/>order · time · route"]
-  MAPS(["Google Maps<br/>directions link"])
-  TOUR --> MAPS
-end
+GEM["<b>Gemini 3.5 Flash-Lite</b> · vision · structured output<br/>fallback: 3.5-flash → 3-flash-preview"]
+IMG["<b>Gemini 3.1 Flash Image</b> · build-time dataset"]
 
-subgraph GOOGLE[" Google AI "]
-  direction LR
-  FLASH["<b>Gemini 3.5 Flash-Lite</b><br/>vision · structured output<br/>fallback: 3.5-flash → 3-flash-preview"]
-  IMG["Gemini 3.1 Flash Image<br/><i>build-time dataset</i>"]
-end
+FS[("<b>Firestore</b><br/>profile · learned notes · briefs")]
+CACHE[("Perception cache<br/><i>shipped in the image</i>")]
+TRACE(["<b>Cloud Trace</b> · OpenTelemetry spans"])
 
-subgraph STATE[" State & telemetry "]
-  direction LR
-  FS[("<b>Firestore</b><br/>profile · learned notes<br/>agent briefs")]
-  CACHE[("Perception cache<br/><i>shipped in the image</i>")]
-  TRACE(["<b>Cloud Trace</b><br/>OpenTelemetry spans"])
-end
+UI     -->|"SSE"| PERC
+SCHED  --> WATCH --> PERC
+PERC   ==>|"<b>cached per property</b><br/>re-rank = 23ms, zero model calls"| JUDGE
+JUDGE  --> TOUR --> MAPS
+JUDGE  --> UI
+WATCH  --> FS
 
-UI -->|"SSE stream"| SPLIT
-WATCH --> SPLIT
-SPLIT --> ACT
-ACT --> UI
-WATCH -.->|"brief"| FS
+PERC   <-->|"floor plan + aerial"| GEM
+PERC   <--> CACHE
+IMG    -.-> CACHE
+TOUR   -.-> GEM
+JUDGE  <-->|"the weights you taught it"| FS
+UI     -.->|"feedback → weight deltas"| FS
+PERC   -.-> TRACE
+WATCH  -.-> TRACE
 
-PERC <-->|"floor plan + aerial"| FLASH
-TOUR -.-> FLASH
-IMG -.-> CACHE
-PERC <--> CACHE
-JUDGE <-->|"weights you taught it"| FS
-UI -.->|"feedback → weight deltas"| FS
-
-SPLIT -.-> TRACE
-WATCH -.-> TRACE
-
-classDef g fill:#1a73e8,stroke:#174ea6,color:#fff,font-weight:bold
+classDef g fill:#1a73e8,stroke:#174ea6,color:#fff
 classDef store fill:#e8f0fe,stroke:#1a73e8,color:#174ea6
-classDef key fill:#fef7e0,stroke:#f9ab00,color:#3c4043,font-weight:bold
-class FLASH,IMG g
+classDef key fill:#fef7e0,stroke:#f9ab00,color:#3c4043
+classDef plain fill:#f8f9fa,stroke:#9aa0a6,color:#3c4043
+class GEM,IMG g
 class FS,CACHE,TRACE,MAPS store
 class PERC,JUDGE key
+class UI,SCHED,WATCH,TOUR plain
 ```
+
+**Read it in one line:** the model answers *what is there*; the code decides
+*what it means to you*. Everything downstream — the 23ms re-rank, the swappable
+tradition, the reproducible score, the fact that any claim can be checked
+against the drawing — falls out of that single separation.
 
 **Read it in one line:** the model answers *what is there*; the code decides *what
 it means to you*. Everything good downstream — the 23ms re-rank, the swappable
