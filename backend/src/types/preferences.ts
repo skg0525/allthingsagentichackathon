@@ -30,6 +30,8 @@ export interface PreferenceProfile {
     /** Cap the score when the entrance faces a direction the active tradition flags. */
     strictEntrance: boolean;
     flatYardRequired: boolean;
+    /** Set when the buyer calls road adjacency a dealbreaker, not a preference. */
+    noMajorRoadAdjacency: boolean;
     maxPrice: number;
     minYearBuilt: number;
   };
@@ -70,6 +72,7 @@ export function defaultProfile(userId: string): PreferenceProfile {
       maxCommuteMinutes: 30,
       strictEntrance: true,
       flatYardRequired: false,
+      noMajorRoadAdjacency: false,
       maxPrice: 950000,
       minYearBuilt: 1980,
     },

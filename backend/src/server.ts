@@ -387,14 +387,15 @@ app.post('/api/feedback',
     ? `${listing.address}, $${listing.price.toLocaleString()}, built ${listing.yearBuilt}`
     : propertyId;
 
-  const { adjustments, note, degraded } = await interpretFeedback(action, critique, context);
+  const { adjustments, constraints, note, degraded } = await interpretFeedback(action, critique, context);
   if (!degraded) recordModelCalls(1);
-  const applied = await applyFeedback(userId, propertyId, action, critique, adjustments, note);
+  const applied = await applyFeedback(userId, propertyId, action, critique, adjustments, constraints, note);
 
   res.json({
     success: true,
     note: applied.note,
     changes: applied.changes,
+    constraintsSet: applied.constraintsSet,
     profile: applied.profile,
     backend: memoryBackend(),
     degraded,

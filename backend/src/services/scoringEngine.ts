@@ -210,7 +210,9 @@ export function scoreProperty(
     cap(55, 'Steep backyard grade — you require a flat lot.');
   if (perception.yardGrade === 'Steep Slope')
     redFlags.push('Steep rear grade limits usable yard and adds drainage risk.');
-  if (perception.backsOntoMajorRoad)
+  if (hc.noMajorRoadAdjacency && perception.backsOntoMajorRoad)
+    cap(45, 'Fronts or backs onto a major road — you told the agent this is a dealbreaker.');
+  else if (perception.backsOntoMajorRoad)
     redFlags.push('Property fronts or backs onto a major road — noise and child-safety concern.');
   if (listing.price > hc.maxPrice)
     cap(70, `$${listing.price.toLocaleString()} is over your $${hc.maxPrice.toLocaleString()} ceiling.`);

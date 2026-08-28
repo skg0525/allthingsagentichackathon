@@ -5,19 +5,28 @@
  * change to the yard weight, or the feedback loop is theatre. Gemini does the
  * interpretation; memoryManager does the clamping and persistence.
  */
-import { GoogleGenAI, Type, ThinkingLevel } from '@google/genai';
+import { Type, ThinkingLevel } from '@google/genai';
 import { DimensionKey, DIMENSION_LABELS } from '../types/preferences.js';
-import { MODEL } from './geminiEvaluator.js';
-
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY ?? '' });
+import { callWithFallback } from './geminiEvaluator.js';
 
 const KEYS: DimensionKey[] = [
   'vastu', 'mainFloorSuite', 'yard', 'commute',
   'walkability', 'maintenance', 'community',
 ];
 
+/** Constraints feedback is allowed to switch on. Each one caps a score outright. */
+export type ConstraintKey =
+  | 'mainFloorBedroomRequired' | 'mainFloorFullBathRequired'
+  | 'flatYardRequired' | 'noMajorRoadAdjacency' | 'strictEntrance';
+
+const CONSTRAINTS: ConstraintKey[] = [
+  'mainFloorBedroomRequired', 'mainFloorFullBathRequired',
+  'flatYardRequired', 'noMajorRoadAdjacency', 'strictEntrance',
+];
+
 export interface Interpretation {
   adjustments: { dimension: DimensionKey; delta: number }[];
+  constraints: ConstraintKey[];
   note: string;
   degraded: boolean;
 }
@@ -28,16 +37,31 @@ You tune a home-buyer's preference model from their own words.
 The seven dimensions you may adjust:
 ${KEYS.map((k) => `  ${k} — ${DIMENSION_LABELS[k]}`).join('\n')}
 
-Given a thumbs up or down on a property plus the buyer's free-text critique,
-return the weight adjustments that best capture what they just told you.
+You must decide between two different things the buyer might be saying.
+
+**A preference** — "this matters more to me than you thought". Return a weight
+adjustment. delta between -0.4 and +0.4. Most feedback moves ONE or TWO
+dimensions; leave the rest alone.
+
+**A dealbreaker** — "a house with this is disqualified, full stop". Return the
+matching constraint in the constraints list. Only do this when the language is
+genuinely absolute: "dealbreaker", "non-negotiable", "never", "absolutely not",
+"won't even look at", "rules it out". A constraint caps the score of every
+property with that flaw, so do not set one for ordinary dislike.
+
+Available constraints:
+  noMajorRoadAdjacency      — fronting or backing onto a busy road
+  flatYardRequired          — a sloped yard is unacceptable
+  mainFloorBedroomRequired  — must have a bedroom on the main floor
+  mainFloorFullBathRequired — that floor must have a full bath
+  strictEntrance            — entrance direction the tradition flags is unacceptable
 
 Rules:
-- delta is between -0.25 and +0.25. Most feedback should move ONE or TWO
-  dimensions. Do not touch dimensions the critique says nothing about.
-- A thumbs DOWN on a specific flaw RAISES the weight of that dimension —
-  they are telling you it matters more than you assumed.
+- A thumbs DOWN on a specific flaw RAISES the weight of that dimension — they
+  are telling you it matters more than you assumed.
 - A thumbs UP on a specific strength also RAISES that dimension's weight.
-- Vague praise or complaint with no specific cause returns an empty list.
+- Vague praise or complaint with no specific cause returns empty lists.
+- Set a constraint AND a weight adjustment when the critique warrants both.
 - "note" is one short sentence, written back to the buyer in second person,
   stating what you learned. e.g. "Backyard privacy now weighs more heavily
   than commute time in your ranking."
@@ -57,9 +81,10 @@ const SCHEMA = {
         required: ['dimension', 'delta'],
       },
     },
+    constraints: { type: Type.ARRAY, items: { type: Type.STRING, enum: CONSTRAINTS } },
     note: { type: Type.STRING },
   },
-  required: ['adjustments', 'note'],
+  required: ['adjustments', 'constraints', 'note'],
 };
 
 export async function interpretFeedback(
@@ -68,8 +93,10 @@ export async function interpretFeedback(
   propertyContext: string,
 ): Promise<Interpretation> {
   try {
-    const res = await ai.models.generateContent({
-      model: MODEL,
+    // The last raw call in the codebase used to live here, so a 503 silently
+    // turned the feedback loop into a no-op that echoed the critique back.
+    const { text } = await callWithFallback((model) => ({
+      model,
       contents: [{
         role: 'user',
         parts: [{
@@ -84,20 +111,24 @@ export async function interpretFeedback(
         responseSchema: SCHEMA,
         thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
         temperature: 0.2,
-        maxOutputTokens: 1024,
+        maxOutputTokens: 2048,
       },
-    });
+    }));
 
-    const parsed = JSON.parse(res.text ?? '{}');
+    const parsed = JSON.parse(text);
     const adjustments = (parsed.adjustments ?? [])
       .filter((a: any) => KEYS.includes(a.dimension) && typeof a.delta === 'number')
       .map((a: any) => ({
         dimension: a.dimension as DimensionKey,
-        delta: Math.max(-0.25, Math.min(0.25, a.delta)),
+        delta: Math.max(-0.4, Math.min(0.4, a.delta)),
       }));
+
+    const constraints = (parsed.constraints ?? [])
+      .filter((c: string) => CONSTRAINTS.includes(c as ConstraintKey)) as ConstraintKey[];
 
     return {
       adjustments,
+      constraints,
       note: parsed.note || 'Noted for future scans.',
       degraded: false,
     };
@@ -105,6 +136,6 @@ export async function interpretFeedback(
     console.warn('[feedback] interpretation failed:', (err as Error).message);
     // Still record the critique verbatim — losing the buyer's words is worse
     // than losing the weight change.
-    return { adjustments: [], note: critique.slice(0, 200), degraded: true };
+    return { adjustments: [], constraints: [], note: critique.slice(0, 200), degraded: true };
   }
 }

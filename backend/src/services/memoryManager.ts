@@ -172,6 +172,8 @@ export async function updateProfile(
 export interface AppliedFeedback {
   profile: PreferenceProfile;
   changes: { dimension: DimensionKey; from: number; to: number }[];
+  /** Constraints this feedback switched on. These cap scores outright. */
+  constraintsSet: string[];
   note: string;
 }
 
@@ -188,10 +190,25 @@ export async function applyFeedback(
   action: 'thumbs_up' | 'thumbs_down',
   critique: string,
   adjustments: { dimension: DimensionKey; delta: number }[],
+  constraints: string[],
   note: string,
 ): Promise<AppliedFeedback> {
   const profile = await getProfile(userId);
   const changes: AppliedFeedback['changes'] = [];
+  const constraintsSet: string[] = [];
+
+  /* A weight change moves a weighted average across seven dimensions, so on its
+     own it shifts a score by about a point — invisible, and sometimes upward,
+     because raising the weight of a dimension a property scores well on raises
+     its total. When the buyer says "dealbreaker" they mean the house is
+     disqualified, and only a hard constraint expresses that. */
+  for (const key of constraints) {
+    const hc = profile.hardConstraints as unknown as Record<string, unknown>;
+    if (key in hc && hc[key] !== true) {
+      hc[key] = true;
+      constraintsSet.push(key);
+    }
+  }
 
   for (const { dimension, delta } of adjustments) {
     const from = profile.weights[dimension];
@@ -208,7 +225,7 @@ export async function applyFeedback(
   profile.learnedNotes = profile.learnedNotes.slice(0, 25); // keep the doc bounded
 
   const saved = await saveProfile(profile);
-  return { profile: saved, changes, note };
+  return { profile: saved, changes, constraintsSet, note };
 }
 
 export async function resetProfile(userId: string): Promise<PreferenceProfile> {
