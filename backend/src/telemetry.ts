@@ -63,34 +63,33 @@ export function initTelemetry(): boolean {
 
   try {
     // Deliberately synchronous requires, after the safety checks above.
-    const { NodeSDK } = require('@opentelemetry/sdk-node');
+    const { NodeTracerProvider, SimpleSpanProcessor } = require('@opentelemetry/sdk-trace-node');
     const { TraceExporter } = require('@google-cloud/opentelemetry-cloud-trace-exporter');
     const { resourceFromAttributes } = require('@opentelemetry/resources');
     const {
       ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION,
     } = require('@opentelemetry/semantic-conventions');
 
-    const sdk = new NodeSDK({
+    /* SimpleSpanProcessor, not the usual BatchSpanProcessor.
+     *
+     * Batching relies on a background timer, and Cloud Run throttles CPU to
+     * near zero between requests — so the timer never fires and buffered spans
+     * die with the container. Exporting each span as it ends costs a little
+     * more per request and is the only thing that reliably works on a service
+     * that scales to zero. */
+    const tp = new NodeTracerProvider({
       resource: resourceFromAttributes({
         [ATTR_SERVICE_NAME]: SERVICE,
         [ATTR_SERVICE_VERSION]: process.env.K_REVISION ?? 'local',
       }),
-      traceExporter: new TraceExporter({ projectId }),
+      spanProcessors: [new SimpleSpanProcessor(new TraceExporter({ projectId }))],
     });
-    sdk.start();
+    tp.register();
+    provider = tp;
     enabled = true;
+    console.log(`[trace] exporting to Cloud Trace in ${projectId} (per-span)`);
 
-    /* Cloud Run throttles CPU to near zero between requests, so the batch
-       processor's background timer never fires and buffered spans die with the
-       container. Flushing has to be driven by request traffic instead — see
-       flushTraces(), called after each response. */
-    const api = require('@opentelemetry/api');
-    const tp = api.trace.getTracerProvider();
-    provider = (tp?.getDelegate?.() ?? tp) as typeof provider;
-
-    const shutdown = () => { void sdk.shutdown().catch(() => {}); };
-    process.once('SIGTERM', shutdown);
-    console.log(`[trace] exporting to Cloud Trace in ${projectId}`);
+    process.once('SIGTERM', () => { void tp.shutdown().catch(() => {}); });
   } catch (err) {
     console.warn('[trace] disabled:', (err as Error).message);
   }
