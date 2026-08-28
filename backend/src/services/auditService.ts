@@ -155,7 +155,7 @@ export async function auditProperty(
     perception.mainFloorBedroom && perception.mainFloorFullBath);
 
   const scoreStart = Date.now();
-  const { matchScore, dimensions, redFlags } = scoreProperty(listing, perception, profile);
+  const { matchScore, dimensions, redFlags, verdict } = scoreProperty(listing, perception, profile);
   span.setAttribute('score.match', matchScore);
   span.setAttribute('score.redFlags', redFlags.length);
   trace.push({
@@ -183,6 +183,7 @@ export async function auditProperty(
     cons,
     redFlags,
     summary,
+    verdict,
     trace,
     cached,
     totalMs: Date.now() - t0,

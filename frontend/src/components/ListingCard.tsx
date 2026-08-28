@@ -1,6 +1,6 @@
 'use client';
 
-import { AlertTriangle, Bed, Bath, Ruler, Loader2, Zap } from 'lucide-react';
+import { AlertTriangle, Bed, Bath, Ruler, Loader2, Zap, ThumbsDown, Star } from 'lucide-react';
 import { SmartImage } from './SmartImage';
 import type { AuditResult, PropertyListing } from '@/types/listing';
 
@@ -21,6 +21,7 @@ export function ListingCard({
   onClick: () => void;
 }) {
   const b = audit ? band(audit.matchScore) : null;
+  const rejected = audit?.verdict === 'rejected';
 
   return (
     <button
@@ -29,7 +30,8 @@ export function ListingCard({
       className={`group w-full text-left rounded-xl border transition-all duration-200 overflow-hidden
         ${isActive
           ? 'border-brand-500/60 bg-brand-500/[0.07] ring-1 ring-brand-500/40'
-          : 'border-ink-700 bg-ink-850 hover:border-ink-600 hover:bg-ink-800'}`}
+          : 'border-ink-700 bg-ink-850 hover:border-ink-600 hover:bg-ink-800'}
+        ${rejected ? 'opacity-55' : ''}`}
     >
       <div className="flex gap-3 p-3">
         <div className="relative shrink-0">
@@ -80,10 +82,24 @@ export function ListingCard({
               </span>
             ) : audit && b ? (
               <div className="flex flex-wrap items-center gap-1.5">
-                <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5
-                                  text-[11px] font-semibold ring-1 ${b.chip}`}>
-                  {b.word}
-                </span>
+                {audit.verdict === 'rejected' ? (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-bad-500/15
+                                   px-2 py-0.5 text-[11px] font-semibold text-bad-400
+                                   ring-1 ring-bad-500/30">
+                    <ThumbsDown size={11} /> You passed on this
+                  </span>
+                ) : audit.verdict === 'shortlisted' ? (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-good-500/15
+                                   px-2 py-0.5 text-[11px] font-semibold text-good-400
+                                   ring-1 ring-good-500/30">
+                    <Star size={11} /> Shortlisted
+                  </span>
+                ) : (
+                  <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5
+                                    text-[11px] font-semibold ring-1 ${b.chip}`}>
+                    {b.word}
+                  </span>
+                )}
                 {audit.redFlags.length > 0 && (
                   <span className="inline-flex items-center gap-1 rounded-full bg-bad-500/10
                                    px-2 py-0.5 text-[11px] font-medium text-bad-400 ring-1 ring-bad-500/25">

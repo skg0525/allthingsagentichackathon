@@ -36,6 +36,15 @@ export interface PreferenceProfile {
     minYearBuilt: number;
   };
   /** Free-text lessons learned from thumbs up/down. Fed back into the narrator. */
+  /**
+   * What you said about individual houses.
+   *
+   * Weight changes express what you like in general. They cannot express "not
+   * this one" — a weighted average over seven dimensions barely moves, and if
+   * the house happens to score well on the dimension you raised, it moves UP.
+   * Rejecting a specific house has to be recorded against that house.
+   */
+  propertyFeedback: Record<string, 'rejected' | 'shortlisted'>;
   learnedNotes: string[];
   updatedAt: string;
   version: number;
@@ -76,6 +85,7 @@ export function defaultProfile(userId: string): PreferenceProfile {
       maxPrice: 950000,
       minYearBuilt: 1980,
     },
+    propertyFeedback: {},
     learnedNotes: [],
     updatedAt: new Date().toISOString(),
     version: 1,

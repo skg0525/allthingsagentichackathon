@@ -156,6 +156,8 @@ export interface ScoreOutcome {
   matchScore: number;
   dimensions: DimensionScore[];
   redFlags: string[];
+  /** What the buyer said about this specific property, if anything. */
+  verdict?: 'rejected' | 'shortlisted';
 }
 
 export function scoreProperty(
@@ -224,5 +226,16 @@ export function scoreProperty(
   if (primary && primary.minutes > hc.maxCommuteMinutes * 1.3)
     cap(68, `${primary.minutes} min to ${primary.label} ${primary.daysPerWeek}x/week is well past your ${hc.maxCommuteMinutes} min limit.`);
 
-  return { matchScore, dimensions, redFlags };
+  /* Your explicit verdict on this house outranks the arithmetic.
+     Saying "not for me" has to visibly remove it from contention, not nudge a
+     weighted average by a point. */
+  const verdict = profile.propertyFeedback?.[listing.id];
+  if (verdict === 'rejected') {
+    matchScore = Math.min(matchScore, 25);
+    redFlags.unshift('You marked this one as not for you.');
+  } else if (verdict === 'shortlisted') {
+    matchScore = Math.min(100, matchScore + 6);
+  }
+
+  return { matchScore, dimensions, redFlags, verdict };
 }

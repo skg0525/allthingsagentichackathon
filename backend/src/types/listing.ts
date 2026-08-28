@@ -99,6 +99,8 @@ export interface AuditResult {
   cons: string[];
   redFlags: string[];
   summary: string;
+  /** What the buyer said about this specific property, if anything. */
+  verdict?: 'rejected' | 'shortlisted';
   /** Real observability: what the agent actually did, with timings. */
   trace: TraceStep[];
   cached: boolean;

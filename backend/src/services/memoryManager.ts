@@ -197,6 +197,12 @@ export async function applyFeedback(
   const changes: AppliedFeedback['changes'] = [];
   const constraintsSet: string[] = [];
 
+  // The verdict on this specific house. This is what makes a thumbs-down
+  // actually do something to the house you were looking at.
+  if (!profile.propertyFeedback) profile.propertyFeedback = {};
+  profile.propertyFeedback[propertyId] =
+    action === 'thumbs_down' ? 'rejected' : 'shortlisted';
+
   /* A weight change moves a weighted average across seven dimensions, so on its
      own it shifts a score by about a point — invisible, and sometimes upward,
      because raising the weight of a dimension a property scores well on raises

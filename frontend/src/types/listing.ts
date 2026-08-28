@@ -79,6 +79,7 @@ export interface AuditResult {
   cons: string[];
   redFlags: string[];
   summary: string;
+  verdict?: 'rejected' | 'shortlisted';
   trace: TraceStep[];
   cached: boolean;
   totalMs: number;
