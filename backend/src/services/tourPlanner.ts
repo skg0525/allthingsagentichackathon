@@ -70,10 +70,19 @@ Decide:
    buyer is still fresh.
 2. minutesOnSite for each: 30 for a straightforward look, 45 where there is
    something specific and slow to verify.
-3. whatToCheck — ONE sentence, the single most useful thing to do while standing
-   there, informed by what the agent already flagged. Be concrete and physical:
-   "measure the ground-floor bath — the plan shows no tub" beats "check the
-   bathroom". If a red flag exists, that is what to check.
+3. whatToCheck — ONE sentence naming the single most useful thing to do WHILE
+   PHYSICALLY STANDING AT THE PROPERTY.
+
+   It must be something only an in-person visit can settle. Good: "measure the
+   ground-floor bath — the plan shows no tub"; "stand at the rear fence and see
+   how far the grade actually drops"; "open a window on the road side and listen".
+
+   Do NOT suggest checking commute times, walk scores, transit access, distance
+   to a train station, or school districts. Those are already known from data and
+   nothing about them is settled by visiting the house. This is a driving tour;
+   the buyer is not walking to a station.
+
+   If the property has a red flag, that is what to check.
 
 Assume 20 minutes of driving between stops. Return strictly valid JSON.
 `.trim();
@@ -120,14 +129,28 @@ export async function planTour(
     'tour.stops': listings.length,
     'tour.start': startAddress,
   }, async (span) => {
+    /* Only physical findings go to the planner.
+     *
+     * Feeding it the scoring `cons` leaked neighbourhood statistics into the
+     * advice — it started telling a buyer on a driving tour to walk to the
+     * MARTA station and time it. Commute and walk scores are already known from
+     * data; nothing about them is verified by standing in a living room. What
+     * belongs here is what the agent saw in the plan and the aerial. */
     const context = listings.map((l) => {
       const a = audits[l.id];
+      const p = a?.perception;
       return {
         propertyId: l.id,
         address: l.address,
         matchScore: a?.matchScore ?? null,
+        yearBuilt: l.yearBuilt,
         redFlags: a?.redFlags ?? [],
-        concerns: a?.cons?.slice(0, 2) ?? [],
+        seenInThePlan: p ? {
+          mainFloorSuite: p.mainFloorSuiteEvidence,
+          yard: p.yardEvidence,
+          site: p.siteEvidence,
+          entrance: `${p.entranceDirection} — ${p.entranceEvidence}`,
+        } : null,
       };
     });
 
