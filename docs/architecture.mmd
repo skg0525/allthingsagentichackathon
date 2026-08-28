@@ -1,0 +1,33 @@
+flowchart LR
+  U(["Buyer<br/>browser"])
+  S(["Cloud Scheduler<br/>daily 6am"])
+
+  subgraph GCR["Cloud Run"]
+    UI["Next.js UI"]
+    API["Agent API"]
+    VIS["Perception"]
+    SCORE["Scoring"]
+    TOUR["Tour planner"]
+  end
+
+  GEM["Gemini 3.5<br/>Flash-Lite"]
+  FS[("Firestore")]
+  CACHE[("Perception<br/>cache")]
+  TRACE(["Cloud Trace"])
+  MAPS(["Google Maps"])
+
+  U --> UI --> API
+  S -->|cron| API
+  API --> VIS --> SCORE --> TOUR
+  SCORE --> UI
+
+  VIS <-->|"floor plan<br/>+ aerial"| GEM
+  VIS <--> CACHE
+  SCORE <-->|weights| FS
+  API --> TRACE
+  TOUR --> MAPS
+
+  classDef goog fill:#1a73e8,stroke:#1a73e8,color:#fff
+  classDef data fill:#e8f0fe,stroke:#1a73e8,color:#174ea6
+  class GEM goog
+  class FS,CACHE,TRACE,MAPS,S data

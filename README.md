@@ -50,13 +50,49 @@ give it feedback.
 
 ## Architecture
 
-![VastuNest architecture](docs/architecture.svg)
+```mermaid
+flowchart LR
+  U(["Buyer<br/>browser"])
+  S(["Cloud Scheduler<br/>daily 6am"])
+
+  subgraph GCR["Cloud Run"]
+    UI["Next.js UI"]
+    API["Agent API"]
+    VIS["Perception"]
+    SCORE["Scoring"]
+    TOUR["Tour planner"]
+  end
+
+  GEM["Gemini 3.5<br/>Flash-Lite"]
+  FS[("Firestore")]
+  CACHE[("Perception<br/>cache")]
+  TRACE(["Cloud Trace"])
+  MAPS(["Google Maps"])
+
+  U --> UI --> API
+  S -->|cron| API
+  API --> VIS --> SCORE --> TOUR
+  SCORE --> UI
+
+  VIS <-->|"floor plan<br/>+ aerial"| GEM
+  VIS <--> CACHE
+  SCORE <-->|weights| FS
+  API --> TRACE
+  TOUR --> MAPS
+
+  classDef goog fill:#1a73e8,stroke:#1a73e8,color:#fff
+  classDef data fill:#e8f0fe,stroke:#1a73e8,color:#174ea6
+  class GEM goog
+  class FS,CACHE,TRACE,MAPS,S data
+```
 
 The model is asked one question: what is physically in this drawing. It never
 sees your preference weights and never produces a score. Because of that,
 perception depends only on the images, so it is cached. A re-rank costs 23ms and
 no model call, and switching from Vastu to Feng Shui re-ranks the whole list
 without calling Gemini.
+
+<sub>Source: [`docs/architecture.mmd`](docs/architecture.mmd)</sub>
 
 ## Quickstart
 
