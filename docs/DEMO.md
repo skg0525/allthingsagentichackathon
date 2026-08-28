@@ -54,7 +54,8 @@ Disturb — a Slack notification mid-take means starting over.
 | 4 | Cloud Run → vastunest-agent → LOGS | Proof: live Gemini calls |
 | 5 | Firestore → `buyerProfiles` → `demo_buyer_1` | Proof: the weight you change |
 | 6 | Cloud Scheduler → `vastunest-overnight` | Proof: the agent runs unattended |
-| 7 | Architecture diagram (PNG) | Close, 3:25 |
+| 7 | Architecture diagram (PNG) | Close, 3:35 |
+| 8 | A real floor plan image, downloaded | The optional credibility beat |
 
 ---
 
@@ -127,12 +128,13 @@ what kind of API day it is, which decides Option A vs B.
 | 1:45 | 2 | Click the worst one. Three red flags. Say why it was rejected. |
 | 2:00 | 2 | Click **Feng Shui**. 75 Trailview goes 4th → 1st. |
 | 2:25 | 2 | Switch back to Vastu. Open the docked **Teach the agent** bar. Type the critique live. Show the weight move and the re-rank. |
-| 2:55 | 3,4,5,6 | Cloud Run services → logs → Firestore doc → Scheduler job. |
-| 3:25 | 7 | Architecture. The perception/judgement point. Close. |
+| 2:55 | 2 | **Plan a tour** → route + what to check at each door → open Google Maps. |
+| 3:15 | 3,4,5,6 | Cloud Run services → logs → Firestore doc → Scheduler job. |
+| 3:35 | 7 | Architecture. The perception/judgement point. Close. |
 
-**Optional, if you have 15 spare seconds:** click **Analyse a plan** and drop in
-a real floor plan from anywhere. It answers "does this only work on your data?"
-before a judge can ask it.
+**If you have 15 spare seconds anywhere:** **Analyse a plan**, drop in a real
+floor plan from a listing you found online. It answers "does this only work on
+your own data?" before a judge can ask it.
 
 ---
 
@@ -202,17 +204,29 @@ not remove filler words, but fixes bad mic quality in seconds.
 - **If something breaks, keep going and say so.** A recovered failure reads as
   real. A suspiciously perfect take reads as edited.
 
-## 7. Be honest about the dataset
+## 7. Be honest about the dataset — and make it an asset
 
-Say this, roughly, around 1:00:
+You will be tempted to imply this is real listing data, or to justify not using
+real data on privacy grounds. **Don't do either.** Listings are public; a judge
+who knows real estate will know that, and a weak excuse costs you more
+credibility than the thing you were excusing.
 
-> "These floor plans and aerials are generated — it's a fixture set, and that's
-> deliberate: because I wrote the ground truth, I can actually measure whether
-> the agent reads them correctly. It scores 93% exact across 42 fields. Here's
-> the harness."
+There is a genuinely strong reason, and it is simply true:
 
-Then, if you do the upload beat, drop in a real plan. Claiming live MLS data you
-don't have is the fastest way to lose credibility in Q&A.
+> "These floor plans are generated, deliberately. If I'd scraped real listings I
+> would have no answer key — I could show you a confident-looking output and
+> neither of us could tell whether it was right. Because I wrote the spec these
+> were drawn from, I know the ground truth for every one. So I can tell you it
+> scores 93% exact across 42 fields, with nothing read backwards, and you can
+> re-run that yourself in the repo in about a second."
+
+Then prove it generalises rather than asserting it: **drop in a real floor plan
+on camera.** One unseen plan read correctly does more than any claim about your
+dataset.
+
+That reframe is worth rehearsing. It turns the obvious objection into the reason
+you can make a measurable claim at all — which is something almost nobody else in
+the field will be able to say.
 
 ---
 
@@ -379,7 +393,37 @@ Submit. Wait for the response.
 
 ---
 
-## 2:55 – 3:25 · Google Cloud proof (MANDATORY)
+## 2:55 – 3:15 · It acts on the answer
+
+**Click "Plan a tour" in the header.** Three are pre-selected.
+
+> "Scoring is only half of it. I still have to go and see them."
+
+**Click Plan.**
+
+> "It ordered them by geography — both Alpharetta houses first, Brookhaven on
+> the way back, because it knows where these places are. It gave the 1969 ranch
+> forty-five minutes instead of thirty, because *that's* the one with the aging
+> systems. And look at what it says to check at each door — 'inspect the
+> electrical panel and HVAC to assess remaining lifespan.' That's not generic
+> advice. That came from what it found in the plan."
+
+**Click "Open the route in Google Maps."** Let the real map load on screen.
+
+> "And that's a real Google Maps route, on my phone, with every stop as a
+> waypoint."
+
+**Optional, ~15s if you have room — the credibility beat:**
+Click **Analyse a plan** and drop in a real floor plan you found online.
+
+> "One more thing. This is a floor plan it has never seen, from a listing I
+> found five minutes ago." [*results appear*] "Same model, same rules. And notice
+> the yard fields say Unknown — a floor plan can't tell you about a backyard, so
+> it says so instead of guessing."
+
+---
+
+## 3:15 – 3:35 · Google Cloud proof (MANDATORY)
 
 **Cut to the browser. Have these tabs open in advance.**
 
@@ -392,10 +436,12 @@ Submit. Wait for the response.
 5. **Firestore console** — open the `buyerProfiles` document, show the weight
    you just changed and the learned note.
    > "There's the 0.95 I just created."
+6. **Cloud Scheduler** — `vastunest-overnight`, enabled, 06:00 daily.
+   > "And that's the job that ran this morning without me."
 
 ---
 
-## 3:25 – 4:00 · Architecture & close
+## 3:35 – 4:00 · Architecture & close
 
 **Show the architecture diagram.**
 

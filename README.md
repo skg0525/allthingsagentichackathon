@@ -153,55 +153,73 @@ Exits non-zero if anything is off.
 
 ```mermaid
 flowchart TB
-    subgraph auto["Autonomous path — no human involved"]
-        SCHED["Cloud Scheduler<br/>06:00 daily"]
-        WATCH["watchAgent<br/>pull new listings · read · judge"]
-        BRIEF[("Firestore<br/>agentBriefs")]
-    end
 
-    subgraph client["Next.js command center · Cloud Run"]
-        UI["Ranked candidates · Inspector<br/>Preference sliders · Feedback<br/>While-you-were-away brief"]
-    end
+subgraph HUMAN[" 1 · You ask "]
+  direction LR
+  UI["<b>Command center</b><br/>Next.js on Cloud Run<br/>rank · inspect · teach · tour"]
+end
 
-    subgraph api["Agent API · Cloud Run · scale-to-zero"]
-        SSE["GET /api/scan<br/>Server-Sent Events"]
-        AUD["auditService<br/>orchestration + cache"]
-        SCORE["scoringEngine<br/>deterministic, pure"]
-        NARR["narrator<br/>no extra model call"]
-        FB["feedbackInterpreter"]
-        MEM["memoryManager<br/>Firestore, JSON fallback"]
-    end
+subgraph AUTO[" 2 · Or nobody asks "]
+  direction LR
+  SCHED["<b>Cloud Scheduler</b><br/>06:00 daily"] --> WATCH["<b>watchAgent</b><br/>pull new listings<br/>read them · decide alone<br/><i>silence is a valid outcome</i>"]
+end
 
-    subgraph google["Google AI"]
-        VIS["Gemini 3.5 Flash-Lite<br/>vision · structured output<br/>fallback: 3.5-flash, 3-flash-preview"]
-        IMG["Gemini 3.1 Flash Image<br/>build-time asset generation"]
-    end
+subgraph SPLIT[" 3 · The split everything rests on "]
+  direction LR
+  PERC["<b>PERCEPTION</b> — the model<br/>“what is physically in this drawing?”<br/>entrance · kitchen · tub or no tub<br/>yard grade · road adjacency<br/><i>never sees your weights</i>"]
+  JUDGE["<b>JUDGEMENT</b> — the code<br/>“how well does that fit <i>you</i>?”<br/>weighted dimensions · hard constraints<br/>Vastu ⇄ Feng Shui rule tables<br/><i>deterministic · reproducible</i>"]
+  PERC ==>|"cached per property<br/>re-rank = 23ms, zero calls"| JUDGE
+end
 
-    subgraph data["State"]
-        FS[("Firestore<br/>buyerProfiles")]
-        CACHE[("Perception cache<br/>keyed by property")]
-        ASSETS[("Floor plans + aerials<br/>shipped in the image")]
-    end
+subgraph ACT[" 4 · It acts "]
+  direction LR
+  NARR["narrator<br/><i>no extra model call</i>"]
+  TOUR["<b>tourPlanner</b><br/>order · time · route"]
+  MAPS(["Google Maps<br/>directions link"])
+  TOUR --> MAPS
+end
 
-    SCHED -->|"POST /api/agent/run"| WATCH
-    WATCH --> AUD
-    WATCH --> BRIEF --> UI
+subgraph GOOGLE[" Google AI "]
+  direction LR
+  FLASH["<b>Gemini 3.5 Flash-Lite</b><br/>vision · structured output<br/>fallback: 3.5-flash → 3-flash-preview"]
+  IMG["Gemini 3.1 Flash Image<br/><i>build-time dataset</i>"]
+end
 
-    UI -->|EventSource| SSE
-    SSE --> AUD
-    AUD -->|cache miss only| VIS
-    AUD --> CACHE
-    ASSETS --> VIS
-    AUD --> SCORE --> NARR --> SSE
-    UI -->|"PATCH /api/profile"| MEM
-    UI -->|"POST /api/feedback"| FB --> VIS
-    FB --> MEM --> FS
-    MEM --> SCORE
-    IMG -.->|npm run assets| ASSETS
+subgraph STATE[" State & telemetry "]
+  direction LR
+  FS[("<b>Firestore</b><br/>profile · learned notes<br/>agent briefs")]
+  CACHE[("Perception cache<br/><i>shipped in the image</i>")]
+  TRACE(["<b>Cloud Trace</b><br/>OpenTelemetry spans"])
+end
 
-    classDef g fill:#1a73e8,stroke:#174ea6,color:#fff
-    class VIS,IMG,FS g
+UI -->|"SSE stream"| SPLIT
+WATCH --> SPLIT
+SPLIT --> ACT
+ACT --> UI
+WATCH -.->|"brief"| FS
+
+PERC <-->|"floor plan + aerial"| FLASH
+TOUR -.-> FLASH
+IMG -.-> CACHE
+PERC <--> CACHE
+JUDGE <-->|"weights you taught it"| FS
+UI -.->|"feedback → weight deltas"| FS
+
+SPLIT -.-> TRACE
+WATCH -.-> TRACE
+
+classDef g fill:#1a73e8,stroke:#174ea6,color:#fff,font-weight:bold
+classDef store fill:#e8f0fe,stroke:#1a73e8,color:#174ea6
+classDef key fill:#fef7e0,stroke:#f9ab00,color:#3c4043,font-weight:bold
+class FLASH,IMG g
+class FS,CACHE,TRACE,MAPS store
+class PERC,JUDGE key
 ```
+
+**Read it in one line:** the model answers *what is there*; the code decides *what
+it means to you*. Everything good downstream — the 23ms re-rank, the swappable
+tradition, the reproducible score, the fact that a claim can be checked against
+the drawing — falls out of that one separation.
 
 **Request path on a warm scan:** browser → SSE → cache hit → deterministic score →
 narrative → stream out. No model call, no network egress, ~7ms per property.
