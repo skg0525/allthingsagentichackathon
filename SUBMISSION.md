@@ -82,10 +82,18 @@ If you keep it private, share it with `testing@devpost.com` and
 > Directional rules are data, not code. Vastu Shastra and Feng Shui genuinely
 > disagree — a south-facing entrance is a Vastu flaw and the Feng Shui ideal — so
 > switching tradition re-orders the entire list with no model call.
+>
+> When you've decided what's worth seeing, it plans the tour: orders the stops by
+> geography, allocates realistic time at each door, tells you the one thing to
+> verify in person given what it already found in the plans, and hands back a
+> Google Maps route. Every step of its reasoning exports to Cloud Trace as
+> OpenTelemetry spans, so the chain is auditable in Google's console rather than
+> only in ours.
 
-**Technologies used:** Gemini 3.5 Flash (vision + structured output) via the
+**Technologies used:** Gemini 3.5 Flash-Lite (vision + structured output) via the
 Google GenAI SDK; Gemini 3.1 Flash Image; Cloud Run; Firestore; Cloud Scheduler;
-Secret Manager; Next.js 16, Tailwind v4, TypeScript.
+Secret Manager; Cloud Trace via OpenTelemetry; Google Maps universal URLs;
+Next.js 16, Tailwind v4, TypeScript.
 
 **Cost and abuse controls:** Cloud Run `min-instances=0` / `max-instances=2`;
 per-IP throttles on every route that can trigger a model call; a per-instance
@@ -176,6 +184,7 @@ Run revision; one-command deploy; demo reset script that verifies its own work.
 
 | Tab | What it shows |
 |---|---|
+| Cloud Trace console | The agent's reasoning chain as OpenTelemetry spans — Google's own view of it |
 | https://vastunest-ui-555426598641.us-central1.run.app | The app |
 | https://vastunest-agent-555426598641.us-central1.run.app/api/health | `"memoryBackend":"firestore"`, the model, the Cloud Run revision |
 | Cloud Run console | Two services, `min-instances 0` |

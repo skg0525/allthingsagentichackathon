@@ -23,6 +23,7 @@ import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const SERVICE = 'vastunest-agent';
 let enabled = false;
+let provider: { forceFlush: () => Promise<void> } | null = null;
 
 export function initTelemetry(): boolean {
   const projectId = process.env.GOOGLE_CLOUD_PROJECT ?? process.env.GCLOUD_PROJECT;
@@ -69,14 +70,26 @@ export function initTelemetry(): boolean {
       ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION,
     } = require('@opentelemetry/semantic-conventions');
 
-    new NodeSDK({
+    const sdk = new NodeSDK({
       resource: resourceFromAttributes({
         [ATTR_SERVICE_NAME]: SERVICE,
         [ATTR_SERVICE_VERSION]: process.env.K_REVISION ?? 'local',
       }),
       traceExporter: new TraceExporter({ projectId }),
-    }).start();
+    });
+    sdk.start();
     enabled = true;
+
+    /* Cloud Run throttles CPU to near zero between requests, so the batch
+       processor's background timer never fires and buffered spans die with the
+       container. Flushing has to be driven by request traffic instead — see
+       flushTraces(), called after each response. */
+    const api = require('@opentelemetry/api');
+    const tp = api.trace.getTracerProvider();
+    provider = (tp?.getDelegate?.() ?? tp) as typeof provider;
+
+    const shutdown = () => { void sdk.shutdown().catch(() => {}); };
+    process.once('SIGTERM', shutdown);
     console.log(`[trace] exporting to Cloud Trace in ${projectId}`);
   } catch (err) {
     console.warn('[trace] disabled:', (err as Error).message);
@@ -85,6 +98,20 @@ export function initTelemetry(): boolean {
 }
 
 export const tracingEnabled = () => enabled;
+
+/**
+ * Push buffered spans now.
+ *
+ * Safe to call often — the exporter no-ops when there is nothing pending — and
+ * deliberately not awaited by request handlers, so a slow trace export can
+ * never delay a response.
+ */
+export function flushTraces(): void {
+  if (!enabled || !provider?.forceFlush) return;
+  void provider.forceFlush().catch((err) => {
+    console.warn('[trace] flush failed:', (err as Error).message.slice(0, 100));
+  });
+}
 
 const tracer = () => trace.getTracer(SERVICE);
 

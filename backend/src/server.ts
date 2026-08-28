@@ -11,7 +11,7 @@
  *   POST /api/feedback        free-text critique -> interpreted weight change
  */
 // Must come before anything that emits spans.
-import { initTelemetry, tracingEnabled, traced } from './telemetry.js';
+import { initTelemetry, tracingEnabled, flushTraces } from './telemetry.js';
 initTelemetry();
 
 import express, { Request, Response, NextFunction } from 'express';
@@ -71,6 +71,14 @@ app.use(cors({
 }));
 // Uploaded floor plans arrive base64-encoded in the body.
 app.use(express.json({ limit: '12mb' }));
+
+// Spans are flushed on the way out of every request, because Cloud Run's CPU
+// throttling means nothing else will do it. Fire-and-forget: never delay a
+// response for telemetry.
+app.use((_req, res, next) => {
+  res.on('finish', flushTraces);
+  next();
+});
 
 // Property imagery is served from the API so the vision agent and the browser
 // are provably looking at the exact same bytes.

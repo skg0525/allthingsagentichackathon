@@ -29,6 +29,8 @@ something new.
 | **Reads floor plans** | Gemini 3.5 Flash locates the front door, the kitchen quadrant, the primary bedroom, and whether a main-floor bath contains a tub — citing the visual evidence for each claim. |
 | **Runs without you** | Cloud Scheduler triggers an overnight cycle. The agent pulls what is new on the market, reads the floor plans unprompted, and decides for itself whether anything is worth waking you for. A quiet night is a valid outcome. |
 | **Reads plans it has never seen** | Drop in any real floor plan — same model, same prompt, same rules. |
+| **Plans the tour** | Pick a shortlist and it orders the stops by geography, allocates realistic time at each door, says what to verify in person given what it already found in the plans, and hands back a Google Maps route. |
+| **Traces itself** | Every reasoning step exports to Cloud Trace as OpenTelemetry spans — auditable in Google's console, not just ours. |
 | **Starts empty** | Nothing is scored until you ask. No precomputed grid — you watch the agent work. |
 | **Reads aerials** | Recovers yard grade, fencing, privacy and road adjacency from top-down imagery. |
 | **Scores deterministically** | Perception is the model's job; judgement is pure arithmetic in `scoringEngine.ts`. The same perception always yields the same score. |
@@ -418,6 +420,7 @@ the scheduler wakes the agent once a day and it goes back to sleep.
 | `GET` | `/api/agent/briefs` | What the agent found on past unattended runs |
 | `POST` | `/api/agent/reset` | Clear briefs + the seen list (demo reset) |
 | `POST` | `/api/analyze/plan` | Analyse an uploaded floor plan the system has never seen |
+| `POST` | `/api/tour/plan` | Order a shortlist into a drivable route + Google Maps link |
 | `GET` | `/api/scan` | **SSE** — audits stream as each resolves |
 | `POST` | `/api/audit/:id` | Single property |
 | `GET` | `/api/profile` | Buyer preference profile |
@@ -449,6 +452,8 @@ backend/
       watchAgent.ts       the autonomous cycle — runs on a cron, decides alone
       briefStore.ts       append-only log of unattended runs
       adhocAnalyzer.ts    analyse an uploaded, never-before-seen floor plan
+      tourPlanner.ts      order a shortlist geographically, time it, route it
+    telemetry.ts          OpenTelemetry spans exported to Cloud Trace
   public/assets/          generated floor plans, aerials, exteriors
 frontend/
   src/components/         command center UI
@@ -539,3 +544,12 @@ you are done. The rules do not require the app to be live at judging time.
 - **The autonomous run needed a real decision, not a real schedule.** Wiring
   Cloud Scheduler is trivial; the part that makes it an agent is that it stays
   silent when nothing clears the bar.
+- **Cloud Run throttles CPU to near zero between requests**, so OpenTelemetry's
+  batch processor never fires its background timer and buffered spans die with
+  the container. Flushing has to be driven by request traffic instead.
+- **The Firestore client throws an *uncaught* exception when no credentials
+  exist**, from a deferred gRPC stub creation outside any try/catch around the
+  call. Credentials have to be checked before the client is constructed, or a
+  clone without `gcloud auth` gets a server that exits seconds after boot.
+- **The universal Google Maps URL beat the Directions API.** No key, no quota,
+  no billing, and it opens natively in the Maps app on whatever phone scans it.
