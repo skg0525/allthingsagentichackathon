@@ -16,6 +16,7 @@ import { PreferenceProfile } from '../types/preferences.js';
 import { perceiveProperty } from './geminiEvaluator.js';
 import { scoreProperty } from './scoringEngine.js';
 import { buildNarrative } from './narrator.js';
+import { traced } from '../telemetry.js';
 import { STORE_DIR, APP_ROOT } from '../paths.js';
 
 const CACHE_FILE = join(STORE_DIR, 'perception-cache.json');
@@ -139,10 +140,24 @@ export async function auditProperty(
      behind a minute of model calls the user never asked for. */
   if (opts.cachedOnly && !(await hasPerception(listing.id))) return null;
 
+  return traced('audit.property', {
+    'property.id': listing.id,
+    'property.address': listing.address,
+    'profile.version': profile.version,
+    'profile.tradition': profile.tradition,
+    'scan.forced': opts.force ?? false,
+  }, async (span) => {
   const { perception, trace, cached } = await getPerception(listing, opts.force ?? false);
+  span.setAttribute('perception.cached', cached);
+  span.setAttribute('perception.entrance', perception.entranceDirection);
+  span.setAttribute('perception.kitchen', perception.kitchenQuadrant);
+  span.setAttribute('perception.mainFloorSuite',
+    perception.mainFloorBedroom && perception.mainFloorFullBath);
 
   const scoreStart = Date.now();
   const { matchScore, dimensions, redFlags } = scoreProperty(listing, perception, profile);
+  span.setAttribute('score.match', matchScore);
+  span.setAttribute('score.redFlags', redFlags.length);
   trace.push({
     step: 'Deterministic scoring',
     detail: `Applied ${dimensions.length} weighted dimensions from profile v${profile.version}. ` +
@@ -172,4 +187,5 @@ export async function auditProperty(
     cached,
     totalMs: Date.now() - t0,
   };
+  });
 }

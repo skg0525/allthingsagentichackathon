@@ -24,6 +24,8 @@ interface LocalShape {
 
 let db: Firestore | null = null;
 function firestore(): Firestore | null {
+  // memoryBackend() is only 'firestore' after initMemory verified credentials,
+  // so this inherits that guard rather than repeating the check.
   if (memoryBackend() !== 'firestore') return null;
   if (!db) {
     const projectId = process.env.GOOGLE_CLOUD_PROJECT ?? process.env.GCLOUD_PROJECT;

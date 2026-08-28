@@ -154,6 +154,26 @@ export interface AdhocResult {
   trace: TraceStep[];
 }
 
+export interface TourStop {
+  propertyId: string;
+  address: string;
+  order: number;
+  arriveAt: string;
+  minutesOnSite: number;
+  whatToCheck: string;
+  matchScore: number;
+}
+
+export interface TourPlan {
+  stops: TourStop[];
+  startAddress: string;
+  startTime: string;
+  totalMinutes: number;
+  mapsUrl: string;
+  summary: string;
+  degraded: boolean;
+}
+
 export interface HealthPayload {
   status: string;
   model: string;
@@ -163,4 +183,5 @@ export interface HealthPayload {
   pendingMarketListings: number;
   revision: string;
   region: string;
+  tracing?: string;
 }

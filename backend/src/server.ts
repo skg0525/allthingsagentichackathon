@@ -10,6 +10,10 @@
  *   PATCH /api/profile        adjust weights / hard constraints, re-ranks free
  *   POST /api/feedback        free-text critique -> interpreted weight change
  */
+// Must come before anything that emits spans.
+import { initTelemetry, tracingEnabled, traced } from './telemetry.js';
+initTelemetry();
+
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import 'dotenv/config';
@@ -25,6 +29,7 @@ import { incomingListings, incomingById } from './data/incomingListings.js';
 import { runWatchCycle } from './services/watchAgent.js';
 import { listBriefs, resetWatch, listSeenIds } from './services/briefStore.js';
 import { analyzeUploadedPlan } from './services/adhocAnalyzer.js';
+import { planTour } from './services/tourPlanner.js';
 import { auditProperty, clearPerceptionCache, cacheStats } from './services/auditService.js';
 import { MODEL } from './services/geminiEvaluator.js';
 import { interpretFeedback } from './services/feedbackInterpreter.js';
@@ -110,6 +115,7 @@ app.get('/api/health', wrap(async (_req, res) => {
     perceptionCache: stats,
     activeScans,
     modelBudget: budgetStatus(),
+    tracing: tracingEnabled() ? 'cloud-trace' : 'disabled',
     listings: mockListings.length,
     pendingMarketListings: incomingListings.length,
     revision: process.env.K_REVISION ?? 'local',
@@ -311,6 +317,49 @@ app.post('/api/analyze/plan',
     res.status(status).json({ error: (err as Error).message });
   }
 }));
+
+/* ------------------------------- tour -------------------------------- */
+
+/**
+ * Turn a shortlist into a drivable route.
+ *
+ * The agent orders the stops, allocates time, says what to verify at each door
+ * given what it already found in the plans, and returns a Google Maps link with
+ * every stop as a waypoint.
+ */
+app.post('/api/tour/plan',
+  rateLimit({ max: 10, windowMs: 60_000, modelCost: 1 }),
+  wrap(async (req, res) => {
+    const { propertyIds, startAddress, startTime } = req.body ?? {};
+    if (!Array.isArray(propertyIds) || propertyIds.length === 0)
+      return res.status(400).json({ error: 'propertyIds must be a non-empty array' });
+    if (propertyIds.length > 8)
+      return res.status(400).json({ error: 'Eight stops is already a long day; pick fewer.' });
+
+    const userId = userIdOf(req);
+    const profile = await getProfile(userId);
+
+    const listings = propertyIds
+      .map((id: string) => listingById(id) ?? incomingById(id))
+      .filter(Boolean) as PropertyListing[];
+    if (!listings.length) return res.status(404).json({ error: 'No matching listings' });
+
+    // Re-score from cache so the plan can reference real findings without
+    // triggering vision calls the user did not ask for.
+    const audits: Record<string, Awaited<ReturnType<typeof auditProperty>>> = {};
+    await Promise.all(listings.map(async (l) => {
+      audits[l.id] = await auditProperty(l, profile, { cachedOnly: true });
+    }));
+
+    const plan = await planTour(
+      listings,
+      audits as never,
+      profile,
+      { startAddress, startTime },
+    );
+    recordModelCalls(plan.degraded ? 0 : 1);
+    res.json({ plan });
+  }));
 
 /* ----------------------------- feedback ----------------------------- */
 

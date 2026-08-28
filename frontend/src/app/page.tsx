@@ -10,6 +10,7 @@ import { FeedbackDock } from '@/components/FeedbackDock';
 import { SetupStage } from '@/components/SetupStage';
 import { AgentBrief } from '@/components/AgentBrief';
 import { PlanDropzone } from '@/components/PlanDropzone';
+import { TourPlanner } from '@/components/TourPlanner';
 import {
   getHealth, getListings, getProfile, getTraditions, getBriefs, patchProfile,
   startScan, resolveApiBase, getApiBase, type ScanMode,
@@ -35,6 +36,8 @@ export default function CommandCenter() {
   const [scanError, setScanError] = useState<string | null>(null);
   const [brief, setBrief] = useState<DailyBrief | null>(null);
   const [showUpload, setShowUpload] = useState(false);
+  const [showTour, setShowTour] = useState(false);
+  const [tourPicks, setTourPicks] = useState<string[]>([]);
   const stopScan = useRef<(() => void) | null>(null);
 
   /* ------------------------------ boot ------------------------------ */
@@ -201,8 +204,33 @@ export default function CommandCenter() {
   return (
     <div className="animate-rise relative z-10 flex h-screen flex-col">
       {showUpload && <PlanDropzone onClose={() => setShowUpload(false)} />}
+      {showTour && (
+        <TourPlanner
+          listings={listings}
+          audits={audits}
+          selected={tourPicks}
+          onToggle={(id) => setTourPicks((p) =>
+            p.includes(id) ? p.filter((x) => x !== id) : [...p, id])}
+          onClear={() => setTourPicks([])}
+          onClose={() => setShowTour(false)}
+        />
+      )}
       <Header
         onOpenUpload={() => setShowUpload(true)}
+        onOpenTour={() => {
+          // Pre-select the strongest matches — the ones you'd actually go see.
+          if (!tourPicks.length) {
+            setTourPicks(
+              [...listings]
+                .filter((l) => audits[l.id])
+                .sort((a, b) => (audits[b.id]?.matchScore ?? 0) - (audits[a.id]?.matchScore ?? 0))
+                .slice(0, 3)
+                .map((l) => l.id),
+            );
+          }
+          setShowTour(true);
+        }}
+        tourCount={tourPicks.length}
         onForceRescan={() => runScan('force')}
         onReset={() => { stopScan.current?.(); setAudits({}); setActiveId(null);
                          setElapsedMs(null); setIsScanning(false);

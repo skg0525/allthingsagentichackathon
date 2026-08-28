@@ -18,6 +18,7 @@ import { incomingListings } from '../data/incomingListings.js';
 import { auditProperty } from './auditService.js';
 import { getProfile } from './memoryManager.js';
 import { saveBrief, listSeenIds, markSeen } from './briefStore.js';
+import { traced } from '../telemetry.js';
 
 /** Only wake someone for a property that genuinely clears their bar. */
 const NOTIFY_THRESHOLD = 80;
@@ -63,6 +64,11 @@ export async function runWatchCycle(
   trigger: 'schedule' | 'manual' = 'schedule',
   opts: { replay?: boolean } = {},
 ): Promise<DailyBrief> {
+  return traced('agent.watchCycle', {
+    'agent.trigger': trigger,
+    'agent.user': userId,
+    'agent.replay': opts.replay ?? false,
+  }, async (span) => {
   const startedAt = Date.now();
   const profile: PreferenceProfile = await getProfile(userId);
 
@@ -120,10 +126,16 @@ export async function runWatchCycle(
     durationMs: Date.now() - startedAt,
   };
 
+  span.setAttribute('agent.newListings', fresh.length);
+  span.setAttribute('agent.analysed', findings.length);
+  span.setAttribute('agent.worthTouring', worth.length);
+  span.setAttribute('agent.notified', brief.notify);
+
   await saveBrief(userId, brief);
   console.log(
     `[watch] ${trigger} run: ${findings.length} analysed, ` +
     `${worth.length} worth touring, notify=${brief.notify} (${brief.durationMs}ms)`,
   );
   return brief;
+  });
 }

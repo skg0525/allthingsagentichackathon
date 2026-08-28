@@ -9,6 +9,8 @@
  */
 import { Firestore } from '@google-cloud/firestore';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
+import { homedir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { PreferenceProfile, DimensionKey, defaultProfile } from '../types/preferences.js';
 import { TraditionId, TRADITIONS } from '../data/traditions.js';
@@ -23,10 +25,35 @@ let firestore: Firestore | null = null;
 let backend: MemoryBackend = 'local-json';
 let probed = false;
 
+/**
+ * Are Google credentials actually available?
+ *
+ * The Firestore client's gRPC layer resolves credentials lazily and, when none
+ * exist, throws an UNCAUGHT exception from a deferred stub creation — outside
+ * any try/catch around the call that triggered it. The process dies. So the
+ * question has to be answered before a client is ever constructed, or a
+ * developer who clones this repo without `gcloud auth` gets a server that
+ * exits seconds after boot for no visible reason.
+ */
+function credentialsAvailable(): boolean {
+  if (process.env.K_SERVICE) return true;                       // Cloud Run
+  if (process.env.GOOGLE_APPLICATION_CREDENTIALS) return true;  // explicit key file
+  const adc = join(homedir(), '.config', 'gcloud', 'application_default_credentials.json');
+  return existsSync(adc);
+}
+
 /** One probe at boot decides the backend; per-request failures fall back too. */
 export async function initMemory(): Promise<MemoryBackend> {
   if (probed) return backend;
   probed = true;
+
+  if (!credentialsAvailable()) {
+    backend = 'local-json';
+    console.log('[memory] no Google credentials found — using the local JSON store');
+    console.log('[memory] run `gcloud auth application-default login` to use Firestore');
+    return backend;
+  }
+
   try {
     const projectId = process.env.GOOGLE_CLOUD_PROJECT ?? process.env.GCLOUD_PROJECT;
     const db = new Firestore(projectId ? { projectId } : {});

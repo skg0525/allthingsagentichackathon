@@ -1,6 +1,6 @@
 import type {
   AuditResult, PreferenceProfile, PropertyListing, HealthPayload, DimensionKey,
-  Tradition, TraditionId, DailyBrief, AdhocResult,
+  Tradition, TraditionId, DailyBrief, AdhocResult, TourPlan,
 } from '@/types/listing';
 
 /**
@@ -108,6 +108,19 @@ export const analyzeUploadedPlan = (imageBase64: string, mimeType: string) =>
     method: 'POST',
     body: JSON.stringify({ imageBase64, mimeType }),
   });
+
+/* ----------------------------- tour ----------------------------- */
+
+/** The agent orders the stops, times them, and returns a Google Maps route. */
+export const planTour = (
+  propertyIds: string[],
+  startAddress?: string,
+  startTime?: string,
+) =>
+  json<{ plan: TourPlan }>(`/api/tour/plan?userId=${USER_ID}`, {
+    method: 'POST',
+    body: JSON.stringify({ userId: USER_ID, propertyIds, startAddress, startTime }),
+  }).then((r) => r.plan);
 
 export interface FeedbackResponse {
   note: string;

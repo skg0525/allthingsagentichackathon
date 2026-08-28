@@ -50,7 +50,7 @@ needed — Cloud Run's own hostname is a valid hosted URL.
 > services after recording to keep spend at zero. `min-instances=0` means idle
 > cost is already ~$0.
 
-### ⬜ Public code repository
+### ✅ Public code repository
 `https://github.com/skg0525/allthingsagentichackathon`
 
 If you keep it private, share it with `testing@devpost.com` and
@@ -100,8 +100,8 @@ representative values for the Atlanta north-metro corridor.
 
 **Findings and learnings:** see the section at the bottom of `README.md`.
 
-### ⬜ Spin-up instructions
-In `README.md` under **Spin-up** and **Deploy to Google Cloud**. ✅ written
+### ✅ Spin-up instructions
+In `README.md` under **Spin-up** and **Deploy to Google Cloud**.
 
 ### ⬜ Architecture diagram
 Mermaid diagram in `README.md`. **Export it to PNG** for the Devpost gallery —

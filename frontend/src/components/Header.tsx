@@ -1,6 +1,8 @@
 'use client';
 
-import { Loader2, Cloud, Database, Cpu, RefreshCw, RotateCcw, Radar, FileImage } from 'lucide-react';
+import {
+  Loader2, Cloud, Database, Cpu, RefreshCw, RotateCcw, Radar, FileImage, Route,
+} from 'lucide-react';
 import type { HealthPayload } from '@/types/listing';
 
 /**
@@ -9,11 +11,14 @@ import type { HealthPayload } from '@/types/listing';
  * the judges can see which infrastructure actually served the request.
  */
 export function Header({
-  onForceRescan, onReset, onOpenUpload, isScanning, progress, health, elapsedMs, analyzedCount,
+  onForceRescan, onReset, onOpenUpload, onOpenTour, tourCount,
+  isScanning, progress, health, elapsedMs, analyzedCount,
 }: {
   onForceRescan: () => void;
   onReset: () => void;
   onOpenUpload: () => void;
+  onOpenTour: () => void;
+  tourCount: number;
   isScanning: boolean;
   progress: { done: number; total: number };
   health: HealthPayload | null;
@@ -64,6 +69,24 @@ export function Header({
                 ? `re-scored in ${elapsedMs}ms`
                 : `analyzed live in ${(elapsedMs / 1000).toFixed(1)}s`}
             </span>
+          )}
+
+          {analyzedCount > 0 && (
+            <button
+              onClick={onOpenTour}
+              title="Turn your shortlist into a drivable route"
+              className="flex items-center gap-1.5 rounded-lg border border-good-500/40
+                         bg-good-500/10 px-2.5 py-2 text-[12px] text-good-400
+                         hover:border-good-500/60 hover:bg-good-500/15"
+            >
+              <Route size={13} />
+              <span className="hidden sm:inline">Plan a tour</span>
+              {tourCount > 0 && (
+                <span className="rounded-full bg-good-500/25 px-1.5 font-mono text-[10px]">
+                  {tourCount}
+                </span>
+              )}
+            </button>
           )}
 
           <button

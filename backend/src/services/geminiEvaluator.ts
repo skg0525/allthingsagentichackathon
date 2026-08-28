@@ -12,6 +12,7 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { PropertyListing, Perception, PerceptionSchema, TraceStep } from '../types/listing.js';
 import { PUBLIC_DIR } from '../paths.js';
+import { traced } from '../telemetry.js';
 
 /**
  * Primary vision model.
@@ -232,7 +233,14 @@ export async function perceiveProperty(listing: PropertyListing): Promise<Percei
     for (const model of MODEL_CHAIN) {
       const started = Date.now();
       try {
-        const res = await withTimeout(
+        const res = await traced('gemini.vision', {
+          'gen_ai.system': 'gcp.gemini',
+          'gen_ai.request.model': model,
+          'gen_ai.operation.name': 'generate_content',
+          'property.id': listing.id,
+          'images.attached': loaded.length,
+          'attempt.round': round,
+        }, () => withTimeout(
           ai.models.generateContent({
             model,
             contents: [{ role: 'user', parts }],
@@ -251,7 +259,7 @@ export async function perceiveProperty(listing: PropertyListing): Promise<Percei
             },
           }),
           REQUEST_TIMEOUT_MS,
-        );
+        ));
 
         const text = res.text;
         if (!text) throw new Error('empty response body');
