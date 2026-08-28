@@ -332,16 +332,26 @@ Click **Analyze**. Talk while cards land.
 
 ## 2:25 – 2:50 · It learns
 
-**Open the docked "Teach the agent" bar. Pick 👎. PASTE the text — do not type it
-live, their checklist says so:**
+**First, point at 4820 Highpoint Crossing sitting at rank 4 with 69/100.**
+
+> "This one looks fine on paper. Big, new, good schools."
+
+**Open the docked "Teach the agent" bar. Pick 👎. PASTE the text — their
+checklist says not to type live:**
 
 ```
-It fronts a four-lane road. With a toddler that's a dealbreaker.
+It fronts a four-lane road. With a toddler that is an absolute dealbreaker,
+we would never even look at a house like this.
 ```
 
-> "It turns that into weights — community safety, 0.75 to 0.95 — writes it to
-> Firestore, and re-ranks everything in twenty-three milliseconds, because
-> re-ranking doesn't need the model at all."
+> "Now watch what it does with that. It didn't just note my complaint — it worked
+> out that 'dealbreaker' means a rule, not a preference. It set a hard constraint,
+> raised how much I weight safety, and wrote both to Firestore.
+>
+> And that house just went from 69 to 45. Rank four to rank eight.
+>
+> All of that re-ranking took twenty-three milliseconds, because it never called
+> the model. The agent already knows what's in those drawings."
 
 ---
 
