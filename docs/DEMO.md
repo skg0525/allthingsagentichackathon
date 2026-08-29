@@ -1,421 +1,257 @@
-# Demo — script and recording playbook
+# Demo script
 
-Everything you need to record the ~4 minute submission video. **Mechanics first**
-(section A), then the **word-for-word beats** (section B).
-
----
-
-# A · How to record
+Record tomorrow. Target **3:35**. Judges stop watching at 4:00, so leave buffer.
 
 ---
 
-## 1. What to record with
+# Before you record
 
-**Use QuickTime Player.** It ships with macOS, records screen + mic in one file,
-and produces no watermark or time limit.
-
-> File → New Screen Recording → click the ˅ next to the record button →
-> **Microphone: MacBook Pro Microphone** (or your headset) → Record Selected
-> Portion or Entire Screen.
-
-Alternatives if you want a webcam bubble or easier trimming: **OBS Studio**
-(free, more setup) or **Loom** (free tier caps at 5 min — fine, but it watermarks
-and hosts on their domain).
-
-**Do not use a phone pointed at the screen.** Judges notice.
-
-### Audio matters more than video
-A crisp voice over a plain screen beats a beautiful screen with echoey laptop
-audio. Use headphones with an inline mic if you have any. Record in a room with
-soft furnishing. Close the window.
-
----
-
-## 2. Set the stage (10 minutes before)
-
-**Display resolution.** The three-pane console needs width. Set your display to
-**1512×982 or wider** (System Settings → Displays → "More Space" is usually too
-small — pick the middle option). Below ~1280px the preference rail hides itself
-and you lose the tradition picker on camera.
-
-**Browser.** Chrome, one window, **no other tabs visible**. Hide the bookmarks
-bar (⌘⇧B). Zoom at 100% (⌘0).
-
-**Clean the desktop.** Hide everything: `⌥⌘H` to hide others. Turn on Do Not
-Disturb — a Slack notification mid-take means starting over.
-
-**Tabs, in this order, left to right.** Pre-authenticate all of them:
-
-| # | Tab | Why |
-|---|---|---|
-| 1 | Zillow, filter panel open | The problem, 0:00–0:40 |
-| 2 | VastuNest UI | The whole demo |
-| 3 | Cloud Run console — services list | Proof, 2:55 |
-| 4 | Cloud Run → vastunest-agent → LOGS | Proof: live Gemini calls |
-| 5 | Firestore → `buyerProfiles` → `demo_buyer_1` | Proof: the weight you change |
-| 6 | Cloud Scheduler → `vastunest-overnight` | Proof: the agent runs unattended |
-| 7 | Architecture diagram (PNG) | Close, 3:35 |
-| 8 | A real floor plan image, downloaded | The optional credibility beat |
-
----
-
-## 3. Reset (right before you hit record)
-
-**Close the VastuNest tab first.** A scan still streaming in an open tab refills
-the perception cache the moment the reset clears it — you would start recording
-believing the analysis is live when it is coming from cache. The script now
-refuses to run while a scan is in flight, but closing the tab avoids the whole
-problem.
+**1. Close every VastuNest tab.** Then:
 
 ```bash
-./deploy/demo-reset.sh
+./deploy/demo-reset.sh --cold
 ```
 
-Against the deployed backend:
+Wait for it to say `no demo property is cached`. That makes the on-camera scan
+genuinely live.
 
-```bash
-API=https://vastunest-agent-xxxx.run.app ./deploy/demo-reset.sh
+**2. Open these tabs, in this order, already signed in:**
+
+| # | Tab |
+|---|---|
+| 1 | Zillow, filter panel showing |
+| 2 | https://vastunest-ui-555426598641.us-central1.run.app |
+| 3 | Cloud Run console — services list |
+| 4 | Cloud Run → vastunest-agent → LOGS |
+| 5 | Firestore → `buyerProfiles` → `demo_buyer_1` |
+| 6 | Cloud Scheduler → `vastunest-overnight` |
+| 7 | The architecture diagram |
+
+**3. Display at 1512px or wider**, browser at 100% zoom, bookmarks bar hidden,
+Do Not Disturb on.
+
+**4. Record in short clips, one per beat.** The organizers explicitly recommend
+this: *"Record in short clips. Then you can redo one part without filming it all
+again."* Cut them together after. You are not doing this in one take.
+
+---
+
+# The script
+
+## 0:00 – 0:15 · Hook
+
+**Open cold on the app, on a floor plan, agent overlay pins visible. No title
+card. Talk immediately.**
+
+> "Gemini just read this floor plan. It can tell me the front door faces east,
+> the kitchen is in the south-east corner, and the only bathroom on the ground
+> floor has no tub in it."
+
+**Click the aerial tab.**
+
+> "And from the satellite image — flat backyard, fenced, backing onto woodland,
+> not a road."
+
+**On-screen caption:** `Gemini 3.5 Flash-Lite · Google GenAI SDK · Cloud Run + Firestore`
+
+---
+
+## 0:15 – 0:45 · The problem
+
+**Cut to Zillow. Scroll the filters. Keep this short.**
+
+> "We've toured twenty-two houses and still haven't bought one. Beds, baths,
+> price — that's everything you can filter on.
+>
+> What actually rules a house out for us: the entrance has to face east or north,
+> that's Vastu and it's not negotiable in my family. A real ground-floor bedroom
+> with a full bath, for my parents. A flat yard, because we have a toddler. Not
+> backing onto a four-lane road.
+>
+> None of that is a field anywhere. All of it is in the drawings."
+
+---
+
+## 0:45 – 1:05 · It ran without me
+
+**Back to the app. Point at "While you were away".**
+
+> "It doesn't wait to be asked. Cloud Scheduler ran this at six this morning. Two
+> new listings came on the market, it read both floor plans, and it decided one —
+> 18 Wren Hollow Court — was worth waking me up for. The other one it scored,
+> looked at, and said nothing about.
+>
+> That decision is the product. An agent that pings you about every new listing
+> is just a worse email alert."
+
+---
+
+## 1:05 – 1:45 · The evidence
+
+**Click Analyze. Talk over the cards landing. Cut the dead time in editing.**
+
+> "Two images per property go to Gemini — floor plan and aerial — with one
+> question: what is physically in this drawing?"
+
+**Open the top result. Scroll to "What the agent saw".**
+
+> "And it shows its work. Every claim quotes the evidence."
+
+**Read one aloud, verbatim.**
+
+**Click the worst property.**
+
+> "This one it rejected. South-facing entrance, no bedroom on the main floor, and
+> it caught from the satellite image that it fronts a four-lane road. It didn't
+> score low — it broke rules I told it were non-negotiable."
+
+---
+
+## 1:45 – 2:15 · It learns *(the strongest beat — do not cut)*
+
+**Go back to 18 Wren Hollow Court, sitting at number one.**
+
+> *(Read the score off the screen — it moves a little depending on which model
+> in the fallback chain answered.)*
+
+> "Now, the agent thinks this is the best house I've got. Say I go see it and I
+> hate it."
+
+**Open "Teach the agent". Click 👎. Paste — do not type:**
+
+```
+Not for me. The street felt wrong when we drove it.
 ```
 
-It clears the perception cache, resets learned preferences, sets the tradition
-back to Vastu, wipes old briefs, and runs the overnight agent once so
-*"While you were away"* has real content when you load the page.
+**Hit Teach. Let it land.**
 
-It ends by verifying that **no demo property is cached** and that the agent brief
-survived. If either check fails it exits non-zero and tells you what to do — do
-not record until it passes clean.
-
-Then load the UI — and **do not click Analyze**. That click belongs on camera.
-
----
-
-## 4. Decide how you are proving liveness
-
-Perception ships pre-computed, so the app is instant out of the box. That is
-deliberate — vision latency is Google's and it swings wildly, and no demo should
-be a coin flip on their capacity. But it means **clicking Analyze on a seeded
-cache is not a live demonstration**, and you must not present it as one.
-
-Two honest options. Pick one before you record:
-
-**Option A — seeded, prove liveness on one property (recommended).**
-Leave the seed in place. The scan returns in about a second, which keeps the
-demo tight. Then open one property and hit **Re-read the plans**, and narrate:
-
-> "That was cached. Watch it actually read one — this is a real call to Gemini,
-> right now."
-
-Costs ~15 seconds and proves the same thing as waiting two minutes.
-
-**Option B — fully cold.**
-Run `./deploy/demo-reset.sh --cold`, which drops the seed too. Everything is
-read live on camera. More impressive if the API cooperates, and a long silence
-if it does not.
-
-**Do a throwaway run 10 minutes before the real take either way.** It tells you
-what kind of API day it is, which decides Option A vs B.
-
----
-
-## 5. Shot list
-
-| Time | Tab | What you're doing |
-|---|---|---|
-| 0:00 | 1 | Scroll Zillow's filters. Name what's missing. |
-| 0:40 | 2 | The brief screen. **Lead with "While you were away" — the agent ran overnight, unprompted, and found a 91.** Then read your priorities. |
-| 1:00 | 2 | Click **Analyze**. Narrate as cards land. |
-| 1:20 | 2 | Open the winner. Floor plan tab. Point at the overlay pins. Read an evidence quote *verbatim*. |
-| 1:45 | 2 | Click the worst one. Three red flags. Say why it was rejected. |
-| 2:00 | 2 | Click **Feng Shui**. 75 Trailview goes 4th → 1st. |
-| 2:25 | 2 | Switch back to Vastu. Open the docked **Teach the agent** bar. Type the critique live. Show the weight move and the re-rank. |
-| 2:55 | 2 | **Plan a tour** → route + what to check at each door → open Google Maps. |
-| 3:15 | 3,4,5,6 | Cloud Run services → logs → Firestore doc → Scheduler job. |
-| 3:35 | 7 | Architecture. The perception/judgement point. Close. |
-
-**If you have 15 spare seconds anywhere:** **Analyse a plan**, drop in a real
-floor plan from a listing you found online. It answers "does this only work on
-your own data?" before a judge can ask it.
-
----
-
-## 5b. Narration and editing — the official rules
-
-Two things in the organizers' written checklist override earlier advice,
-including advice I gave you:
-
-**Editing is not just allowed, it is recommended.** Their words: *"Use jump cuts
-to remove pauses, ums, and dead air. Cut all load times and waiting. Speed up
-slow sections. Record in short clips, then you can redo one part without filming
-it all again."* So record beat by beat and cut it together. Do not sit through a
-50-second scan on camera.
-
-**AI voiceover is acceptable.** Their words: *"Not comfortable narrating? An AI
-voiceover beats silence or mumbling."* The live Q&A said they prefer a real
-voice, and that is still true, but a clean AI read beats a hesitant human one.
-
-So the ranking is:
-
-1. Your voice, recorded in short clips, filler removed in Descript
-2. An AI voiceover from the script, if narrating makes you tense up
-3. A mumbled single take — worst option, avoid
-
-**Do not type live.** Their checklist says so explicitly. Paste the feedback
-text, or cut to the result.
-
-### The tools
-
-**[Descript](https://descript.com)** — record in clips, one click removes every
-"um", Studio Sound fixes laptop-mic audio, and jump cuts are trivial. This is the
-whole workflow in one tool.
-
-**[ElevenLabs](https://elevenlabs.io)** — if you go the AI voiceover route, paste
-the script and lay the audio over your screen clips.
-
-**[Adobe Podcast Enhance](https://podcast.adobe.com/enhance)** — free, cleans
-audio quality only.
-
-### The rule that still holds
-
-No mockups and no slideware. Every frame has to be the real thing running. Cutting
-dead air is editing; faking a result is not.
-
-## 6. Delivery
-
-- **Don't read the script.** Know the five beats and talk. Stumbling sounds live;
-  reading sounds canned, and the rules ask for unedited.
-- **Say the numbers out loud.** "Ninety-one out of a hundred." "Twenty-three to
-  seventy-five." Judges skim; spoken numbers stick.
-- **Never say "as you can see."** Say what you want them to see.
-- **Silence is fine** while the scan runs. Better than filler.
-- **If something breaks, keep going and say so.** A recovered failure reads as
-  real. A suspiciously perfect take reads as edited.
-
-## 7. Be honest about the dataset — and make it an asset
-
-You will be tempted to imply this is real listing data, or to justify not using
-real data on privacy grounds. **Don't do either.** Listings are public; a judge
-who knows real estate will know that, and a weak excuse costs you more
-credibility than the thing you were excusing.
-
-There is a genuinely strong reason, and it is simply true:
-
-> "These floor plans are generated, deliberately. If I'd scraped real listings I
-> would have no answer key — I could show you a confident-looking output and
-> neither of us could tell whether it was right. Because I wrote the spec these
-> were drawn from, I know the ground truth for every one. So I can tell you it
-> scores 93% exact across 42 fields, with nothing read backwards, and you can
-> re-run that yourself in the repo in about a second."
-
-Then prove it generalises rather than asserting it: **drop in a real floor plan
-on camera.** One unseen plan read correctly does more than any claim about your
-dataset.
-
-That reframe is worth rehearsing. It turns the obvious objection into the reason
-you can make a measurable claim at all — which is something almost nobody else in
-the field will be able to say.
-
----
-
-## 8. Before you upload
-
-- [ ] Watch it back the whole way through, with headphones
-- [ ] Audio audible throughout, no clipping
-- [ ] No personal data on screen — email, other tabs, notifications
-- [ ] The `.run.app` URL is legible at least once
-- [ ] Under 4:00
-- [ ] Upload to YouTube as **public** (not unlisted — the rules require public
-      for the bonus content, and public is safer for the main submission too)
-- [ ] Title it with the project name and the hackathon
-
----
-
-# B · What to say
-
-**Target 3:40, not 4:00.** Judges stop watching at four minutes — an overrun means
-your close and your Cloud proof are simply never seen. Leave buffer.
-
-**Show the project working in the first 10 to 15 seconds.** That is from the
-organizers' checklist, and it is tighter than the 30 seconds mentioned in the
-Q&A. No title card, no intro, no sign-in. Open already logged in, on a result.
-
-**Say the model and framework out loud.** Their checklist: *"which Gemini model
-and which agent framework you used — say them clearly, don't bury them."* The
-line is in the hook below.
-
----
-
-## 0:00 – 0:30 · The hook
-
-**Open on the app, already on a floor plan with the agent's overlay pins showing.**
-No preamble. No title card. Talk immediately.
-
-> "This is a floor plan. Gemini 3.5 Flash-Lite just read it, and it can tell me
-> the front door faces east, the kitchen is in the south-east corner, and the only
-> bathroom on the ground floor has no tub in it.
+> "Down to twenty-five. From first to last.
 >
-> [*click the aerial tab*]
->
-> From the satellite image: flat backyard, fenced, backing onto woodland rather
-> than a road.
->
-> Zillow has a filter for none of that."
-
-**On-screen text instead of saying it:** put `Gemini 3.5 Flash-Lite · Google GenAI
-SDK · Cloud Run + Firestore` as a caption here. Their checklist asks for the model
-and framework to be explicit, and a caption costs no seconds.
+> And that's the point — it's not just adjusting a slider somewhere. It recorded
+> a verdict about this specific house, wrote it to Firestore, and re-ranked
+> everything in twenty-three milliseconds without calling the model once. It
+> already knows what's in those drawings."
 
 ---
 
-## 0:30 – 0:55 · Why it matters (fast)
+## 2:15 – 2:35 · The rulebook swaps
 
-**Cut to Zillow's filter panel for a few seconds only.**
+> "Vastu is an Indian tradition. Plenty of families use a different one, so the
+> compass rules are a table, not code."
 
-> "We've toured twenty-two houses. Beds, baths, price — that's all you can filter
-> on. But what actually rules a house out for us is whether the entrance faces
-> east, because that's Vastu and it's not negotiable in my family. Whether there's
-> a real ground-floor bedroom with a full bath for my parents. Whether the yard is
-> flat enough for a toddler. Whether it backs onto a four-lane road.
->
-> None of that is a field. All of it is in the drawings."
+**Click Feng Shui. Point at 75 Trailview Court moving up.**
 
-**Back to the app.**
-
----
-
-## 0:55 – 1:15 · It already ran without me
-
-**Point at "While you were away".**
-
-> "And it doesn't wait for me. Cloud Scheduler ran this at six this morning. Two
-> new listings hit the market, it read both of them, and it decided one — this
-> one, 89 out of 100 — was worth waking me up for. The other scored 35 and it
-> stayed quiet.
->
-> That decision is the whole product. An agent that pings you about every new
-> listing is just a worse email alert."
-
----
-
-## 1:15 – 2:05 · The evidence
-
-Click **Analyze**. Talk while cards land.
-
-> "Every one of these gets two images sent to Gemini — the floor plan and the
-> aerial — and one question: what is physically in this drawing?"
-
-**Open the winner. Scroll to "What the agent saw."**
-
-> "And it shows its work. Every claim has the evidence it used." [*read one aloud*]
-
-**Click the worst one (35/100).**
-
-> "Here's one it rejected. South-facing entrance. No bedroom on the main floor.
-> And it caught from the satellite image that it fronts a four-lane road. It
-> didn't score low — it broke rules I told it were non-negotiable."
-
----
-
-## 2:05 – 2:25 · The rulebook is swappable
-
-> "Vastu is an Indian tradition. Plenty of families use a different one. So the
-> compass rules are a table, not code. Watch fourth place."
-
-**Click Feng Shui.** *(75 Trailview: 4th → 1st, compass 23 → 75.)*
-
-> "Fourth to first. Same house, same reading — a south entrance is a flaw in Vastu
-> and the ideal in Feng Shui. The agent didn't change its mind about what it saw.
-> Only the rulebook did. And that took no model call at all."
+> "Same house, same reading — a south-facing entrance is a flaw in Vastu and the
+> ideal in Feng Shui. The agent didn't change its mind about what it saw. Only
+> the rulebook did."
 
 **Switch back to Vastu.**
 
 ---
 
-## 2:25 – 2:50 · It learns
-
-**First, point at 4820 Highpoint Crossing sitting at rank 4 with 69/100.**
-
-> "This one looks fine on paper. Big, new, good schools."
-
-**Open the docked "Teach the agent" bar. Pick 👎. PASTE the text — their
-checklist says not to type live:**
-
-```
-It fronts a four-lane road. With a toddler that is an absolute dealbreaker,
-we would never even look at a house like this.
-```
-
-> "Now watch what it does with that. It didn't just note my complaint — it worked
-> out that 'dealbreaker' means a rule, not a preference. It set a hard constraint,
-> raised how much I weight safety, and wrote both to Firestore.
->
-> And that house just went from 69 to 45. Rank four to rank eight.
->
-> All of that re-ranking took twenty-three milliseconds, because it never called
-> the model. The agent already knows what's in those drawings."
-
----
-
-## 2:50 – 3:10 · It acts
+## 2:35 – 2:55 · It acts
 
 **Click "Plan a tour" → Plan.**
 
-> "And when I've decided what's worth seeing, it plans the day. Ordered by
-> geography — both Alpharetta houses first, Brookhaven on the way back. Forty-five
-> minutes at the 1969 house instead of thirty, because that's the one with the
-> aging systems. And what to check at each door, from what it already found in the
-> plan."
+> "And once I know what's worth seeing, it plans the day. Ordered by geography.
+> Forty-five minutes at the 1969 house instead of thirty, because that's the one
+> with the aging systems. And what to check at each door — from what it found in
+> the plan."
 
 **Click "Open in Google Maps."** Let the real route render.
 
 ---
 
-## 3:10 – 3:30 · Google Cloud proof (MANDATORY)
+## 2:55 – 3:20 · Google Cloud proof *(required)*
 
-**Point at the header badges first — they're already on screen.**
+**Point at the header badges — already on screen.**
 
 > "Gemini 3.5 Flash-Lite, Firestore, and the live Cloud Run revision."
 
-Then, fast, one tab each:
-1. **Cloud Run console** — two services, min-instances 0
+Then one tab each, fast:
+
+1. **Cloud Run** — two services, min-instances 0
 2. **Logs** — the Gemini calls
-3. **Firestore** — `buyerProfiles/demo_buyer_1`, the 0.95 you just created
-4. **Cloud Scheduler** — `vastunest-overnight`, enabled, 06:00
+3. **Firestore** — `buyerProfiles/demo_buyer_1`, the verdict you just created
+4. **Cloud Scheduler** — `vastunest-overnight`, enabled, 06:00 daily
 
 ---
 
-## 3:30 – 3:45 · Close
+## 3:20 – 3:35 · Close
 
 **Architecture diagram.**
 
-> "One decision drives all of it: Gemini does perception, code does judgement. The
-> model answers what's in the drawing. It never sees my weights and never produces
-> a score.
+> "One decision drives all of it. Gemini does perception — what's in the drawing.
+> Code does judgement — what that means for me. The model never sees my weights
+> and never produces a score.
 >
-> That's why the same house scores the same every time, why every claim comes with
-> evidence, and why I can tell you it reads these plans 93% exactly right — because
-> I know the ground truth and you can re-run that yourself.
+> That's why it reads these plans 93% exactly right against known ground truth,
+> and why you can re-run that check yourself in a second.
 >
-> I'm still house hunting. But now I'm touring the right three instead of the
-> wrong twenty-two."
+> I'm still house hunting. But I'm touring the right three instead of the wrong
+> twenty-two."
 
 ---
 
-## Timing discipline
+# Timing
 
-| Beat | Ends | Cumulative |
-|---|---|---|
-| Hook | 0:30 | 0:30 |
-| Problem | 0:55 | 0:55 |
-| Overnight run | 1:15 | 1:15 |
-| Live evidence | 2:05 | 2:05 |
-| Tradition switch | 2:25 | 2:25 |
-| Feedback | 2:50 | 2:50 |
-| Tour | 3:10 | 3:10 |
-| **Cloud proof** | 3:30 | 3:30 |
-| Close | 3:45 | **3:45** |
+| Beat | Ends |
+|---|---|
+| Hook | 0:15 |
+| Problem | 0:45 |
+| Overnight run | 1:05 |
+| Evidence | 1:45 |
+| **It learns** | 2:15 |
+| Tradition switch | 2:35 |
+| Tour | 2:55 |
+| **Cloud proof** | 3:20 |
+| Close | **3:35** |
 
-**If you are running long, cut the tradition switch (2:05–2:25).** It is the most
-impressive beat and the least load-bearing. The Cloud proof, the overnight run and
-the feedback loop are all scored requirements.
+**Running long?** Cut the tradition switch (2:15–2:35). Never cut the overnight
+run, the learning beat, or the Cloud proof — those are scored.
 
-**Never cut the overnight brief or the Cloud proof.**
+---
+
+# Editing
+
+The organizers recommend it: *"Use jump cuts to remove pauses, ums, and dead air.
+Cut all load times and waiting. Speed up slow sections."*
+
+- **Cut every wait.** The scan and the feedback call both take 10–30 seconds.
+  None of that belongs in the video.
+- **Don't type on camera.** Paste.
+- **[Descript](https://descript.com)** does all of this: filler removal in one
+  click, Studio Sound for laptop-mic audio, easy jump cuts.
+- **Use your voice if you can.** They prefer it. But their checklist also says
+  *"an AI voiceover beats silence or mumbling"* — so if narrating makes you
+  freeze, [ElevenLabs](https://elevenlabs.io) over the script is a fine choice.
+
+**The one thing you cannot do:** fake a result. No mockups, no slideware. Cutting
+dead air is editing. Showing something that didn't happen is not.
+
+---
+
+# Say this about the dataset
+
+Do not claim it is live MLS data, and do not use privacy as the excuse — listings
+are public and a judge will know. The real reason is better:
+
+> "These floor plans are generated, deliberately. If I'd scraped real listings I'd
+> have no answer key — I could show you a confident-looking output and neither of
+> us could tell if it was right. Because I wrote the spec these were drawn from, I
+> know the correct answer for every one. That's why I can tell you it scores 93%
+> exact across 42 fields, and why you can re-run that yourself."
+
+If you have 15 spare seconds, **drop a real floor plan into "Analyse a plan"** on
+camera. One unseen plan read correctly beats any claim about your dataset.
+
+---
+
+# Before you upload
+
+- [ ] Watch it back with headphones
+- [ ] Under 4:00
+- [ ] The `.run.app` URL is legible at least once
+- [ ] No personal data, no notifications on screen
+- [ ] Upload to YouTube as **public**, not unlisted
+- [ ] Upload early — processing can take hours
