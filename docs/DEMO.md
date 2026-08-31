@@ -29,17 +29,33 @@ curl -X POST "https://vastunest-agent-555426598641.us-central1.run.app/api/cache
 | 1 | Zillow, filter panel showing |
 | 2 | https://vastunest-ui-555426598641.us-central1.run.app |
 | 3 | [Cloud Run services](https://console.cloud.google.com/run?project=gen-lang-client-0460749914) |
-| 4 | [Agent logs](https://console.cloud.google.com/run/detail/us-central1/vastunest-agent/logs?project=gen-lang-client-0460749914) |
+| 4 | [Agent logs](https://console.cloud.google.com/logs/query;query=resource.type%3D%22cloud_run_revision%22%20resource.labels.service_name%3D%22vastunest-agent%22;duration=PT1H?project=gen-lang-client-0460749914) |
 | 5 | [Firestore data](https://console.cloud.google.com/firestore/databases/-default-/data?project=gen-lang-client-0460749914) |
 | 6 | [Cloud Scheduler](https://console.cloud.google.com/cloudscheduler?project=gen-lang-client-0460749914) |
-| 7 | The architecture diagram |
-
-Those links go straight to the right page — no clicking through menus on camera.
+| 7 | The architecture diagram (PNG, open in Preview) |
 
 **Firestore is in the Google Cloud console, not Firebase.** Same database, two
-front ends; the Firebase console only shows projects created through Firebase.
-Use the link above. Once it loads, click `buyerProfiles` in the collection list,
-then the `demo_buyer_1` document.
+front ends; the Firebase console only lists projects created through Firebase.
+Use the link above, then click `buyerProfiles` in the collection column, then
+`demo_buyer_1`.
+
+**Tab 4 goes to Logs Explorer, not the service's Logs tab.** The per-service logs
+URL 404s; Logs Explorer with a filter is stable and shows more anyway. It opens
+pre-filtered to the agent, last hour.
+
+### What to actually point at
+
+You have about 25 seconds for all four. One thing per tab, then move.
+
+| Tab | Point at |
+|---|---|
+| Cloud Run | The two service rows — `vastunest-agent` and `vastunest-ui`, both `us-central1`. That is the whole proof: two services, running, on Google Cloud. Ignore the Scaling/Errors/Billing charts. |
+| Logs | Any line mentioning the model or a scan. Just scroll a little so real log lines are moving on screen. |
+| Firestore | The `demo_buyer_1` document — expand `propertyFeedback` to show the rejection you created a minute earlier, and `weights`. |
+| Scheduler | The `vastunest-overnight` row: schedule `0 6 * * *`, state **Enabled**, and the Last run column. |
+
+Do a dry pass through these four before recording — console pages can be slow to
+load the first time and you do not want that on camera.
 
 **3. Display at 1512px or wider**, browser at 100% zoom, bookmarks bar hidden,
 Do Not Disturb on.
@@ -199,19 +215,41 @@ Then one tab each, fast:
 
 ---
 
-## 3:20 – 3:35 · Close
+## 3:20 – 3:35 · Architecture and close
 
-**Architecture diagram.**
+**Full-screen the diagram.** Trace it with your cursor as you talk — left to
+right, following the arrows. Roughly one sentence per hop.
 
-> "One decision drives all of it. Gemini does perception — what's in the drawing.
-> Code does judgement — what that means for me. The model never sees my weights
-> and never produces a score.
+> "Two ways in — me in the browser, or Cloud Scheduler on a cron. Both hit the
+> same agent on Cloud Run."
+
+*(cursor: Buyer and Cloud Scheduler → Agent API)*
+
+> "Perception sends the floor plan and the aerial to Gemini and gets back what's
+> physically in them. That result goes in a cache, because it depends only on the
+> images."
+
+*(cursor: Perception ↔ Gemini, then ↔ Perception cache)*
+
+> "Scoring is separate, and it's ordinary code. It reads my weights out of
+> Firestore and decides what those findings are worth to me. The model never sees
+> a weight and never produces a score."
+
+*(cursor: Perception → Scoring ↔ Firestore)*
+
+> "And that one separation is the whole design. It's why re-ranking is twenty-three
+> milliseconds instead of a model call, why the same house scores the same every
+> time, and why swapping Vastu for Feng Shui doesn't touch Gemini at all.
 >
-> That's why it reads these plans 93% exactly right against known ground truth,
-> and why you can re-run that check yourself in a second.
+> It also means I can measure it. It reads these plans 93% exactly right against
+> known ground truth, and you can re-run that check yourself in about a second.
 >
-> I'm still house hunting. But I'm touring the right three instead of the wrong
-> twenty-two."
+> I'm still house hunting. But now I'm touring the right three instead of the
+> wrong twenty-two."
+
+**If you're short on time**, the minimum is the third paragraph — the separation
+and why it matters. The hop-by-hop walk is what makes it feel considered, but the
+point survives without it.
 
 ---
 
