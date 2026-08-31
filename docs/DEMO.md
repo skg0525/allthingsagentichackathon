@@ -68,192 +68,177 @@ again."* Cut them together after. You are not doing this in one take.
 
 # The script
 
-## 0:00 – 0:20 · Hook
-
-**Open cold on the app, on a floor plan with the agent overlay pins visible.**
-No title card. Talk immediately.
-
-> "My wife and I have toured twenty-two houses this year. We still haven't bought
-> one — because the things that actually rule a house out for us aren't filters
-> on any listing site.
->
-> So I built VastuNest. It reads the drawings instead.
->
-> It just read this floor plan and told me the front door faces east, and that
-> the only bathroom on the ground floor has no tub in it. My parents are moving
-> in with us. That second one disqualifies the house."
-
-**Add as a text overlay in editing — do not read it out:**
-`Gemini 3.5 Flash-Lite · Google GenAI SDK · Cloud Run + Firestore`
-
-*Why it's built this way: the name, the problem, the stakes and a working result
-all land inside twenty seconds. The tub detail only impresses if the judge already
-knows why it matters, so the reason comes with it.*
+Read these out loud once before recording. If a line makes you stumble, change it
+— your words beat mine every time.
 
 ---
 
-## 0:20 – 0:45 · What can't be filtered
+## 0:00 – 0:20 · Hook
 
-**Cut to Zillow, then Redfin. Scroll each filter panel briefly.**
+**Open cold on the app, floor plan showing with the agent's pins on it.**
 
-> "Beds, baths, price, square feet. That's it.
+> "We've looked at twenty-two houses this year. Still haven't bought one.
 >
-> Here's what decides it for us. The entrance has to face east or north — that's
-> Vastu, and it's not negotiable in my family. A real ground-floor bedroom with a
-> full bath. A flat, fenced yard, because we have a toddler. Not backing onto a
-> four-lane road.
+> The problem is what matters to us isn't on Zillow. You can filter beds, baths,
+> price. You can't filter which way the front door faces.
 >
-> None of that is a field anywhere. All of it is sitting in the floor plan and
-> the satellite photo."
+> So I built this. It reads the floor plan instead.
+>
+> Look — it just told me this front door faces east. And there's no tub in the
+> downstairs bathroom. My parents are moving in with us, so that one's out."
+
+**Text overlay, added in editing — don't say it:**
+`VastuNest · Gemini 3.5 Flash-Lite · Google GenAI SDK · Cloud Run + Firestore`
+
+---
+
+## 0:20 – 0:45 · What you can't filter
+
+**Cut to Zillow, then Redfin. Scroll the filters.**
+
+> "Beds. Baths. Price. Square feet. That's all you get.
+>
+> Here's what actually decides it for us. The front door has to face east or
+> north — that's Vastu, it's a Hindu tradition, and my family won't budge on it.
+> We need a real bedroom downstairs with a full bath. A flat yard, because we've
+> got a toddler. And nothing backing onto a main road.
+>
+> None of that is a checkbox anywhere. But all of it is right there in the floor
+> plan and the satellite photo."
 
 **Back to the app.**
 
-> "Which makes it a vision problem, not a search problem."
+> "So it's not really a search problem. It's a seeing problem."
 
 ---
 
-## 0:45 – 1:05 · It ran without me
+## 0:45 – 1:05 · It ran on its own
 
-**Back to the app. Point at "While you were away".**
+**Point at "While you were away".**
 
-> "It doesn't wait to be asked. Cloud Scheduler ran this at six this morning. Two
-> new listings came on the market, it read both floor plans, and it decided one —
-> 18 Wren Hollow Court — was worth waking me up for. The other one it scored,
-> looked at, and said nothing about.
+> "And it doesn't wait for me. This ran at six this morning on a schedule. Two
+> new houses came on the market overnight. It read both floor plans and decided
+> this one was worth telling me about.
 >
-> That decision is the product. An agent that pings you about every new listing
-> is just a worse email alert."
+> The other one, it looked at and said nothing. That's the part I care about. I
+> don't want an alert every time something gets listed."
 
 ---
 
-## 1:05 – 1:45 · The evidence
+## 1:05 – 1:45 · How it knows
 
-**Click Analyze. Talk over the cards landing. Cut the dead time in editing.**
+**Click Analyze. Talk while cards land. Cut the wait in editing.**
 
-> "Two images per property go to Gemini — floor plan and aerial — with one
-> question: what is physically in this drawing?"
+> "Every house gets two pictures sent to Gemini. The floor plan and the aerial
+> shot. And one question — what's actually in this drawing?"
 
 **Open the top result. Scroll to "What the agent saw".**
 
-> "And it shows its work. Every claim quotes the evidence."
+> "And it shows you where it got that from."
 
-**Read one aloud, verbatim.**
+**Read one evidence quote out loud, exactly as written.**
+
+> "Quick thing about the data — these floor plans are generated on purpose. I
+> wrote the spec they were drawn from, so I know the right answer for every one.
+> That's how I can tell you it gets ninety-three percent of them exactly right,
+> and how you can check that yourself."
 
 **Click the worst property.**
 
-> "This one it rejected. South-facing entrance, no bedroom on the main floor, and
-> it caught from the satellite image that it fronts a four-lane road. It didn't
-> score low — it broke rules I told it were non-negotiable."
+> "This one it threw out. Front door faces south. No bedroom downstairs at all.
+> And from the satellite picture it worked out the house fronts a four-lane road.
+> It didn't just score it low — it broke rules I'd told it were non-negotiable."
 
 ---
 
-## 1:45 – 2:15 · It learns *(the strongest beat — do not cut)*
+## 1:45 – 2:15 · It learns *(don't cut this)*
 
-**Go back to 18 Wren Hollow Court, sitting at number one.**
+**Go back to the house sitting at number one.**
 
-> "This is its top pick. I went and saw it, and I didn't like the street."
+> "This is its top pick right now. But I went and saw it, and I didn't like the
+> street."
 
-**Open "Teach the agent". Click 👎. Paste — do not type:**
+**Open "Teach the agent". Click 👎. Paste — don't type:**
 
 ```
 Not for me. The street felt wrong when we drove it.
 ```
 
-**Hit Teach. Let it land.**
+**Hit Teach. Cut the wait.**
 
-> "First to last.
+> "And it's gone. First to last.
 >
-> And that's the point — it's not just adjusting a slider somewhere. It recorded
-> a verdict about this specific house, wrote it to Firestore, and re-ranked
-> everything in twenty-three milliseconds without calling the model once. It
-> already knows what's in those drawings."
+> It didn't just save my comment somewhere. It remembered that I turned this
+> house down, wrote that to Firestore, and re-sorted everything. Took twenty-three
+> milliseconds, and it never called the model — it already knows what's in those
+> drawings."
 
 ---
 
-## 2:15 – 2:35 · The rulebook swaps
+## 2:15 – 2:35 · Different rules
 
-> "Vastu is an Indian tradition. Plenty of families use a different one, so the
-> compass rules are a table, not code."
+> "Vastu's an Indian thing. Plenty of people use something else. So the compass
+> rules are just a table I can swap."
 
 **Click Feng Shui. Point at 75 Trailview Court moving up.**
 
-> "Same house, same reading — a south-facing entrance is a flaw in Vastu and the
-> ideal in Feng Shui. The agent didn't change its mind about what it saw. Only
-> the rulebook did."
+> "Same house. Same reading. But a south-facing door is bad in Vastu and good in
+> Feng Shui. Nothing changed about what the agent saw — only the rulebook."
 
 **Switch back to Vastu.**
 
 ---
 
-## 2:35 – 2:55 · It acts
+## 2:35 – 2:55 · It books the day
 
 **Click "Plan a tour" → Plan.**
 
-> "And once I know what's worth seeing, it plans the day. Ordered by geography.
+> "Once I know what I want to see, it plans the day. It's grouped them by area.
 > Forty-five minutes at the 1969 house instead of thirty, because that's the one
-> with the aging systems. And what to check at each door — from what it found in
-> the plan."
+> where I need to look at the furnace. And it tells me what to check at each
+> door, based on what it found in the plan."
 
-**Click "Open in Google Maps."** It opens in a new tab and renders a real
-multi-stop driving route. Let it draw, then close the tab and come back.
+**Click "Open in Google Maps."** Let the route draw, then close the tab.
 
-> "And that's a real route I can send to my phone."
-
-*(The route is built from coordinates, so it resolves properly. The street
-addresses themselves are invented — see the dataset note below.)*
+> "And that's a real route I can pull up on my phone."
 
 ---
 
-## 2:55 – 3:20 · Google Cloud proof *(required)*
+## 2:55 – 3:20 · Running on Google Cloud *(required)*
 
 **Point at the header badges — already on screen.**
 
-> "Gemini 3.5 Flash-Lite, Firestore, and the live Cloud Run revision."
+> "That's the model, Firestore, and the live Cloud Run version, straight off the
+> health endpoint."
 
 Then one tab each, fast:
 
-1. **Cloud Run** — two services, min-instances 0
-2. **Logs** — the Gemini calls
-3. **Firestore** — `buyerProfiles/demo_buyer_1`, the verdict you just created
-4. **Cloud Scheduler** — `vastunest-overnight`, enabled, 06:00 daily
+1. **Cloud Run** — "Two services. Both scale to zero."
+2. **Logs** — "Those are the Gemini calls."
+3. **Firestore** — "And there's the house I just turned down."
+4. **Scheduler** — "This is the job that ran at six this morning."
 
 ---
 
-## 3:20 – 3:35 · Architecture and close
+## 3:20 – 3:35 · How it works, and close
 
-**Full-screen the diagram.** Trace it with your cursor as you talk — left to
-right, following the arrows. Roughly one sentence per hop.
+**Full-screen the diagram. Trace it with your cursor.**
 
-> "Two ways in — me in the browser, or Cloud Scheduler on a cron. Both hit the
-> same agent on Cloud Run."
-
-*(cursor: Buyer and Cloud Scheduler → Agent API)*
-
-> "Perception sends the floor plan and the aerial to Gemini and gets back what's
-> physically in them. That result goes in a cache, because it depends only on the
-> images."
-
-*(cursor: Perception ↔ Gemini, then ↔ Perception cache)*
-
-> "Scoring is separate, and it's ordinary code. It reads my weights out of
-> Firestore and decides what those findings are worth to me. The model never sees
-> a weight and never produces a score."
-
-*(cursor: Perception → Scoring ↔ Firestore)*
-
-> "And that one separation is the whole design. It's why re-ranking is twenty-three
-> milliseconds instead of a model call, why the same house scores the same every
-> time, and why swapping Vastu for Feng Shui doesn't touch Gemini at all.
+> "Two ways in. Me, or the scheduler. Both hit the same agent.
 >
-> It also means I can measure it. It reads these plans 93% exactly right against
-> known ground truth, and you can re-run that check yourself in about a second.
+> This part sends the pictures to Gemini and gets back what's in them. That gets
+> cached, because it only depends on the images.
 >
-> I'm still house hunting. But now I'm touring the right three instead of the
+> And this part is just code. It reads my preferences out of Firestore and works
+> out what those findings are worth to me. Gemini never sees my preferences and
+> never gives a score.
+>
+> That split is the whole thing. It's why re-ranking is instant, why the same
+> house always scores the same, and why I can actually measure whether it's
+> reading the plans right.
+>
+> I'm still house hunting. But now I'm seeing the right three instead of the
 > wrong twenty-two."
-
-**If you're short on time**, the minimum is the third paragraph — the separation
-and why it matters. The hop-by-hop walk is what makes it feel considered, but the
-point survives without it.
 
 ---
 
@@ -295,31 +280,19 @@ dead air is editing. Showing something that didn't happen is not.
 
 ---
 
-# Say this about the dataset
+# If a judge asks about the data
 
-**Where:** right after you read an evidence quote, around **1:30** — the moment a
-judge starts wondering where these plans came from. Keep it to two sentences on
-camera and let the README carry the detail.
+The dataset is generated. Say so plainly — the two-line version is already in the
+1:05 beat. Do not claim it is live MLS data, and do not reach for privacy as the
+reason; listings are public and a judge will know.
 
-Do not claim it is live MLS data, and do not use privacy as the excuse — listings
-are public and a judge will know. The real reason is better:
+The real reason is stronger anyway: if you scrape real listings you have no answer
+key, so you cannot tell a confident answer from a correct one. These were drawn
+from a written spec, so the correct answer is known for every one. That is what
+`npm run verify:seed` checks, and it is why 93% means something.
 
-> "These floor plans are generated, deliberately. If I'd scraped real listings I'd
-> have no answer key — I could show you a confident-looking output and neither of
-> us could tell if it was right. Because I wrote the spec these were drawn from, I
-> know the correct answer for every one. That's why I can tell you it scores 93%
-> exact across 42 fields, and why you can re-run that yourself."
-
-**The short on-camera version (two sentences):**
-
-> "These floor plans are generated on purpose — because I wrote the spec they
-> were drawn from, I know the right answer for every one. That's how I can tell
-> you it reads them 93% exactly right, and how you can check that yourself."
-
-If you have 15 spare seconds, **drop a real floor plan into "Analyse a plan"**.
-One unseen plan read correctly beats any claim about your dataset.
-
----
+If you have fifteen spare seconds, drop a real floor plan into **Analyse a plan**
+on camera. One unseen plan read correctly beats any argument about your dataset.
 
 # How to actually record this
 
