@@ -68,43 +68,47 @@ again."* Cut them together after. You are not doing this in one take.
 
 # The script
 
-## 0:00 – 0:15 · Hook
+## 0:00 – 0:20 · Hook
 
-**Open cold on the app, on a floor plan, agent overlay pins visible. No title
-card. Talk immediately.**
+**Open cold on the app, on a floor plan with the agent overlay pins visible.**
+No title card. Talk immediately.
 
-> "Gemini just read this floor plan. It can tell me the front door faces east,
-> the kitchen is in the south-east corner, and the only bathroom on the ground
-> floor has no tub in it."
+> "My wife and I have toured twenty-two houses this year. We still haven't bought
+> one — because the things that actually rule a house out for us aren't filters
+> on any listing site.
+>
+> So I built VastuNest. It reads the drawings instead.
+>
+> It just read this floor plan and told me the front door faces east, and that
+> the only bathroom on the ground floor has no tub in it. My parents are moving
+> in with us. That second one disqualifies the house."
 
-**Click the aerial tab.**
-
-> "And from the satellite image — flat backyard, fenced, backing onto woodland,
-> not a road."
-
-**Add this as a text overlay in editing — do not read it out:**
+**Add as a text overlay in editing — do not read it out:**
 `Gemini 3.5 Flash-Lite · Google GenAI SDK · Cloud Run + Firestore`
 
-Their checklist asks you to name the model and framework clearly. A caption does
-that without spending seconds of narration on it.
+*Why it's built this way: the name, the problem, the stakes and a working result
+all land inside twenty seconds. The tub detail only impresses if the judge already
+knows why it matters, so the reason comes with it.*
 
 ---
 
-## 0:15 – 0:45 · The problem
+## 0:20 – 0:45 · What can't be filtered
 
-**Cut to Zillow, then Redfin. Scroll each filter panel for a few seconds.**
-Showing both is better than one — it makes the point that this is the whole
-industry, not one site's gap.
+**Cut to Zillow, then Redfin. Scroll each filter panel briefly.**
 
-> "We've toured twenty-two houses and still haven't bought one. Beds, baths,
-> price — that's everything you can filter on.
+> "Beds, baths, price, square feet. That's it.
 >
-> What actually rules a house out for us: the entrance has to face east or north,
-> that's Vastu and it's not negotiable in my family. A real ground-floor bedroom
-> with a full bath, for my parents. A flat yard, because we have a toddler. Not
-> backing onto a four-lane road.
+> Here's what decides it for us. The entrance has to face east or north — that's
+> Vastu, and it's not negotiable in my family. A real ground-floor bedroom with a
+> full bath. A flat, fenced yard, because we have a toddler. Not backing onto a
+> four-lane road.
 >
-> None of that is a field anywhere. All of it is in the drawings."
+> None of that is a field anywhere. All of it is sitting in the floor plan and
+> the satellite photo."
+
+**Back to the app.**
+
+> "Which makes it a vision problem, not a search problem."
 
 ---
 
@@ -257,8 +261,8 @@ point survives without it.
 
 | Beat | Ends |
 |---|---|
-| Hook | 0:15 |
-| Problem | 0:45 |
+| Hook | 0:20 |
+| What can't be filtered | 0:45 |
 | Overnight run | 1:05 |
 | Evidence | 1:45 |
 | **It learns** | 2:15 |
