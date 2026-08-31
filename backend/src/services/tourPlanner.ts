@@ -40,8 +40,12 @@ export interface TourPlan {
 }
 
 /**
- * Universal Maps URL. Waypoints are addresses, so no geocoding is needed and
- * the link works on any device signed into any account.
+ * Universal Maps URL, built from coordinates.
+ *
+ * The street addresses in this dataset are invented, so Maps cannot geocode
+ * them — a link built from address strings renders "Google Maps can't find this
+ * address" rather than a route. Coordinates always resolve, and the stops land
+ * in the right neighbourhoods.
  */
 export function buildMapsUrl(origin: string, stops: string[]): string {
   if (!stops.length) return '';
@@ -228,7 +232,13 @@ export async function planTour(
       startAddress,
       startTime,
       totalMinutes,
-      mapsUrl: buildMapsUrl(startAddress, stops.map((s) => s.address)),
+      mapsUrl: buildMapsUrl(
+        startAddress,
+        stops.map((s) => {
+          const l = listings.find((x) => x.id === s.propertyId);
+          return l ? `${l.coords.lat},${l.coords.lng}` : s.address;
+        }),
+      ),
       summary: summary || `${stops.length} stops, about ${Math.round(totalMinutes / 60 * 10) / 10} hours.`,
       degraded,
     };

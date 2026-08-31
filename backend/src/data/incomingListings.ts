@@ -26,6 +26,7 @@ export const incomingListings: PropertyListing[] = [
     beds: 5, baths: 4, halfBaths: 0, sqft: 3040,
     lotSizeAcres: 0.38, yearBuilt: 2020,
     propertyType: 'Single Family', hoaMonthly: 90,
+    coords: { lat: 34.0341, lng: -84.2712 },
     images: asset('prop_109'),
     neighborhood: {
       walkScore: 64, transitScore: 50,
@@ -49,6 +50,7 @@ export const incomingListings: PropertyListing[] = [
     beds: 4, baths: 2, halfBaths: 1, sqft: 2180,
     lotSizeAcres: 0.24, yearBuilt: 1985,
     propertyType: 'Single Family', hoaMonthly: 0,
+    coords: { lat: 34.018, lng: -84.349 },
     images: asset('prop_110'),
     neighborhood: {
       walkScore: 31, transitScore: 18,

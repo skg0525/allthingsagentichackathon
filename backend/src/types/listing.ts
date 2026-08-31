@@ -29,6 +29,15 @@ export interface PropertyListing {
   lotSizeAcres: number;
   yearBuilt: number;
   propertyType: 'Single Family' | 'Townhouse' | 'Condo';
+  /**
+   * Approximate position, used to build the Google Maps route.
+   *
+   * The street addresses are invented, so Maps cannot geocode them — a
+   * directions link built from them renders "can't find this address" instead
+   * of a route. Coordinates always resolve, and these sit in the real
+   * neighbourhood each property is described as being in.
+   */
+  coords: { lat: number; lng: number };
   hoaMonthly: number;
   /** Local, coherent asset set. All three images are the SAME house. */
   images: {

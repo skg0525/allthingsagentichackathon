@@ -26,6 +26,7 @@ export const mockListings: PropertyListing[] = [
     beds: 4, baths: 3, halfBaths: 1, sqft: 2840,
     lotSizeAcres: 0.34, yearBuilt: 2016,
     propertyType: 'Single Family', hoaMonthly: 85,
+    coords: { lat: 34.029, lng: -84.279 },
     images: asset('prop_101'),
     neighborhood: {
       walkScore: 62, transitScore: 48,
@@ -49,6 +50,7 @@ export const mockListings: PropertyListing[] = [
     beds: 4, baths: 2, halfBaths: 1, sqft: 2610,
     lotSizeAcres: 0.28, yearBuilt: 1978,
     propertyType: 'Single Family', hoaMonthly: 0,
+    coords: { lat: 34.0232, lng: -84.3616 },
     images: asset('prop_102'),
     neighborhood: {
       walkScore: 34, transitScore: 21,
@@ -72,6 +74,7 @@ export const mockListings: PropertyListing[] = [
     beds: 5, baths: 4, halfBaths: 0, sqft: 3320,
     lotSizeAcres: 0.41, yearBuilt: 2009,
     propertyType: 'Single Family', hoaMonthly: 140,
+    coords: { lat: 34.0289, lng: -84.1986 },
     images: asset('prop_103'),
     neighborhood: {
       walkScore: 28, transitScore: 16,
@@ -95,6 +98,7 @@ export const mockListings: PropertyListing[] = [
     beds: 4, baths: 2, halfBaths: 1, sqft: 2450,
     lotSizeAcres: 0.31, yearBuilt: 2004,
     propertyType: 'Single Family', hoaMonthly: 45,
+    coords: { lat: 34.0345, lng: -84.51 },
     images: asset('prop_104'),
     neighborhood: {
       walkScore: 41, transitScore: 24,
@@ -118,6 +122,7 @@ export const mockListings: PropertyListing[] = [
     beds: 3, baths: 2, halfBaths: 0, sqft: 2080,
     lotSizeAcres: 0.19, yearBuilt: 1969,
     propertyType: 'Single Family', hoaMonthly: 0,
+    coords: { lat: 33.8651, lng: -84.3366 },
     images: asset('prop_105'),
     neighborhood: {
       walkScore: 84, transitScore: 71,
@@ -141,6 +146,7 @@ export const mockListings: PropertyListing[] = [
     beds: 4, baths: 3, halfBaths: 0, sqft: 2760,
     lotSizeAcres: 0.30, yearBuilt: 2019,
     propertyType: 'Single Family', hoaMonthly: 95,
+    coords: { lat: 34.0754, lng: -84.2941 },
     images: asset('prop_106'),
     neighborhood: {
       walkScore: 58, transitScore: 44,
@@ -164,6 +170,7 @@ export const mockListings: PropertyListing[] = [
     beds: 3, baths: 2, halfBaths: 1, sqft: 1940,
     lotSizeAcres: 0.04, yearBuilt: 2021,
     propertyType: 'Townhouse', hoaMonthly: 310,
+    coords: { lat: 33.8598, lng: -84.3388 },
     images: asset('prop_107'),
     neighborhood: {
       walkScore: 92, transitScore: 79,
@@ -187,6 +194,7 @@ export const mockListings: PropertyListing[] = [
     beds: 5, baths: 4, halfBaths: 1, sqft: 3610,
     lotSizeAcres: 0.26, yearBuilt: 2022,
     propertyType: 'Single Family', hoaMonthly: 120,
+    coords: { lat: 34.2073, lng: -84.1402 },
     images: asset('prop_108'),
     neighborhood: {
       walkScore: 19, transitScore: 8,
