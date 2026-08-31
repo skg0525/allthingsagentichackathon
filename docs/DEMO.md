@@ -79,13 +79,12 @@ Read these out loud once before recording. If a line makes you stumble, change i
 
 > "We've looked at twenty-two houses this year. Still haven't bought one.
 >
-> The problem is what matters to us isn't on Zillow. You can filter beds, baths,
-> price. You can't filter which way the front door faces.
+> The problem is what matters to us isn't on Zillow or redfin. You can filter beds, baths,
+> price. You can't filter which way the front door faces or hows the backyard, or how diverse is the neighborhood
 >
-> So I built this. It reads the floor plan instead.
+> So I built this. It reads the floor plan, analyze the neighborhood and finds something for our need.
 >
-> Look — it just told me this front door faces east. And there's no tub in the
-> downstairs bathroom. My parents are moving in with us, so that one's out."
+> Look — it just told me this front door faces east, kitchen is in south east,  bedroom is in south west.
 
 **Text overlay, added in editing — don't say it:**
 `VastuNest · Gemini 3.5 Flash-Lite · Google GenAI SDK · Cloud Run + Firestore`
