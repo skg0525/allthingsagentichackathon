@@ -279,6 +279,59 @@ One unseen plan read correctly beats any claim about your dataset.
 
 ---
 
+# How to actually record this
+
+## The tool
+
+**QuickTime Player** — already on your Mac, no watermark, no time limit.
+
+> File → New Screen Recording → click the ˅ arrow next to the record button →
+> under Microphone pick your mic → then **Record Selected Portion** and drag a
+> box around just the browser window.
+
+Recording a *selected portion* is how you avoid showing the dock and your other
+windows. Drag the box to the browser's edges and nothing outside it is captured.
+
+If you'd rather record full screen: **auto-hide the dock** first
+(System Settings → Desktop & Dock → "Automatically hide and show the Dock"), and
+turn on **Do Not Disturb** so no notification banners appear.
+
+## Record one segment at a time
+
+This is what the organizers recommend, and it is much easier than one take:
+
+1. Set up the screen for a beat
+2. Hit record, do that beat, stop
+3. If it came out badly, redo just that beat
+4. Stitch them in order afterwards
+
+You'll end up with eight short clips. Name them `01-hook.mov`, `02-problem.mov`
+and so on so the order is obvious when you assemble.
+
+## Stitching them together
+
+**[Descript](https://descript.com)** — drop all the clips in, they appear as one
+timeline. Then: remove filler words in one click, Studio Sound on the audio, and
+drag to cut the waiting. Export as MP4.
+
+**Free alternative:** iMovie handles joining clips and trimming fine. It won't
+strip "ums" automatically.
+
+## What to do about waiting
+
+Two beats have dead time — the scan (10–30s) and the feedback call (10–30s).
+**Cut them in editing.** Record the click, stop recording, wait, start recording
+again when the result is on screen. Nobody wants to watch a spinner and their
+checklist says to cut it.
+
+## Before the real take
+
+Do one **dry run of all eight beats** without recording, with a stopwatch. You
+are looking for friction: a tab that needs a login, a slow render, a step you
+forgot. Fix those, then record.
+
+---
+
 # Before you upload
 
 - [ ] Watch it back with headphones
@@ -287,3 +340,5 @@ One unseen plan read correctly beats any claim about your dataset.
 - [ ] No personal data, no notifications on screen
 - [ ] Upload to YouTube as **public**, not unlisted
 - [ ] Upload early — processing can take hours
+
+---
