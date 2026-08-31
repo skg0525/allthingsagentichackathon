@@ -323,9 +323,27 @@ One unseen plan read correctly beats any claim about your dataset.
 
 **QuickTime Player** — already on your Mac, no watermark, no time limit.
 
-> File → New Screen Recording → click the ˅ arrow next to the record button →
-> under Microphone pick your mic → then **Record Selected Portion** and drag a
-> box around just the browser window.
+**On macOS 15, QuickTime hands off to the Screenshot toolbar, and its microphone
+defaults to None.** This is why a recording comes back silent. QuickTime's own
+mic dropdown does not apply.
+
+> Press **⌘⇧5** → click **Options** → under **Microphone** select
+> **MacBook Pro Microphone** (it starts on None) → set **Save to → Desktop** →
+> then **Record Selected Portion** and drag a box around just the browser.
+
+If the Microphone menu is empty, grant permission in
+**System Settings → Privacy & Security → Microphone** for **Screenshot** and
+**QuickTime Player**.
+
+**Record five seconds and play it back before every session.** Discovering silent
+audio after a good take is the worst way to lose twenty minutes.
+
+### Or skip QuickTime and record in Descript
+
+You are editing there anyway. It captures screen and mic together, shows a live
+input meter so you can see your voice registering before you start, and the clips
+land straight in the timeline — no stitching step. It also avoids the silent-audio
+problem entirely.
 
 Recording a *selected portion* is how you avoid showing the dock and your other
 windows. Drag the box to the browser's edges and nothing outside it is captured.
