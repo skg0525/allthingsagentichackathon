@@ -9,11 +9,25 @@ Both are optional but cheap. The blog is ~10 minutes to publish on dev.to.
 **Where:** [dev.to](https://dev.to/new) — free, no approval wait, publishes instantly.
 Must be **public**, not draft or unlisted.
 
-**Title:**
+**Title — use this one:**
 
 ```
-I let Gemini score houses for me. Then I found out it was lying.
+Gemini reads the floor plan. Code decides what it means.
 ```
+
+*Alternatives if that doesn't feel like you:*
+
+```
+I stopped letting the model score anything, and the agent got better
+What Zillow can't filter, a floor plan can answer
+Building a house-hunting agent that can prove it read the drawings
+```
+
+**Avoid anything blaming the model.** The first draft of this was titled *"Then I
+found out it was lying"* — which is wrong on the facts. The model was answering
+exactly what it was asked with the input it got; the image-fetching was commented
+out in my own code. Blaming Gemini for my bug is inaccurate, and it reads badly in
+a contest Google is sponsoring.
 
 **Tags:** `googlecloud`, `gemini`, `ai`, `webdev`
 
@@ -31,11 +45,13 @@ None of that is a field in any listing feed. All of it is sitting in the floor p
 
 So it isn't a search problem. It's a seeing problem.
 
-## The first version was a lie
+## My first version never looked at a drawing
 
-I built something over a weekend that looked like it was analysing floor plans. Scores, findings, confident write-ups about entrance orientation and yard grade.
+I built something over a weekend that appeared to analyse floor plans. Scores, findings, confident write-ups about entrance orientation and yard grade.
 
-Then I read my own code. The image-fetching was commented out. Every "analysis" was the model guessing from the street address. It had never seen a single drawing.
+Then I read my own code. The image-fetching was commented out. Every "analysis" was the model working from the street address alone — which is exactly what I'd asked it to do. It had never been shown a single drawing.
+
+That one's on me, and it's the reason the rest of this post exists.
 
 It was also slow — 30 seconds a scan — and three of five aerial images were 404ing behind a loading spinner that never resolved.
 
@@ -117,7 +133,17 @@ I'm still house hunting. But I'm touring the right three instead of the wrong tw
 
 ## 2. Social post
 
-**LinkedIn** (better fit than X for this):
+**Where to post it.** The rules accept **X, LinkedIn, Instagram or Facebook** —
+LinkedIn is not required. If posting a side project to your professional network
+feels off, X is a perfectly good choice and the hashtag works the same.
+
+And this whole item is **optional bonus points**. If neither platform feels right,
+skip it. It is not worth being uncomfortable over.
+
+If you do post on LinkedIn: a hackathon build is normally read as initiative, not
+as a signal about your job. But you know your workplace better than I do.
+
+**The post:**
 
 ```
 I've toured 22 houses this year and still haven't bought one.
